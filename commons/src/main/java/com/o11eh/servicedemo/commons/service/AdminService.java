@@ -1,6 +1,6 @@
-package com.o11eh.commons.service;
+package com.o11eh.servicedemo.commons.service;
 
-import com.o11eh.commons.entry.Admin;
+import com.o11eh.servicedemo.commons.entry.Admin;
 import com.o11eh.servicedemo.base.service.BaseService;
 
 /**

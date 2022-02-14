@@ -1,4 +1,4 @@
-package com.o11eh.commons.entry;
+package com.o11eh.servicedemo.commons.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @TableName("back_role")
 @ApiModel(value = "Role对象", description = "角色")
-public class Role extends BaseEntry {
+public class Role extends BaseEntry<Role> {
 
     private static final long serialVersionUID = 1L;
 
