@@ -9,4 +9,5 @@ public class BaseApiConst {
     public static final String UPDATE = "update";
     public static final String DELETE = "delete";
     public static final String PAGE = "page";
+    public static final String CURRENT_SIZE = "{current}/{size}";
 }

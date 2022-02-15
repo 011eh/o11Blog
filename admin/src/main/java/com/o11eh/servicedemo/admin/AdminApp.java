@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @since 2022/02/14 19:45
  */
 
-@MapperScan("com.o11eh.servicedemo.commons.mapper")
+
 @ComponentScan("com.o11eh.servicedemo.commons")
 @ComponentScan("com.o11eh.servicedemo.servicebase")
 @SpringBootApplication

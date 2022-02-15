@@ -2,10 +2,13 @@ package com.o11eh.servicedemo.commons.entry;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
+import com.o11eh.servicedemo.base.validation.groups.Add;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * <p>
@@ -22,8 +25,10 @@ import lombok.Setter;
 public class Admin extends BaseEntry<Admin> {
 
     @ApiModelProperty("用户名")
+    @NotBlank(groups = Add.class)
     private String username;
 
+    @NotBlank(groups = Add.class)
     @ApiModelProperty("密码")
     private String password;
 

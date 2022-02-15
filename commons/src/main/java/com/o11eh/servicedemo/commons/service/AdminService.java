@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.commons.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.commons.entry.Admin;
 import com.o11eh.servicedemo.base.service.BaseService;
 
@@ -13,4 +14,7 @@ import com.o11eh.servicedemo.base.service.BaseService;
  */
 public interface AdminService extends BaseService<Admin> {
 
+    Long add(Admin admin);
+
+    Page<Admin> getPage(Long current, Long size);
 }

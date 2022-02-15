@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.commons.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.commons.entry.Admin;
 import com.o11eh.servicedemo.commons.mapper.AdminMapper;
 import com.o11eh.servicedemo.commons.service.AdminService;
@@ -16,5 +17,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implements AdminService {
+    @Override
+    public Long add(Admin admin) {
+        admin.insert();
+        return admin.getId();
+    }
 
+    @Override
+    public Page<Admin> getPage(Long current, Long size) {
+        return page(current, size);
+    }
 }
