@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ public class Admin extends BaseEntry<Admin> {
     @ApiModelProperty("头像")
     private String avatar;
 
+    @Null
     @ApiModelProperty("状态")
     private Integer status;
 }
