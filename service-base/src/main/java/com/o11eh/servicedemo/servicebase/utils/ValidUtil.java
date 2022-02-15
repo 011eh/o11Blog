@@ -1,7 +1,7 @@
 package com.o11eh.servicedemo.servicebase.utils;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import cn.hutool.core.util.StrUtil;
 import com.o11eh.servicedemo.servicebase.exception.BusinessException;
 import org.springframework.validation.BindingResult;
 
@@ -12,7 +12,7 @@ public class ValidUtil {
             result.getFieldErrors().forEach(error -> {
                 buffer.append(error.getField());
                 buffer.append(error.getDefaultMessage());
-                buffer.append(StringPool.COMMA);
+                buffer.append(StrUtil.C_COMMA);
             });
             throw BusinessException.e(buffer.substring(0, buffer.length() - 1));
         }
