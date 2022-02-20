@@ -1,8 +1,8 @@
-package com.o11eh.servicedemo.servicebase.resp;
+package com.o11eh.servicedemo.base.resp;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.servicebase.constants.ResultCode;
-import com.o11eh.servicedemo.servicebase.enums.ResultMessage;
+import com.o11eh.servicedemo.base.constants.ResultMessage;
+import com.o11eh.servicedemo.base.constants.ResultCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,14 +23,9 @@ public class Result {
         this.msg = msg;
     }
 
-    Result(boolean success, ResultMessage message) {
-        this.success = success;
-        this.code = message.getCode();
-        this.msg = message.getMsg();
-    }
 
     public static Result success() {
-        return new Result(true, ResultMessage.SUCCESS);
+        return new Result(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
     }
 
     public static <T> Result success(T Data) {
@@ -42,7 +37,7 @@ public class Result {
     }
 
     public static Result error() {
-        return new Result(false, ResultMessage.ERROR);
+        return new Result(false, ResultCode.ERROR, ResultMessage.ERROR);
     }
 
     public static Result error(String message) {

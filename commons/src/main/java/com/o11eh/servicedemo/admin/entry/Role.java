@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.commons.entry;
+package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

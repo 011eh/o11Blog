@@ -2,13 +2,13 @@ package com.o11eh.servicedemo.admin.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.constants.ApiConst;
+import com.o11eh.servicedemo.admin.constants.ApiConstants;
+import com.o11eh.servicedemo.base.constants.BaseApiConstants;
+import com.o11eh.servicedemo.base.resp.Result;
 import com.o11eh.servicedemo.base.validation.groups.Add;
 import com.o11eh.servicedemo.base.validation.groups.Update;
-import com.o11eh.servicedemo.commons.entry.Admin;
-import com.o11eh.servicedemo.commons.service.AdminService;
-import com.o11eh.servicedemo.servicebase.constants.BaseApiConst;
-import com.o11eh.servicedemo.servicebase.resp.Result;
+import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.servicebase.utils.ValidUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,15 +25,15 @@ import org.springframework.web.bind.annotation.*;
  * @author 011eh
  * @since 2022-02-14
  */
-@RestController
-@RequestMapping(ApiConst.ADMIN)
+@RequestMapping(ApiConstants.ADMIN)
 @Api(tags = "管理员")
+@RestController
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
-    @PostMapping(BaseApiConst.ADD)
+    @PostMapping(BaseApiConstants.ADD)
     @ApiOperation("增加管理员")
     public Result add(@Validated(Add.class) @RequestBody Admin admin, BindingResult result) {
         ValidUtil.checkParam(result);
@@ -42,14 +42,14 @@ public class AdminController {
     }
 
     @ApiOperation("管理员分页查询")
-    @GetMapping(BaseApiConst.CURRENT_SIZE)
+    @GetMapping(BaseApiConstants.CURRENT_SIZE)
     public Result page(@PathVariable Long current, @PathVariable Long size) {
         Page<Admin> page = adminService.getPage(current, size);
         return Result.success(page);
     }
 
     @ApiOperation("管理员更新")
-    @PutMapping(BaseApiConst.UPDATE)
+    @PutMapping(BaseApiConstants.UPDATE)
     public void update(@Validated(Update.class) @RequestBody Admin admin, BindingResult result) {
         ValidUtil.checkParam(result);
     }

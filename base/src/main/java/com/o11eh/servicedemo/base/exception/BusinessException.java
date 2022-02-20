@@ -1,7 +1,7 @@
-package com.o11eh.servicedemo.servicebase.exception;
+package com.o11eh.servicedemo.base.exception;
 
-import com.o11eh.servicedemo.servicebase.constants.ResultCode;
-import com.o11eh.servicedemo.servicebase.enums.ResultMessage;
+import com.o11eh.servicedemo.base.constants.ResultCode;
+import com.o11eh.servicedemo.base.constants.ResultMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +20,11 @@ public class BusinessException extends RuntimeException {
         this.code = code;
     }
 
-    public static BusinessException e(ResultMessage resultMessage) {
-        return new BusinessException(resultMessage.getCode(), resultMessage.getMsg());
-    }
-
     public static BusinessException e(String message) {
         return new BusinessException(ResultCode.ERROR, message);
+    }
+
+    public static BusinessException e() {
+        return new BusinessException(ResultCode.ERROR, ResultMessage.SUCCESS);
     }
 }

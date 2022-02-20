@@ -2,7 +2,7 @@ package com.o11eh.servicedemo.servicebase.utils;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.o11eh.servicedemo.servicebase.exception.BusinessException;
+import com.o11eh.servicedemo.base.exception.BusinessException;
 import org.springframework.validation.BindingResult;
 
 public class ValidUtil {

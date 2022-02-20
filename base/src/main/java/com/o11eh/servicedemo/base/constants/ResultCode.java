@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.servicebase.constants;
+package com.o11eh.servicedemo.base.constants;
 
 public class ResultCode {
     public static final int SUCCESS = 200;

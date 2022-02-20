@@ -1,7 +1,7 @@
-package com.o11eh.servicedemo.commons.mapper;
+package com.o11eh.servicedemo.admin.mapper;
 
 import com.o11eh.servicedemo.base.mapper.BaseMapperO;
-import com.o11eh.servicedemo.commons.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.Admin;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

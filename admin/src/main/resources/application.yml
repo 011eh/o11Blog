@@ -12,35 +12,52 @@ spring:
     password: 9zHu2:HGqqB_G7s
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+
     druid:
       initialSize: 20
       minIdle: 5
-      maxActive: 200
+      maxActive: 100
 
-      #连接等待超时时间
-      maxWait: 60000
+      # 连接等待超时时间
+      maxWait: 30000
 
-      #配置隔多久进行一次检测(检测可以关闭的空闲连接)
+      # 检查空闲连接时间间隔
       timeBetweenEvictionRunsMillis: 60000
 
-      #配置连接在池中的最小生存时间
+      # 连接的最小生存时间
       minEvictableIdleTimeMillis: 300000
 
-      validationQuery: SELECT 1 FROM DUAL
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      use-global-data-source-stat: true
-      #
-      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      # 判断数据库是否连通的方式
+      validationQuery: select 1
 
-    dbcp2:
+      # 申请连接时，连接池会判断这条连接是否是可用的
+      test-on-borrow: false
+
+      # 申请连接时，连接池将会判断连接是否处于空闲状态（test-on-borrow为false情况下）
+      test-while-idle: true
+
+      # 使用完连接，连接池回收连接的时候会判断该连接是否还可用
+      test-on-return: false
+
+      # 是否缓存preparedStatement
+      pool-prepared-statements: false
+
+      # 每个连接上PSCache的大小
+      max-pool-prepared-statement-per-connection-size: -1
+
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+
       #泄露的连接可以被删除的超时时间（秒），该值应设置为应用程序查询可能执行的最长时间
       remove-abandoned-timeout: 180
-      remove-abandoned-on-borrow: true
 
+      # 是否自动回收超时连接
+      remove-abandoned: true
+
+      # 打开mergeSql功能；慢SQL记录
+      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+      filters: wall,stat,log4j
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml

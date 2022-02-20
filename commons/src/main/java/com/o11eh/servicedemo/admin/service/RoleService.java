@@ -1,6 +1,6 @@
-package com.o11eh.servicedemo.commons.service;
+package com.o11eh.servicedemo.admin.service;
 
-import com.o11eh.servicedemo.commons.entry.Role;
+import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.base.service.BaseService;
 
 /**

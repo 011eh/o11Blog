@@ -1,6 +1,6 @@
-package com.o11eh.servicedemo.commons.mapper;
+package com.o11eh.servicedemo.admin.mapper;
 
-import com.o11eh.servicedemo.commons.entry.Role;
+import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.base.mapper.BaseMapperO;
 import org.apache.ibatis.annotations.Mapper;
 
