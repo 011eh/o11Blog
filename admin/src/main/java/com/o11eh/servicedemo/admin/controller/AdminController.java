@@ -1,6 +1,8 @@
 package com.o11eh.servicedemo.admin.controller;
 
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.server.HttpServerRequest;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.ApiConstants;
 import com.o11eh.servicedemo.base.constants.BaseApiConstants;
@@ -52,5 +54,13 @@ public class AdminController {
     @PutMapping(BaseApiConstants.UPDATE)
     public void update(@Validated(Update.class) @RequestBody Admin admin, BindingResult result) {
         ValidUtil.checkParam(result);
+    }
+
+    @PostMapping("/login")
+    public Result login(HttpServerRequest request, @RequestParam String username, @RequestParam String password) {
+        if (StrUtil.hasEmpty(username, password)) {
+            return Result.error("帐号或密码为空");
+        }
+        return Result.success();
     }
 }
