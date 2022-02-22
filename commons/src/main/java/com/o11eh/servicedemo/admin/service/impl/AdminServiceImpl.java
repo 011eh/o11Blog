@@ -9,7 +9,6 @@ import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.constants.ResultMessage;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.service.impl.BaseServiceImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,9 +29,6 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         if (ObjectUtil.isNotNull(adminInDB)) {
             throw BusinessException.e(ResultMessage.USERNAME_EXISTS);
         }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        admin.setPassword(encoder.encode(admin.getPassword()));
         admin.insert();
         return admin.getId();
     }
@@ -40,5 +36,11 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     @Override
     public Page<Admin> getPage(Long current, Long size) {
         return page(current, size);
+    }
+
+    @Override
+    public Admin getByUsername(String username) {
+        Admin admin = getOne(wrapper().eq(Admin::getUsername, username).last("limit 1"));
+        return admin;
     }
 }
