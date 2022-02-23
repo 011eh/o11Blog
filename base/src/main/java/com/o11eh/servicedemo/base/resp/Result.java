@@ -1,8 +1,8 @@
 package com.o11eh.servicedemo.base.resp;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.base.constants.ResultMessage;
 import com.o11eh.servicedemo.base.constants.ResultCode;
+import com.o11eh.servicedemo.base.constants.ResultMessage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +23,6 @@ public class Result {
         this.msg = msg;
     }
 
-
     public static Result success() {
         return new Result(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
     }
@@ -34,10 +33,6 @@ public class Result {
 
     public static <T> Result success(Page<T> page) {
         return new PageResult<>(page);
-    }
-
-    public static Result error() {
-        return new Result(false, ResultCode.ERROR, ResultMessage.ERROR);
     }
 
     public static Result error(String message) {

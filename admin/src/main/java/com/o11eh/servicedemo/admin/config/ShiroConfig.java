@@ -6,6 +6,8 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+
 @Configuration
 public class ShiroConfig {
     @Bean
@@ -21,9 +23,14 @@ public class ShiroConfig {
     }
 
     @Bean
-    public ShiroFilterFactoryBean filterFactoryBean(DefaultWebSecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager);
+        factoryBean.setFilterChainDefinitionMap(new HashMap<String, String>() {{
+            put("/admin/authc", "authc");
+            put("/admin/normal", "roles[admin,normalAdmin]");
+            put("/admin/admin", "roles[admin]");
+        }});
         return factoryBean;
     }
 }

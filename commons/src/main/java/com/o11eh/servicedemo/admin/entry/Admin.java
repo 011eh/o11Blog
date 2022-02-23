@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.entry;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
 import com.o11eh.servicedemo.base.validation.groups.Add;
@@ -42,4 +43,7 @@ public class Admin extends BaseEntry<Admin> {
     @Null
     @ApiModelProperty("状态")
     private Integer status;
+
+    @TableField(exist = false)
+    private Role role;
 }

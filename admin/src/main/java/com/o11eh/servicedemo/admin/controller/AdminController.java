@@ -5,15 +5,20 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.server.HttpServerRequest;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.ApiConstants;
+import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.constants.BaseApiConstants;
+import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.resp.Result;
 import com.o11eh.servicedemo.base.validation.groups.Add;
 import com.o11eh.servicedemo.base.validation.groups.Update;
-import com.o11eh.servicedemo.admin.entry.Admin;
-import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.servicebase.utils.ValidUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -56,11 +61,51 @@ public class AdminController {
         ValidUtil.checkParam(result);
     }
 
+    @ApiOperation("登录")
     @PostMapping("/login")
     public Result login(HttpServerRequest request, @RequestParam String username, @RequestParam String password) {
         if (StrUtil.hasEmpty(username, password)) {
-            return Result.error("帐号或密码为空");
+            throw BusinessException.e("用户名或密码为空");
         }
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken authenticationToken = new UsernamePasswordToken(username, password);
+        try {
+            subject.login(authenticationToken);
+        } catch (AuthenticationException e) {
+            throw BusinessException.e(e.getMessage());
+        }
+        return Result.success();
+    }
+
+    @GetMapping("logout")
+    public Result logout() {
+        SecurityUtils.getSubject().logout();
+        return Result.success();
+    }
+
+    @GetMapping("/noLogin")
+    public void noLogin() {
+        throw BusinessException.e("请登录");
+    }
+
+    @GetMapping("authc")
+    public Result authc() {
+        return Result.success();
+    }
+
+    @GetMapping("anon")
+    public Result anon() {
+        return Result.success();
+    }
+
+
+    @GetMapping("admin")
+    public Result admin() {
+        return Result.success();
+    }
+
+    @GetMapping("normal")
+    public Result normal() {
         return Result.success();
     }
 }

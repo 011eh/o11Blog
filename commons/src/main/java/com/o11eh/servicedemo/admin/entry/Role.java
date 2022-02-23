@@ -28,6 +28,9 @@ public class Role extends BaseEntry<Role> {
     @TableField("name")
     private String name;
 
+    private String roleKey;
+    private String summary;
+
     @ApiModelProperty("操作菜单Id列表")
     @TableField("menu_ids")
     private String menuIds;

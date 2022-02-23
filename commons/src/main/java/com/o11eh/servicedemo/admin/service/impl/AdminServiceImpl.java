@@ -4,11 +4,15 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
+import com.o11eh.servicedemo.admin.service.RoleService;
 import com.o11eh.servicedemo.base.constants.ResultMessage;
+import com.o11eh.servicedemo.base.entry.BaseEntry;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.service.impl.BaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +25,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implements AdminService {
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public Long add(Admin admin) {
         LambdaQueryWrapper<Admin> wrapper = wrapper().select(Admin::getUsername).eq(Admin::getUsername,
@@ -40,7 +47,11 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
 
     @Override
     public Admin getByUsername(String username) {
-        Admin admin = getOne(wrapper().eq(Admin::getUsername, username).last("limit 1"));
+        Admin admin = getOne(wrapper().eq(Admin::getUsername, username).last(LIMIT_1));
+        if (ObjectUtil.isNotNull(admin)) {
+            Role role = roleService.getOne(roleService.wrapper().eq(BaseEntry::getId, admin.getRoleId()).last(LIMIT_1));
+            admin.setRole(role);
+        }
         return admin;
     }
 }
