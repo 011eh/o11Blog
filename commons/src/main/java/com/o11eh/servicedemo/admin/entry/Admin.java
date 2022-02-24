@@ -6,6 +6,7 @@ import com.o11eh.servicedemo.base.entry.BaseEntry;
 import com.o11eh.servicedemo.base.validation.groups.Add;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,8 +21,7 @@ import javax.validation.constraints.Null;
  * @author 011eh
  * @since 2022-02-14
  */
-@Getter
-@Setter
+@Data
 @TableName("back_admin")
 @ApiModel(value = "Admin对象", description = "管理员")
 public class Admin extends BaseEntry<Admin> {

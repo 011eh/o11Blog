@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +17,7 @@ import lombok.Setter;
  * @author 011eh
  * @since 2022-02-14
  */
-@Getter
-@Setter
+@Data
 @TableName("back_role")
 @ApiModel(value = "Role对象", description = "角色")
 public class Role extends BaseEntry<Role> {
@@ -29,6 +29,8 @@ public class Role extends BaseEntry<Role> {
     private String name;
 
     private String roleKey;
+
+    private String permissionKeys;
     private String summary;
 
     @ApiModelProperty("操作菜单Id列表")

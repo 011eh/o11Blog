@@ -12,6 +12,9 @@ import com.o11eh.servicedemo.base.constants.ResultMessage;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.service.impl.BaseServiceImpl;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implements AdminService {
+
+    public static final int HASH_ITERATIONS = 5;
     @Autowired
     private RoleService roleService;
 
@@ -36,6 +41,10 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         if (ObjectUtil.isNotNull(adminInDB)) {
             throw BusinessException.e(ResultMessage.USERNAME_EXISTS);
         }
+        ByteSource credentialsSalt = ByteSource.Util.bytes(admin.getUsername());
+        String password = new SimpleHash(Md5Hash.ALGORITHM_NAME, admin.getPassword(), credentialsSalt,
+                HASH_ITERATIONS).toString();
+        admin.setPassword(password);
         admin.insert();
         return admin.getId();
     }

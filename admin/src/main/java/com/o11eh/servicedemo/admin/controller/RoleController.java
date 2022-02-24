@@ -2,6 +2,9 @@ package com.o11eh.servicedemo.admin.controller;
 
 
 import com.o11eh.servicedemo.base.controller.BaseController;
+import com.o11eh.servicedemo.base.resp.Result;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/role")
+@RequiresRoles("SUPER_ADMIN")
 public class RoleController extends BaseController {
-
+    @GetMapping("/hello")
+    public Result hello() {
+        return Result.success();
+    }
 }

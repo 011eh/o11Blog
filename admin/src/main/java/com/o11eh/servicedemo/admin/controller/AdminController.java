@@ -8,15 +8,19 @@ import com.o11eh.servicedemo.admin.constants.ApiConstants;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.constants.BaseApiConstants;
+import com.o11eh.servicedemo.base.controller.BaseController;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.resp.Result;
 import com.o11eh.servicedemo.base.validation.groups.Add;
 import com.o11eh.servicedemo.base.validation.groups.Update;
+import com.o11eh.servicedemo.base.vo.PageParams;
 import com.o11eh.servicedemo.servicebase.utils.ValidUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +39,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiConstants.ADMIN)
 @Api(tags = "管理员")
 @RestController
-public class AdminController {
+public class AdminController extends BaseController {
 
     @Autowired
     private AdminService adminService;
@@ -50,8 +54,8 @@ public class AdminController {
 
     @ApiOperation("管理员分页查询")
     @GetMapping(BaseApiConstants.CURRENT_SIZE)
-    public Result page(@PathVariable Long current, @PathVariable Long size) {
-        Page<Admin> page = adminService.getPage(current, size);
+    public Result page(PageParams params) {
+        Page<Admin> page = adminService.getPage(params.getCurrent(), params.getSize());
         return Result.success(page);
     }
 
@@ -59,6 +63,7 @@ public class AdminController {
     @PutMapping(BaseApiConstants.UPDATE)
     public void update(@Validated(Update.class) @RequestBody Admin admin, BindingResult result) {
         ValidUtil.checkParam(result);
+        adminService.updateById(admin);
     }
 
     @ApiOperation("登录")
@@ -71,8 +76,10 @@ public class AdminController {
         UsernamePasswordToken authenticationToken = new UsernamePasswordToken(username, password);
         try {
             subject.login(authenticationToken);
-        } catch (AuthenticationException e) {
+        } catch (DisabledAccountException | UnknownAccountException e) {
             throw BusinessException.e(e.getMessage());
+        } catch (IncorrectCredentialsException e) {
+            throw BusinessException.e("用户或密码错误");
         }
         return Result.success();
     }
@@ -107,5 +114,15 @@ public class AdminController {
     @GetMapping("normal")
     public Result normal() {
         return Result.success();
+    }
+
+    @GetMapping("/unauthorized")
+    public Result unauthorized() {
+        throw BusinessException.e("无相关权限进行操作");
+    }
+
+    @GetMapping("/toLogin")
+    public Result toLogin() {
+        throw BusinessException.e("您尚未登录");
     }
 }
