@@ -33,8 +33,8 @@ public class UserRealm extends AuthorizingRealm {
     }
 
     @Override
-    public boolean supports(AuthenticationToken authenticationToken) {
-        return true;
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof UsernamePasswordToken;
     }
 
     @Override
@@ -77,14 +77,5 @@ public class UserRealm extends AuthorizingRealm {
             e.printStackTrace();
         }
         return info;
-    }
-
-    public static void main(String[] args) {
-        String hashAlgorithName = "MD5";
-        String password = "11111";
-        int hashIterations = 1;
-        ByteSource credentialsSalt = ByteSource.Util.bytes("admin1");
-        Object obj = new SimpleHash(hashAlgorithName, password, credentialsSalt, hashIterations);
-        System.out.println(obj.toString());
     }
 }

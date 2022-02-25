@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.o11eh.servicedemo.base.validation.groups.Get;
+import com.o11eh.servicedemo.base.validation.groups.Query;
 import com.o11eh.servicedemo.base.validation.groups.Update;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class BaseEntry<T extends Model<T>> extends Model<T> implements Serializa
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(groups = {Get.class, Update.class})
+    @NotNull(groups = {Query.class, Update.class})
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 

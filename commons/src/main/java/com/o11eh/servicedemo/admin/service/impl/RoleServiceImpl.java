@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
  * @since 2022-02-14
  */
 @Service
+@RequiresRoles("")
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
 
+    @Override
+    public Long add(Role role) {
+        return null;
+    }
 }

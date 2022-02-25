@@ -2,6 +2,7 @@ package com.o11eh.servicedemo.admin.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.Role;
@@ -35,8 +36,8 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
 
     @Override
     public Long add(Admin admin) {
-        LambdaQueryWrapper<Admin> wrapper = wrapper().select(Admin::getUsername).eq(Admin::getUsername,
-                admin.getUsername());
+        LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery()
+                .select(Admin::getUsername).eq(Admin::getUsername, admin.getUsername());
         Admin adminInDB = getOne(wrapper);
         if (ObjectUtil.isNotNull(adminInDB)) {
             throw BusinessException.e(ResultMessage.USERNAME_EXISTS);
@@ -51,16 +52,30 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
 
     @Override
     public Page<Admin> getPage(Long current, Long size) {
-        return page(current, size);
+        LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery().select(Admin.class,
+                i -> !i.getColumn().equals("password"));
+        Page<Admin> page = page(current, size, wrapper);
+        page.getRecords().forEach(admin -> {
+            Role role = roleService.getById(admin.getRoleId());
+            admin.setRole(role);
+        });
+        return page;
     }
 
     @Override
     public Admin getByUsername(String username) {
-        Admin admin = getOne(wrapper().eq(Admin::getUsername, username).last(LIMIT_1));
+        Admin admin = getOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername, username).last(LIMIT_1));
         if (ObjectUtil.isNotNull(admin)) {
-            Role role = roleService.getOne(roleService.wrapper().eq(BaseEntry::getId, admin.getRoleId()).last(LIMIT_1));
+            Role role = roleService.getOne(Wrappers.<Role>lambdaQuery().eq(BaseEntry::getId, admin.getRoleId())
+                    .last(LIMIT_1));
             admin.setRole(role);
         }
         return admin;
+    }
+
+    @Override
+    public Long updateAdmin(Admin admin) {
+        this.updateById(admin);
+        return admin.getId();
     }
 }

@@ -5,7 +5,7 @@ import com.o11eh.servicedemo.base.service.BaseService;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author 011eh
@@ -13,4 +13,6 @@ import com.o11eh.servicedemo.base.service.BaseService;
  */
 public interface RoleService extends BaseService<Role> {
 
+
+    Long add(Role role);
 }

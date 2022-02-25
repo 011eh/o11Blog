@@ -1,12 +1,14 @@
 package com.o11eh.servicedemo.admin.controller;
 
 
+import com.o11eh.servicedemo.admin.entry.Role;
+import com.o11eh.servicedemo.admin.service.RoleService;
+import com.o11eh.servicedemo.base.constants.BaseApiConstants;
 import com.o11eh.servicedemo.base.controller.BaseController;
 import com.o11eh.servicedemo.base.resp.Result;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -20,8 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/role")
 @RequiresRoles("SUPER_ADMIN")
 public class RoleController extends BaseController {
+    @Autowired
+    RoleService roleService;
+
     @GetMapping("/hello")
     public Result hello() {
         return Result.success();
+    }
+
+    @PostMapping(BaseApiConstants.ADD)
+    public Result addRole(@RequestBody Role role) {
+        Long id = roleService.add(role);
+        return Result.success(id);
     }
 }

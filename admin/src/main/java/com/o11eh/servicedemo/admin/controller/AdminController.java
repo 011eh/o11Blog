@@ -6,14 +6,15 @@ import cn.hutool.http.server.HttpServerRequest;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.ApiConstants;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.security.ShiroUtils;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.constants.BaseApiConstants;
 import com.o11eh.servicedemo.base.controller.BaseController;
 import com.o11eh.servicedemo.base.exception.BusinessException;
+import com.o11eh.servicedemo.base.req.PageParams;
 import com.o11eh.servicedemo.base.resp.Result;
 import com.o11eh.servicedemo.base.validation.groups.Add;
 import com.o11eh.servicedemo.base.validation.groups.Update;
-import com.o11eh.servicedemo.base.vo.PageParams;
 import com.o11eh.servicedemo.servicebase.utils.ValidUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,7 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiConstants.ADMIN)
 @Api(tags = "管理员")
 @RestController
+
 public class AdminController extends BaseController {
 
     @Autowired
@@ -46,6 +49,7 @@ public class AdminController extends BaseController {
 
     @PostMapping(BaseApiConstants.ADD)
     @ApiOperation("增加管理员")
+    @RequiresRoles(ShiroUtils.SUPER_ADMIN)
     public Result add(@Validated(Add.class) @RequestBody Admin admin, BindingResult result) {
         ValidUtil.checkParam(result);
         Long id = adminService.add(admin);
@@ -53,17 +57,21 @@ public class AdminController extends BaseController {
     }
 
     @ApiOperation("管理员分页查询")
-    @GetMapping(BaseApiConstants.CURRENT_SIZE)
-    public Result page(PageParams params) {
+    @PostMapping(BaseApiConstants.PAGE)
+    @RequiresRoles(ShiroUtils.SUPER_ADMIN)
+    public Result page(@Validated PageParams params, BindingResult result) {
+        ValidUtil.checkParam(result);
         Page<Admin> page = adminService.getPage(params.getCurrent(), params.getSize());
         return Result.success(page);
     }
 
     @ApiOperation("管理员更新")
     @PutMapping(BaseApiConstants.UPDATE)
-    public void update(@Validated(Update.class) @RequestBody Admin admin, BindingResult result) {
+    @RequiresRoles(ShiroUtils.SUPER_ADMIN)
+    public Result update(@Validated(Update.class) @RequestBody Admin admin, BindingResult result) {
         ValidUtil.checkParam(result);
-        adminService.updateById(admin);
+        Long id = adminService.updateAdmin(admin);
+        return Result.success(id);
     }
 
     @ApiOperation("登录")
@@ -104,7 +112,6 @@ public class AdminController extends BaseController {
     public Result anon() {
         return Result.success();
     }
-
 
     @GetMapping("admin")
     public Result admin() {

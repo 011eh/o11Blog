@@ -36,8 +36,4 @@ public class Role extends BaseEntry<Role> {
     @ApiModelProperty("操作菜单Id列表")
     @TableField("menu_ids")
     private String menuIds;
-
-    @ApiModelProperty("状态")
-    @TableField("status")
-    private Integer status;
 }
