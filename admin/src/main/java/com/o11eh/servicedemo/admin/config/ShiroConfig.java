@@ -47,8 +47,9 @@ public class ShiroConfig {
         }});
         factoryBean.setFilterChainDefinitionMap(new HashMap<String, String>() {{
             put("/admin/authc", "authc");
-            put("/admin/normal", "hasAnyRoles[SUPER_ADMIN,NORMAL_ADMIN]");
-            put("/admin/admin", "roles[SUPER_ADMIN],perms[add]");
+            put("/admin/perm1", "perms[admin:perm1]");
+            put("/admin/perm2", "perms[admin:perm2]");
+            put("/admin/perm3", "perms[admin:perm3]");
         }});
         return factoryBean;
     }

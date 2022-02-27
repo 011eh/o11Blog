@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.servicebase.utils;
+package com.o11eh.servicedemo.base.utils;
 
 import com.o11eh.servicedemo.base.constants.BaseConstants;
 import com.o11eh.servicedemo.base.exception.BusinessException;

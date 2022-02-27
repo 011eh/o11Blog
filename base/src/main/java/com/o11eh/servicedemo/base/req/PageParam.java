@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.Min;
 
 @Data
-public class PageParams {
+public class PageParam {
     @Min(value = 1)
     private Long current;
     @Range(min = 1, max = 100)

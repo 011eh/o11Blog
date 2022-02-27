@@ -1,31 +1,33 @@
 package com.o11eh.servicedemo.admin.security;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.AdminService;
+import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.base.enums.StatusEnum;
+import com.o11eh.servicedemo.base.utils.JsonUtl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     public String getName() {
@@ -64,18 +66,10 @@ public class UserRealm extends AuthorizingRealm {
         Role role = admin.getRole();
         info.addRole(role.getRoleKey());
 
-        ObjectMapper mapper = new ObjectMapper();
-        CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, String.class);
-
-        try {
-            String permissionKeys = role.getPermissionKeys();
-            if (StrUtil.isNotBlank(permissionKeys)) {
-                List<String> permissions = mapper.readValue(permissionKeys, collectionType);
-                info.addStringPermissions(permissions);
-            }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        List<Integer> permissionIds = JsonUtl.jsonToList(role.getPermissionIds(), Integer.class);
+        List<Permission> permissions = permissionService.getPermissionKeysByIds(permissionIds);
+        List<String> keys = permissions.stream().map(Permission::getPermissionKey).collect(Collectors.toList());
+        info.addStringPermissions(keys);
         return info;
     }
 }

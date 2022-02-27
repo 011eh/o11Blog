@@ -1,9 +1,8 @@
 package com.o11eh.servicedemo.admin.controller;
 
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.entry.Role;
-import com.o11eh.servicedemo.admin.service.RoleService;
+import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.base.constants.BaseApiConstants;
 import com.o11eh.servicedemo.base.constants.DocConstants;
 import com.o11eh.servicedemo.base.controller.BaseController;
@@ -18,56 +17,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
- *
  * @author 011eh
- * @since 2022-02-14
+ * @since 2022/02/27 13:30
  */
 @RestController
-@RequestMapping("/role")
-@Api(tags = "角色")
-public class RoleController extends BaseController {
+@Api(tags = "权限")
+@RequestMapping("permission")
+public class PermissionController extends BaseController {
     @Autowired
-    RoleService roleService;
+    private PermissionService permissionService;
 
     @Override
     @GetMapping(BaseApiConstants.PATH_ID)
     @ApiOperation(DocConstants.DETAIL)
     public Result detail(@PathVariable Long id) {
-        Role role = roleService.getById(id);
-        return Result.success(role);
+        Permission permission = permissionService.getById(id);
+        return Result.success(permission);
     }
 
     @Override
     @PostMapping(BaseApiConstants.PAGE)
     @ApiOperation(DocConstants.PAGE)
     public Result page(@RequestBody PageParam param, BindingResult result) {
-        Page<Role> page = roleService.page(param.getCurrent(), param.getSize());
+        Page<Permission> page = permissionService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
 
-    @ApiOperation(DocConstants.ADD)
     @PostMapping(BaseApiConstants.ADD)
-    public Result add(@RequestBody Role role) {
-        Long id = roleService.add(role);
-        return Result.success(id);
+    @ApiOperation(DocConstants.ADD)
+    public Result add(@RequestBody Permission permission) {
+        permissionService.save(permission);
+        return Result.success(permission.getId());
     }
-
 
     @PutMapping(BaseApiConstants.UPDATE)
     @ApiOperation(DocConstants.UPDATE)
-    public Result update(@RequestBody Role role) {
-        Long id = roleService.updateRole(role);
-        return Result.success(id);
+    public Result update(@RequestBody Permission permission) {
+        permissionService.updateById(permission);
+        return Result.success(permission.getId());
     }
 
+
     @Override
-    @DeleteMapping(BaseApiConstants.DELETE)
     @ApiOperation(DocConstants.BATCH_DELETE)
+    @DeleteMapping(BaseApiConstants.DELETE)
     public Result deleteBatch(@RequestBody List<Long> ids) {
-        roleService.removeBatchByIds(ids);
+        permissionService.removeBatchByIds(ids);
         return Result.success();
     }
 }
