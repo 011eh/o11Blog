@@ -12,7 +12,7 @@ import com.o11eh.servicedemo.base.service.BaseService;
  * @since 2022-02-14
  */
 public interface RoleService extends BaseService<Role> {
-
-
     Long add(Role role);
+
+    Long updateRole(Role role);
 }

@@ -4,7 +4,7 @@ import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.RoleMapper;
 import com.o11eh.servicedemo.admin.service.RoleService;
 import com.o11eh.servicedemo.base.service.impl.BaseServiceImpl;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+import com.o11eh.servicedemo.base.utils.JsonUtl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,11 +16,21 @@ import org.springframework.stereotype.Service;
  * @since 2022-02-14
  */
 @Service
-@RequiresRoles("")
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Override
     public Long add(Role role) {
-        return null;
+        String permissionKeys = JsonUtl.ObjectToJson(role.getPermissionKeyList());
+        role.setPermissionIds(permissionKeys);
+        role.insert();
+        return role.getId();
+    }
+
+    @Override
+    public Long updateRole(Role role) {
+        String permissionKeys = JsonUtl.ObjectToJson(role.getPermissionKeyList());
+        role.setPermissionIds(permissionKeys);
+        role.updateById();
+        return role.getId();
     }
 }
