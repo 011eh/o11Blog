@@ -7,6 +7,8 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Date;
 
@@ -18,16 +20,16 @@ public class JwtUtil {
     public static final String signature = "HVBnvSv8jt-3-rKdi!FD8M28_7:YAa";
     public static final String TYPE = "typ";
     public static final String JWT = "JWT";
+    public static final String HEADER = "Authorization";
 
-    public static String createToken(String userName, String roleName,
-                                     String audience, String issuer, long ttl) {
+
+    public static String createToken(String username, String audience, String issuer, long ttl) {
         long nowMills = System.currentTimeMillis();
         Date nowDate = new Date(nowMills);
         JwtBuilder builder = Jwts.builder()
                 .setHeaderParam(TYPE, JWT)
-                .claim(BaseConstants.ROLE_NAME, roleName)
                 .claim(BaseConstants.CREATE_TIME, nowDate)
-                .setSubject(userName)
+                .setSubject(username)
                 .setIssuer(issuer)
                 .setAudience(audience)
                 .setNotBefore(nowDate)
@@ -36,6 +38,11 @@ public class JwtUtil {
             builder.setExpiration(new Date(nowMills + ttl));
         }
         return builder.compact();
+    }
+
+    public static String getToken(ServletRequest request) {
+        HttpServletRequest req = (HttpServletRequest) request;
+        return req.getHeader(HEADER);
     }
 
     public static Claims parseJWT(String token) {
@@ -51,12 +58,6 @@ public class JwtUtil {
 
     public static boolean isExpired(String token) {
         return parseJWT(token).getExpiration().before(new Date());
-    }
-
-    public static boolean verify(String token, String username) {
-        String subject = getUsername(token);
-        boolean success = subject.equals(username);
-        return !isExpired(token) && success;
     }
 
     public static String getUsername(String token) {

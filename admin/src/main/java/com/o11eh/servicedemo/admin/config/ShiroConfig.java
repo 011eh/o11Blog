@@ -1,25 +1,34 @@
 package com.o11eh.servicedemo.admin.config;
 
+import com.o11eh.servicedemo.admin.security.JwtFilter;
+import com.o11eh.servicedemo.admin.security.JwtRealm;
 import com.o11eh.servicedemo.admin.security.UserRealm;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheManager;
 
-import java.util.HashMap;
+import javax.servlet.Filter;
+import java.util.LinkedHashMap;
 
 @Configuration
 public class ShiroConfig {
-
     public static final int HASH_ITERATIONS = 5;
+
     public static final String LOGIN_URL = "/auth/toLogin";
     public static final String UNAUTHORIZED_URL = "/auth/unauthorized";
 
     @Bean
+    public SimpleCredentialsMatcher hashedCredentialsMatcher() {
+        return new SimpleCredentialsMatcher();
+    }
+
+    @Bean
+    public JwtRealm jwtRealm() {
+        return new JwtRealm();
+    }
+
     public UserRealm userRealm(SimpleCredentialsMatcher matcher) {
         UserRealm userRealm = new UserRealm();
         userRealm.setCredentialsMatcher(matcher);
@@ -27,7 +36,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public DefaultWebSecurityManager securityManager(UserRealm realm) {
+    public DefaultWebSecurityManager securityManager(JwtRealm realm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(realm);
         return securityManager;
@@ -40,14 +49,18 @@ public class ShiroConfig {
         factoryBean.setLoginUrl(LOGIN_URL);
         factoryBean.setSecurityManager(securityManager);
 
-        factoryBean.setFilterChainDefinitionMap(new HashMap<String, String>() {{
+        factoryBean.setFilters(new LinkedHashMap<String, Filter>() {{
+            put("jwtFilter", new JwtFilter());
+        }});
+
+        factoryBean.setFilterChainDefinitionMap(new LinkedHashMap<String, String>() {{
             put("/admin/*", "perms[admin:query]");
             put("/admin/page", "perms[admin:query]");
             put("/admin/add", "perms[admin:add]");
             put("/admin/update", "perms[admin:update]");
             put("/admin/delete", "perms[admin:delete]");
 
-            put("/permission/", "perms[permission:query]");
+            put("/permission/*", "perms[permission:query]");
             put("/permission/page", "perms[admin:query]");
             put("/permission/add", "perms[permission:add]");
             put("/permission/update", "perms[permission:update]");
@@ -58,15 +71,8 @@ public class ShiroConfig {
             put("/role/add", "perms[role:add]");
             put("/role/update", "perms[role:update]");
             put("/role/delete", "perms[role:delete]");
+            put("/**", "jwtFilter");
         }});
         return factoryBean;
-    }
-
-    @Bean
-    public SimpleCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
-        matcher.setHashAlgorithmName(Md5Hash.ALGORITHM_NAME);
-        matcher.setHashIterations(HASH_ITERATIONS);
-        return matcher;
     }
 }

@@ -35,7 +35,6 @@ import java.util.List;
 @Service
 public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implements AdminService {
 
-    public static final int HASH_ITERATIONS = 5;
     @Autowired
     private RoleService roleService;
 
@@ -49,7 +48,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         }
         ByteSource credentialsSalt = ByteSource.Util.bytes(admin.getUsername());
         String password = new SimpleHash(Md5Hash.ALGORITHM_NAME, admin.getPassword(), credentialsSalt,
-                HASH_ITERATIONS).toString();
+                5).toString();
         admin.setPassword(password);
         admin.insert();
         return admin.getId();

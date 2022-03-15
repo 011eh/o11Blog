@@ -25,6 +25,6 @@ public class BusinessException extends RuntimeException {
     }
 
     public static BusinessException e() {
-        return new BusinessException(ResultCode.ERROR, ResultMessage.SUCCESS);
+        return new BusinessException(ResultCode.ERROR, ResultMessage.ERROR);
     }
 }
