@@ -54,8 +54,6 @@ public class UserRealm extends AuthorizingRealm {
             throw new DisabledAccountException("账号不可用");
         }
 
-
-
         ByteSource credentialsSalt = ByteSource.Util.bytes(admin.getUsername());
         return new SimpleAuthenticationInfo(admin, admin.getPassword(), credentialsSalt, getName());
     }
