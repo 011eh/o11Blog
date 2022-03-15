@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth")
+@ApiOperation("登录接口")
 public class LoginController {
     @ApiOperation("登录")
     @PostMapping("/login")
@@ -30,6 +31,7 @@ public class LoginController {
         } catch (IncorrectCredentialsException e) {
             throw BusinessException.e("用户或密码错误");
         }
+
         return Result.success();
     }
 
@@ -47,31 +49,5 @@ public class LoginController {
     @GetMapping("unauthorized")
     public Result unauthorized() {
         throw BusinessException.e("无相关权限进行操作");
-    }
-
-
-    @GetMapping("anon")
-    public Result anon() {
-        return Result.success();
-    }
-
-    @GetMapping("authc")
-    public Result authc() {
-        return Result.success();
-    }
-
-    @GetMapping("perm1")
-    public Result perm1() {
-        return Result.success();
-    }
-
-    @GetMapping("perm2")
-    public Result perm2() {
-        return Result.success();
-    }
-
-    @GetMapping("perm3")
-    public Result perm3() {
-        return Result.success();
     }
 }

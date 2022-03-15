@@ -16,6 +16,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.ReactiveHyperLogLogCommands;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,8 +46,6 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
         Admin admin = adminService.getByUsername(username);
-        ByteSource.Util.bytes(admin.getUsername());
-
 
         if (ObjectUtil.isNull(admin)) {
             throw new UnknownAccountException("用户名不存在");
@@ -54,6 +53,9 @@ public class UserRealm extends AuthorizingRealm {
         if (admin.getStatus().equals(StatusEnum.Disable.getStatus())) {
             throw new DisabledAccountException("账号不可用");
         }
+
+
+
         ByteSource credentialsSalt = ByteSource.Util.bytes(admin.getUsername());
         return new SimpleAuthenticationInfo(admin, admin.getPassword(), credentialsSalt, getName());
     }

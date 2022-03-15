@@ -59,6 +59,11 @@ spring:
 
       filters: wall,stat,log4j
 
+  redis:
+    host: redis
+    port: 6379
+    password: 9zHu2:HGqqB_G7s
+
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
