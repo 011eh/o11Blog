@@ -10,5 +10,5 @@ import java.util.List;
  * @since 2022/02/27 12:21
  */
 public interface PermissionService extends BaseService<Permission> {
-    List<Permission> getPermissionKeysByIds(List<Integer> permissionIds);
+    List<Permission> getPermissionKeysByIds(List<Long> permissionIds);
 }

@@ -24,7 +24,6 @@ public class Role extends BaseEntry<Role> {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String roleKey;
     private String permissionIds;
     private String summary;
     @TableField(exist = false)

@@ -64,9 +64,8 @@ public class UserRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Admin admin = (Admin) principalCollection.getPrimaryPrincipal();
         Role role = admin.getRole();
-        info.addRole(role.getRoleKey());
 
-        List<Integer> permissionIds = JsonUtl.jsonToList(role.getPermissionIds(), Integer.class);
+        List<Long> permissionIds = JsonUtl.jsonToList(role.getPermissionIds(), Long.class);
         List<Permission> permissions = permissionService.getPermissionKeysByIds(permissionIds);
         List<String> keys = permissions.stream().map(Permission::getPermissionKey).collect(Collectors.toList());
         info.addStringPermissions(keys);

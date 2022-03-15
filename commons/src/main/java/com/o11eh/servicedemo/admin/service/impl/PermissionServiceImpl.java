@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission> implements PermissionService {
     @Override
-    public List<Permission> getPermissionKeysByIds(List<Integer> permissionIds) {
+    public List<Permission> getPermissionKeysByIds(List<Long> permissionIds) {
         LambdaQueryWrapper<Permission> wrapper = Wrappers.<Permission>lambdaQuery().select(Permission::getPermissionKey)
                 .in(CollUtil.isNotEmpty(permissionIds), BaseEntry::getId, permissionIds);
         return this.list(wrapper);

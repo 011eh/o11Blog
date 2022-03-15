@@ -38,7 +38,7 @@ public class PermissionController extends BaseController {
     @Override
     @PostMapping(BaseApiConstants.PAGE)
     @ApiOperation(DocConstants.PAGE)
-    public Result page(@RequestBody PageParam param, BindingResult result) {
+    public Result page(@RequestBody PageParam param) {
         Page<Permission> page = permissionService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }

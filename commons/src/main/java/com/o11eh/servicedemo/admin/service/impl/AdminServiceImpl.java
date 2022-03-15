@@ -73,8 +73,6 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         if (ObjectUtil.isNotNull(admin)) {
             Role role = roleService.getOne(Wrappers.<Role>lambdaQuery().eq(BaseEntry::getId, admin.getRoleId())
                     .last(LIMIT_1));
-            ObjectMapper mapper = new ObjectMapper();
-            CollectionLikeType collectionLikeType = mapper.getTypeFactory().constructCollectionLikeType(List.class, Integer.class);
             admin.setRole(role);
         }
         return admin;

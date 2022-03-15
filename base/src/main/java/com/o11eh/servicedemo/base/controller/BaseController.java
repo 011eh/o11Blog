@@ -7,17 +7,14 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 
 public class BaseController {
-    //@PostMapping(BaseApiConstants.PAGE)
-    public Result page(PageParam param, BindingResult result) {
+    public Result page(PageParam param) {
         throw new UnsupportedOperationException();
     }
 
-    //@DeleteMapping(BaseApiConstants.DELETE)
     public Result deleteBatch(List<Long> ids) {
         throw new UnsupportedOperationException();
     }
 
-    //@GetMapping(BaseApiConstants.PATH_ID)
     public Result detail(Long id) {
         throw new UnsupportedOperationException();
     }
