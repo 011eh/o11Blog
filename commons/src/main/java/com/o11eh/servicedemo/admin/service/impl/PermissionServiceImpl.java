@@ -11,6 +11,8 @@ import com.o11eh.servicedemo.base.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author 011eh
@@ -23,5 +25,20 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         LambdaQueryWrapper<Permission> wrapper = Wrappers.<Permission>lambdaQuery().select(Permission::getPermissionKey)
                 .in(CollUtil.isNotEmpty(permissionIds), BaseEntry::getId, permissionIds);
         return this.list(wrapper);
+    }
+
+    @Override
+    public List<Permission> getPermissions() {
+        final int rootParentId = 0;
+
+        List<Permission> permissions = this.list();
+        Map<Long, List<Permission>> group = permissions.stream().collect(Collectors.groupingBy(Permission::getParentId));
+        List<Permission> roots = group.remove(rootParentId);
+
+        roots.stream().map(root -> {
+            root.setChildren();
+        });
+
+        return null;
     }
 }

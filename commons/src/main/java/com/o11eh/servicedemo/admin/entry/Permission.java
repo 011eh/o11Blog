@@ -1,11 +1,11 @@
 package com.o11eh.servicedemo.admin.entry;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import java.util.regex.PatternSyntaxException;
+import java.util.List;
 
 /**
  * @author 011eh
@@ -16,4 +16,11 @@ import java.util.regex.PatternSyntaxException;
 public class Permission extends BaseEntry<Permission> {
     private String name;
     private String permissionKey;
+    private Integer status;
+    private Long parentId;
+    private Integer sort;
+    private Integer resourceType;
+
+    @TableField(exist = false)
+    private List<Permission> children;
 }

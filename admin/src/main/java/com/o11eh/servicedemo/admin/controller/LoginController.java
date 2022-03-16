@@ -4,6 +4,7 @@ import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.resp.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("auth")
-@ApiOperation("登录接口")
+@Api(tags = "登录")
 public class LoginController {
 
     @Autowired

@@ -3,11 +3,11 @@ package com.o11eh.servicedemo.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.servicebase.constants.BaseApiConstants;
-import com.o11eh.servicedemo.servicebase.constants.DocConstants;
 import com.o11eh.servicedemo.base.controller.BaseController;
 import com.o11eh.servicedemo.base.req.PageParam;
 import com.o11eh.servicedemo.base.resp.Result;
+import com.o11eh.servicedemo.servicebase.constants.BaseApiConstants;
+import com.o11eh.servicedemo.servicebase.constants.DocConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +63,12 @@ public class PermissionController extends BaseController {
     public Result deleteBatch(@RequestBody List<Long> ids) {
         permissionService.removeBatchByIds(ids);
         return Result.success();
+    }
+
+    @ApiOperation("授予权限")
+    @GetMapping("permission")
+    public Result getPermissions() {
+        List<Permission> permissions = permissionService.getPermissions();
+        return Result.success(permissions);
     }
 }

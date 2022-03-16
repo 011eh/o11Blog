@@ -89,7 +89,7 @@ public class ShiroConfig {
             put("/admin/delete", "perms[admin:delete]");
 
             put("/permission/*", "perms[permission:query]");
-            put("/permission/page", "perms[admin:query]");
+            put("/permission/page", "perms[permission:query]");
             put("/permission/add", "perms[permission:add]");
             put("/permission/update", "perms[permission:update]");
             put("/permission/delete", "perms[permission:delete]");
