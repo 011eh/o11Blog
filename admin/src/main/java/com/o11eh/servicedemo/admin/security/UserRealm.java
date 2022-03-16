@@ -2,12 +2,10 @@ package com.o11eh.servicedemo.admin.security;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.o11eh.servicedemo.admin.entry.Admin;
-import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.base.enums.StatusEnum;
-import com.o11eh.servicedemo.base.utils.JsonUtl;
+import com.o11eh.servicedemo.servicebase.enums.StatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -16,10 +14,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.ReactiveHyperLogLogCommands;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
@@ -29,6 +26,9 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @Override
     public String getName() {
@@ -61,14 +61,14 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         log.info("进行授权");
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Admin admin = (Admin) principalCollection.getPrimaryPrincipal();
         Role role = admin.getRole();
 
-        List<Long> permissionIds = JsonUtl.jsonToList(role.getPermissionIds(), Long.class);
-        List<Permission> permissions = permissionService.getPermissionKeysByIds(permissionIds);
-        List<String> keys = permissions.stream().map(Permission::getPermissionKey).collect(Collectors.toList());
-        info.addStringPermissions(keys);
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        if (ObjectUtil.isNotNull(role)) {
+            List<String> keys = role.getPermissionKeyList();
+            info.addStringPermissions(keys);
+        }
         return info;
     }
 }

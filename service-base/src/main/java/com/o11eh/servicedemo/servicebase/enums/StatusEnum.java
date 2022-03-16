@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.base.enums;
+package com.o11eh.servicedemo.servicebase.enums;
 
 import lombok.AllArgsConstructor;
 

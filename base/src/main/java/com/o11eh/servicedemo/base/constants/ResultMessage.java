@@ -6,8 +6,4 @@ package com.o11eh.servicedemo.base.constants;
  */
 public class ResultMessage {
     public static final String SUCCESS = "操作成功";
-    public static final String ERROR = "操作失败";
-    public static final String INTERNAL_SERVER_ERROR = "内部服务器错误";
-
-    public static final String USERNAME_EXISTS = "用户名已存在";
 }

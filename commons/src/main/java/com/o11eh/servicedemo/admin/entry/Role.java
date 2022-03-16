@@ -26,6 +26,7 @@ public class Role extends BaseEntry<Role> {
     private String name;
     private String permissionIds;
     private String summary;
+
     @TableField(exist = false)
-    private List<Long> permissionKeyList;
+    private List<String> permissionKeyList;
 }

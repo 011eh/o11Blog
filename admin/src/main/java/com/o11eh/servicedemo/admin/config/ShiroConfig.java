@@ -1,15 +1,19 @@
 package com.o11eh.servicedemo.admin.config;
 
-import com.o11eh.servicedemo.admin.security.JwtFilter;
-import com.o11eh.servicedemo.admin.security.JwtRealm;
 import com.o11eh.servicedemo.admin.security.UserRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
+import org.apache.shiro.codec.Base64;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.ShiroHttpSession;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 
 @Configuration
@@ -18,17 +22,20 @@ public class ShiroConfig {
 
     public static final String LOGIN_URL = "/auth/toLogin";
     public static final String UNAUTHORIZED_URL = "/auth/unauthorized";
+    public static final int MINUTE = 60;
+    public static final int Day = 24 * 60 * MINUTE;
+    public static final String CIPHER_KEY = "SlNMMTBBYkNmbEVWTEFWMw==";
+
 
     @Bean
     public SimpleCredentialsMatcher hashedCredentialsMatcher() {
-        return new SimpleCredentialsMatcher();
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+        matcher.setHashAlgorithmName(Md5Hash.ALGORITHM_NAME);
+        matcher.setHashIterations(HASH_ITERATIONS);
+        return matcher;
     }
 
     @Bean
-    public JwtRealm jwtRealm() {
-        return new JwtRealm();
-    }
-
     public UserRealm userRealm(SimpleCredentialsMatcher matcher) {
         UserRealm userRealm = new UserRealm();
         userRealm.setCredentialsMatcher(matcher);
@@ -36,9 +43,34 @@ public class ShiroConfig {
     }
 
     @Bean
-    public DefaultWebSecurityManager securityManager(JwtRealm realm) {
+    public DefaultWebSessionManager sessionManager() {
+        SimpleCookie cookie = new SimpleCookie(ShiroHttpSession.DEFAULT_SESSION_ID_NAME);
+        cookie.setMaxAge(30 * MINUTE);
+
+        DefaultWebSessionManager manager = new DefaultWebSessionManager();
+        manager.setSessionIdCookie(cookie);
+        manager.setSessionIdCookieEnabled(true);
+        return manager;
+    }
+
+    @Bean
+    public CookieRememberMeManager rememberMeManager() {
+        SimpleCookie cookie = new SimpleCookie(CookieRememberMeManager.DEFAULT_REMEMBER_ME_COOKIE_NAME);
+        cookie.setMaxAge(5 * Day);
+
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(cookie);
+        cookieRememberMeManager.setCipherKey(Base64.decode(CIPHER_KEY));
+        return cookieRememberMeManager;
+    }
+
+    @Bean
+    public DefaultWebSecurityManager securityManager(UserRealm realm, DefaultWebSessionManager sessionManager,
+                                                     CookieRememberMeManager rememberMeManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(realm);
+        securityManager.setSessionManager(sessionManager);
+        securityManager.setRememberMeManager(rememberMeManager);
         return securityManager;
     }
 
@@ -48,10 +80,6 @@ public class ShiroConfig {
         factoryBean.setUnauthorizedUrl(UNAUTHORIZED_URL);
         factoryBean.setLoginUrl(LOGIN_URL);
         factoryBean.setSecurityManager(securityManager);
-
-        factoryBean.setFilters(new LinkedHashMap<String, Filter>() {{
-            put("jwtFilter", new JwtFilter());
-        }});
 
         factoryBean.setFilterChainDefinitionMap(new LinkedHashMap<String, String>() {{
             put("/admin/*", "perms[admin:query]");
@@ -71,7 +99,6 @@ public class ShiroConfig {
             put("/role/add", "perms[role:add]");
             put("/role/update", "perms[role:update]");
             put("/role/delete", "perms[role:delete]");
-            put("/**", "jwtFilter");
         }});
         return factoryBean;
     }

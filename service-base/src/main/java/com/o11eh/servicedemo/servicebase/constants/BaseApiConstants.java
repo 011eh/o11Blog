@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.base.constants;
+package com.o11eh.servicedemo.servicebase.constants;
 
 /**
  * @author 011eh

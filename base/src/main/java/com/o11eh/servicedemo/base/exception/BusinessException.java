@@ -23,8 +23,4 @@ public class BusinessException extends RuntimeException {
     public static BusinessException e(String message) {
         return new BusinessException(ResultCode.ERROR, message);
     }
-
-    public static BusinessException e() {
-        return new BusinessException(ResultCode.ERROR, ResultMessage.ERROR);
-    }
 }

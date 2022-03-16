@@ -24,7 +24,7 @@ public class JsonUtl {
             try {
                 return OBJECT_MAPPER.readValue(json, collectionType);
             } catch (JsonProcessingException e) {
-                throw BusinessException.e(ERROR_MESSAGE);
+                throw BusinessException.e(e.getMessage());
             }
         }
         return null;
@@ -34,7 +34,7 @@ public class JsonUtl {
         try {
             return OBJECT_MAPPER.readValue(json, aClass);
         } catch (JsonProcessingException e) {
-            throw BusinessException.e(ERROR_MESSAGE);
+            throw BusinessException.e(e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class JsonUtl {
         try {
             return OBJECT_MAPPER.writeValueAsString(o);
         } catch (JsonProcessingException e) {
-            throw BusinessException.e(ERROR_MESSAGE);
+            throw BusinessException.e(e.getMessage());
         }
     }
 }
