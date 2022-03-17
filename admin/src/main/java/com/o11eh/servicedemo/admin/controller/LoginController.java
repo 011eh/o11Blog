@@ -4,6 +4,7 @@ import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.resp.Result;
+import com.o11eh.servicedemo.servicebase.constants.RedisCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -13,6 +14,7 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +26,9 @@ public class LoginController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @ApiOperation("登录")
     @PostMapping("/login")
@@ -42,7 +47,15 @@ public class LoginController {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
         SecurityUtils.getSubject().login(token);
 
+        redisTemplate.opsForValue().set(RedisCo.ADMIN + RedisCo.COLON + admin.getId(), admin);
         return Result.success();
+    }
+
+
+    @GetMapping("info")
+    public Result getUserInfo(long userId) {
+        Admin admin = (Admin) redisTemplate.opsForValue().get(RedisCo.ADMIN + RedisCo.COLON + userId);
+        return Result.success(admin);
     }
 
     @GetMapping("logout")

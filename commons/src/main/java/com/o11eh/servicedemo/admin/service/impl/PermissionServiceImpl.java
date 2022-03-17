@@ -29,16 +29,14 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
 
     @Override
     public List<Permission> getPermissions() {
-        final int rootParentId = 0;
+        final long rootParentId = 0;
 
         List<Permission> permissions = this.list();
         Map<Long, List<Permission>> group = permissions.stream().collect(Collectors.groupingBy(Permission::getParentId));
         List<Permission> roots = group.remove(rootParentId);
 
-        roots.stream().map(root -> {
-            root.setChildren();
-        });
+        roots.forEach(root -> root.setChildren(group.get(root.getId())));
 
-        return null;
+        return roots;
     }
 }

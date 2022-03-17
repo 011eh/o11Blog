@@ -99,6 +99,7 @@ public class ShiroConfig {
             put("/role/add", "perms[role:add]");
             put("/role/update", "perms[role:update]");
             put("/role/delete", "perms[role:delete]");
+            put("**", "authc");
         }});
         return factoryBean;
     }
