@@ -65,8 +65,8 @@ public class PermissionController extends BaseController {
         return Result.success();
     }
 
-    @ApiOperation("授予权限")
-    @GetMapping("permission")
+    @ApiOperation("授权列表")
+    @GetMapping("permissionList")
     public Result getPermissions() {
         List<Permission> permissions = permissionService.getPermissions();
         return Result.success(permissions);

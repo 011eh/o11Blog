@@ -2,6 +2,7 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -24,9 +25,13 @@ public class Role extends BaseEntry<Role> {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String permissionIds;
     private String summary;
 
     @TableField(exist = false)
-    private List<String> permissionKeyList;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<String> permissionKeys;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @TableField(exist = false)
+    private List<Long> permissionIds;
 }

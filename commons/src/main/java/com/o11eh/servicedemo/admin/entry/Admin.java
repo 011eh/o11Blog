@@ -2,16 +2,17 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
+import com.o11eh.servicedemo.base.utils.jackson.Views;
 import com.o11eh.servicedemo.base.validation.groups.Add;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
 
 /**
  * <p>
@@ -26,24 +27,22 @@ import javax.validation.constraints.Null;
 @ApiModel(value = "Admin对象", description = "管理员")
 public class Admin extends BaseEntry<Admin> {
 
-    @ApiModelProperty("用户名")
     @NotBlank(groups = Add.class)
     private String username;
 
+    private String nickName;
+
     @NotBlank(groups = Add.class)
-    @ApiModelProperty("密码")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    @ApiModelProperty("角色Id")
     private Long roleId;
-
-    @ApiModelProperty("头像")
     private String avatar;
 
-    @Null
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty("状态")
     private Integer status;
 
+    @JsonUnwrapped(prefix = "role")
     @TableField(exist = false)
     private Role role;
 }

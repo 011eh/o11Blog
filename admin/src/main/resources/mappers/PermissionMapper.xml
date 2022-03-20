@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.o11eh.servicedemo.admin.mapper.PermissionMapper">
+    <insert id="insertPermission">
+        insert into back_role_permission(role_id, permission_id) value (#{roleId},#{pId});
+    </insert>
+    <delete id="deletePermission">
+        delete
+        from back_role_permission
+        where role_id = #{roleId}
+    </delete>
+    <select id="selectKeys" resultType="java.lang.String">
+        select permission_key
+        from back_role_permission rp
+                 join back_permission p on rp.permission_id = p.id
+        where role_id = #{roleId};
+    </select>
+</mapper>

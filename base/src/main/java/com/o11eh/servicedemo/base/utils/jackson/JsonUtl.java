@@ -1,10 +1,11 @@
-package com.o11eh.servicedemo.base.utils;
+package com.o11eh.servicedemo.base.utils.jackson;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.o11eh.servicedemo.base.exception.BusinessException;
+import org.omg.CORBA.OMGVMCID;
 
 import java.util.List;
 

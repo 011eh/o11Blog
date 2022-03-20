@@ -3,6 +3,7 @@ package com.o11eh.servicedemo.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Role;
+import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
 import com.o11eh.servicedemo.servicebase.constants.BaseApiConstants;
 import com.o11eh.servicedemo.servicebase.constants.DocConstants;
@@ -31,11 +32,16 @@ public class RoleController extends BaseController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    private PermissionService permissionService;
+
     @Override
     @GetMapping(BaseApiConstants.PATH_ID)
     @ApiOperation(DocConstants.DETAIL)
     public Result detail(@PathVariable Long id) {
         Role role = roleService.getById(id);
+        List<String> keys = permissionService.getKeysByRoleId(id);
+        role.setPermissionKeys(keys);
         return Result.success(role);
     }
 

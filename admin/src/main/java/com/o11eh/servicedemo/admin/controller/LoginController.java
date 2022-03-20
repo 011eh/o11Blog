@@ -1,10 +1,11 @@
 package com.o11eh.servicedemo.admin.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.security.AuthInfo;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.resp.Result;
-import com.o11eh.servicedemo.servicebase.constants.RedisCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -18,6 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("auth")
@@ -40,22 +42,22 @@ public class LoginController {
         String pwd = new SimpleHash(Md5Hash.ALGORITHM_NAME, password, credentialsSalt,
                 5).toString();
 
-        if (!admin.getPassword().equals(pwd)) {
+        if (!StrUtil.equals(admin.getPassword(), pwd)) {
             throw new IncorrectCredentialsException();
         }
 
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
         SecurityUtils.getSubject().login(token);
 
-        redisTemplate.opsForValue().set(RedisCo.ADMIN + RedisCo.COLON + admin.getId(), admin);
-        return Result.success();
+        return Result.success(admin.getId());
     }
 
 
+    @ApiOperation("用户信息")
     @GetMapping("info")
-    public Result getUserInfo(long userId) {
-        Admin admin = (Admin) redisTemplate.opsForValue().get(RedisCo.ADMIN + RedisCo.COLON + userId);
-        return Result.success(admin);
+    public Result getUserInfo() {
+        AuthInfo info = (AuthInfo) SecurityUtils.getSubject().getPrincipal();
+        return Result.success(info);
     }
 
     @GetMapping("logout")

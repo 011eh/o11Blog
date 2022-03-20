@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
-import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
@@ -14,7 +13,7 @@ import com.o11eh.servicedemo.admin.service.RoleService;
 import com.o11eh.servicedemo.base.entry.BaseEntry;
 import com.o11eh.servicedemo.base.exception.BusinessException;
 import com.o11eh.servicedemo.base.service.impl.BaseServiceImpl;
-import com.o11eh.servicedemo.base.utils.JsonUtl;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -74,7 +72,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
 
         Admin admin = getOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername, username).last(LIMIT_1));
         if (ObjectUtil.isNull(admin)) {
-            return null;
+            throw new UnknownAccountException();
         }
 
         Role role = roleService.getOne(Wrappers.<Role>lambdaQuery().eq(BaseEntry::getId, admin.getRoleId())
@@ -82,10 +80,8 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         admin.setRole(role);
 
         if (ObjectUtil.isNotNull(role)) {
-            List<Permission> permissions = permissionService.getPermissionKeysByIds(
-                    JsonUtl.jsonToList(role.getPermissionIds(), Long.class));
-            List<String> keys = permissions.stream().map(Permission::getPermissionKey).collect(Collectors.toList());
-            role.setPermissionKeyList(keys);
+            List<String> keys = permissionService.getKeysByRoleId(role.getId());
+            role.setPermissionKeys(keys);
         }
 
         return admin;

@@ -82,6 +82,15 @@ public class ShiroConfig {
         factoryBean.setSecurityManager(securityManager);
 
         factoryBean.setFilterChainDefinitionMap(new LinkedHashMap<String, String>() {{
+            put("/swagger-ui/**", "anon");
+            put("/swagger-resources/**", "anon");
+            put("/v3/api-docs", "anon");
+
+            put("/auth/login", "anon");
+            put("/auth/toLogin", "anon");
+            put("/auth/info", "anon");
+            put("/auth/unauthorized", "anon");
+
             put("/admin/*", "perms[admin:query]");
             put("/admin/page", "perms[admin:query]");
             put("/admin/add", "perms[admin:add]");
@@ -99,7 +108,8 @@ public class ShiroConfig {
             put("/role/add", "perms[role:add]");
             put("/role/update", "perms[role:update]");
             put("/role/delete", "perms[role:delete]");
-            put("**", "authc");
+
+            put("/**", "authc");
         }});
         return factoryBean;
     }

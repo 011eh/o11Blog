@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.base.resp;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.o11eh.servicedemo.base.constants.ResultMessage;
 import com.o11eh.servicedemo.base.constants.ResultCode;
 import lombok.Getter;
