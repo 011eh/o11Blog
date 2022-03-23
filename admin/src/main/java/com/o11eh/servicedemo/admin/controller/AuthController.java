@@ -65,6 +65,11 @@ public class AuthController {
         return Result.success();
     }
 
+    @GetMapping("toLogin")
+    public Result toLogin() {
+        throw BusinessException.e("您尚未登录");
+    }
+
     @GetMapping("unauthorized")
     public Result unauthorized() {
         throw BusinessException.e("无相关权限进行操作");

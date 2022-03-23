@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 public class ShiroConfig {
     public static final int HASH_ITERATIONS = 5;
 
-    public static final String LOGIN_URL = "/login";
+    public static final String LOGIN_URL = "auth/login";
     public static final String UNAUTHORIZED_URL = "/auth/unauthorized";
     public static final int MINUTE = 60;
     public static final int Day = 24 * 60 * MINUTE;

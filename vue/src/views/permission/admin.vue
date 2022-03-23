@@ -6,5 +6,11 @@
 
 <script>
 
-export default {}
+import {getInfo} from "@/api/user";
+
+export default {
+  created() {
+    getInfo()
+  }
+}
 </script>

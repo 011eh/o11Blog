@@ -10,7 +10,7 @@
         where role_id = #{roleId}
     </delete>
     <select id="selectKeys" resultType="java.lang.String">
-        select permission_key
+        select *
         from back_role_permission rp
                  join back_permission p on rp.permission_id = p.id
         where role_id = #{roleId};

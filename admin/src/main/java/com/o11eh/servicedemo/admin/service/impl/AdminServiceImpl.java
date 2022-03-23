@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
@@ -80,6 +81,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
 
         if (ObjectUtil.isNotNull(role)) {
             List<String> keys = permissionService.getKeysByRoleId(role.getId());
+            permissionService.list(Wrappers.<Permission>lambdaQuery)
             role.setPermissionKeys(keys);
         }
 
