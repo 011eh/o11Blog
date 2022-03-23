@@ -13,49 +13,52 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResourceController {
     @GetMapping("menu")
     public Result menu() throws JsonProcessingException {
-        String menu = "[\n" +
-                "    {\n" +
-                "      \"path\": \"/permission\",\n" +
-                "      \"component\": \"layout\",\n" +
-                "      \"redirect\": \"/permission/role\",\n" +
-                "      \"alwaysShow\": true,\n" +
-                "      \"name\": \"permission\",\n" +
-                "      \"meta\": {\n" +
-                "        \"title\": \"权限2\",\n" +
-                "        \"icon\": \"lock\",\n" +
-                "        \"roles\": [\n" +
-                "          \"role:list\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      \"children\": [\n" +
-                "        {\n" +
-                "          \"path\": \"/page\",\n" +
-                "          \"component\": \"page\",\n" +
-                "          \"name\": \"PagePermission\",\n" +
-                "          \"meta\": {\n" +
-                "            \"icon\": \"lock\",\n" +
-                "            \"title\": \"Page Permission\"\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"path\": \"directive\",\n" +
-                "          \"component\": \"directive\",\n" +
-                "          \"name\": \"DirectivePermission\",\n" +
-                "          \"meta\": {\n" +
-                "            \"title\": \"Directive Permission\"\n" +
-                "          }\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"path\": \"role\",\n" +
-                "          \"component\": \"role\",\n" +
-                "          \"name\": \"RolePermission\",\n" +
-                "          \"meta\": {\n" +
-                "            \"title\": \"Role Permission\"\n" +
-                "          }\n" +
+        String menu = "[  {\n" +
+                "    \"path\": \"/permission\",\n" +
+                "    \"component\": \"layout\",\n" +
+                "    \"name\": \"permission\",\n" +
+                "    \"hidden\": false,\n" +
+                "    \"redirect\": \"/permission/page\",\n" +
+                "    \"alwaysShow\": false,\n" +
+                "    \"meta\": {\n" +
+                "      \"title\": \"资源权限\",\n" +
+                "      \"icon\": \"lock\",\n" +
+                "      \"roles\": [\n" +
+                "        \"role:list\"\n" +
+                "      ],\n" +
+                "      \"noCache\": true,\n" +
+                "      \"affix\": false,\n" +
+                "      \"breadcrumb\": true\n" +
+                "    },\n" +
+                "    \"children\": [\n" +
+                "      {\n" +
+                "        \"path\": \"page\",\n" +
+                "        \"component\": \"page\",\n" +
+                "        \"name\": \"user\",\n" +
+                "        \"meta\": {\n" +
+                "          \"title\": \"用户管理\"\n" +
                 "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n";
+                "      },\n" +
+                "      {\n" +
+                "        \"path\": \"directive\",\n" +
+                "        \"hidden\": false,\n" +
+                "        \"affix\": true,\n" +
+                "        \"component\": \"directive\",\n" +
+                "        \"name\": \"role\",\n" +
+                "        \"meta\": {\n" +
+                "          \"title\": \"角色管理\"\n" +
+                "        }\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"path\": \"role\",\n" +
+                "        \"component\": \"role\",\n" +
+                "        \"name\": \"menu\",\n" +
+                "        \"meta\": {\n" +
+                "          \"title\": \"菜单管理\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n]";
 
         JsonNode node = JsonUtl.OBJECT_MAPPER.readTree(menu);
         return Result.success(node);
