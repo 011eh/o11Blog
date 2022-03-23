@@ -3,15 +3,13 @@ package com.o11eh.servicedemo.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.base.controller.BaseController;
-import com.o11eh.servicedemo.base.req.PageParam;
-import com.o11eh.servicedemo.base.resp.Result;
-import com.o11eh.servicedemo.servicebase.constants.BaseApiConstants;
-import com.o11eh.servicedemo.servicebase.constants.DocConstants;
+import com.o11eh.servicedemo.admin.entry.PageParam;
+import com.o11eh.servicedemo.admin.entry.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.o11eh.servicedemo.admin.constants.Constants;
 
 import java.util.List;
 
@@ -27,30 +25,30 @@ public class PermissionController extends BaseController {
     private PermissionService permissionService;
 
     @Override
-    @GetMapping(BaseApiConstants.PATH_ID)
-    @ApiOperation(DocConstants.DETAIL)
+    @GetMapping(Constants.Api.PATH_ID)
+    @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable Long id) {
         Permission permission = permissionService.getById(id);
         return Result.success(permission);
     }
 
     @Override
-    @PostMapping(BaseApiConstants.PAGE)
-    @ApiOperation(DocConstants.PAGE)
+    @PostMapping(Constants.Api.PAGE)
+    @ApiOperation(Constants.Doc.PAGE)
     public Result page(@RequestBody PageParam param) {
         Page<Permission> page = permissionService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
 
-    @PostMapping(BaseApiConstants.ADD)
-    @ApiOperation(DocConstants.ADD)
+    @PostMapping(Constants.Api.ADD)
+    @ApiOperation(Constants.Doc.ADD)
     public Result add(@RequestBody Permission permission) {
         permissionService.save(permission);
         return Result.success(permission.getId());
     }
 
-    @PutMapping(BaseApiConstants.UPDATE)
-    @ApiOperation(DocConstants.UPDATE)
+    @PutMapping(Constants.Api.UPDATE)
+    @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Permission permission) {
         permissionService.updateById(permission);
         return Result.success(permission.getId());
@@ -58,8 +56,8 @@ public class PermissionController extends BaseController {
 
 
     @Override
-    @ApiOperation(DocConstants.BATCH_DELETE)
-    @DeleteMapping(BaseApiConstants.DELETE)
+    @ApiOperation(Constants.Doc.BATCH_DELETE)
+    @DeleteMapping(Constants.Api.DELETE)
     public Result deleteBatch(@RequestBody List<Long> ids) {
         permissionService.removeBatchByIds(ids);
         return Result.success();

@@ -1,9 +1,8 @@
 package com.o11eh.servicedemo.admin.security;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
-import com.o11eh.servicedemo.servicebase.enums.StatusEnum;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -12,6 +11,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.o11eh.servicedemo.admin.enums.StatusEnum;
 
 import java.util.List;
 

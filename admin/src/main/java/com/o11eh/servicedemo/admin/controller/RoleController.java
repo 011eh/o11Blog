@@ -5,11 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
-import com.o11eh.servicedemo.servicebase.constants.BaseApiConstants;
-import com.o11eh.servicedemo.servicebase.constants.DocConstants;
-import com.o11eh.servicedemo.base.controller.BaseController;
-import com.o11eh.servicedemo.base.req.PageParam;
-import com.o11eh.servicedemo.base.resp.Result;
+import com.o11eh.servicedemo.admin.constants.Constants;
+import com.o11eh.servicedemo.admin.entry.PageParam;
+import com.o11eh.servicedemo.admin.entry.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +34,8 @@ public class RoleController extends BaseController {
     private PermissionService permissionService;
 
     @Override
-    @GetMapping(BaseApiConstants.PATH_ID)
-    @ApiOperation(DocConstants.DETAIL)
+    @GetMapping(Constants.Api.PATH_ID)
+    @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable Long id) {
         Role role = roleService.getById(id);
         List<String> keys = permissionService.getKeysByRoleId(id);
@@ -46,31 +44,31 @@ public class RoleController extends BaseController {
     }
 
     @Override
-    @PostMapping(BaseApiConstants.PAGE)
-    @ApiOperation(DocConstants.PAGE)
+    @PostMapping(Constants.Api.PAGE)
+    @ApiOperation(Constants.Doc.PAGE)
     public Result page(@RequestBody PageParam param) {
         Page<Role> page = roleService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
 
-    @ApiOperation(DocConstants.ADD)
-    @PostMapping(BaseApiConstants.ADD)
+    @ApiOperation(Constants.Doc.ADD)
+    @PostMapping(Constants.Api.ADD)
     public Result add(@RequestBody Role role) {
         Long id = roleService.add(role);
         return Result.success(id);
     }
 
 
-    @PutMapping(BaseApiConstants.UPDATE)
-    @ApiOperation(DocConstants.UPDATE)
+    @PutMapping(Constants.Api.UPDATE)
+    @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Role role) {
         Long id = roleService.updateRole(role);
         return Result.success(id);
     }
 
     @Override
-    @DeleteMapping(BaseApiConstants.DELETE)
-    @ApiOperation(DocConstants.BATCH_DELETE)
+    @DeleteMapping(Constants.Api.DELETE)
+    @ApiOperation(Constants.Doc.BATCH_DELETE)
     public Result deleteBatch(@RequestBody List<Long> ids) {
         roleService.removeBatchByIds(ids);
         return Result.success();

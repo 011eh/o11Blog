@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2022/02/14 19:45
  */
 @SpringBootApplication(scanBasePackages = {
-        "com.o11eh.servicedemo.admin",
-        "com.o11eh.servicedemo.servicebase"
+        "com.o11eh.servicedemo",
 })
 public class AdminApp {
     public static void main(String[] args) {

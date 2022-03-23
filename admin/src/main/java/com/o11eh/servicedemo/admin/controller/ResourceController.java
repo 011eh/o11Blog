@@ -2,11 +2,10 @@ package com.o11eh.servicedemo.admin.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.o11eh.servicedemo.base.resp.Result;
-import com.o11eh.servicedemo.base.utils.jackson.JsonUtl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.o11eh.servicedemo.admin.entry.VueRouter;
+import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.admin.utils.JsonUtl;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("resource")
@@ -61,6 +60,12 @@ public class ResourceController {
                 "  }\n]";
 
         JsonNode node = JsonUtl.OBJECT_MAPPER.readTree(menu);
+        System.out.println(node.get(0).get("children"));
         return Result.success(node);
+    }
+
+    @PostMapping("routers")
+    public Result routers(@RequestBody VueRouter router) {
+        return Result.success(router);
     }
 }
