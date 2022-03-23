@@ -49,15 +49,16 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({commit}, roles) {
+  generateRoutes({commit}) {
     return new Promise(resolve => {
       let accessedRoutes
-      debugger
       menu().then(res => {
-        for (const router of res) {
+        const routers = res.data
+        debugger
+        for (const router of routers) {
           setComponent(router)
         }
-        accessedRoutes = res
+        accessedRoutes = routers
 
         //accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
         // for (const r of accessedRoutes) {
