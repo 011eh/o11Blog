@@ -28,4 +28,8 @@ public class Permission extends BaseEntry<Permission> {
 
     @TableField(exist = false)
     private List<Permission> children;
+
+    public Permission(String name) {
+        this.name = name;
+    }
 }
