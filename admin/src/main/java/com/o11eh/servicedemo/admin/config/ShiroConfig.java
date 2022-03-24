@@ -1,6 +1,5 @@
 package com.o11eh.servicedemo.admin.config;
 
-import com.o11eh.servicedemo.admin.security.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.codec.Base64;
@@ -20,7 +19,7 @@ import java.util.LinkedHashMap;
 public class ShiroConfig {
     public static final int HASH_ITERATIONS = 5;
 
-    public static final String LOGIN_URL = "auth/login";
+    public static final String LOGIN_URL = "/auth/toLogin";
     public static final String UNAUTHORIZED_URL = "/auth/unauthorized";
     public static final int MINUTE = 60;
     public static final int Day = 24 * 60 * MINUTE;
@@ -78,9 +77,7 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setUnauthorizedUrl(UNAUTHORIZED_URL);
-        factoryBean.setLoginUrl(LOGIN_URL);
         factoryBean.setSecurityManager(securityManager);
-
         factoryBean.setFilterChainDefinitionMap(new LinkedHashMap<String, String>() {{
             put("/swagger-ui/**", "anon");
             put("/swagger-resources/**", "anon");

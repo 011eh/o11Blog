@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.security;
+package com.o11eh.servicedemo.admin.config;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.o11eh.servicedemo.admin.entry.Admin;

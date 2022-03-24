@@ -1,7 +1,7 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.o11eh.servicedemo.admin.security.AuthInfo;
+import com.o11eh.servicedemo.admin.config.AuthInfo;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.config.BusinessException;
@@ -27,9 +27,6 @@ public class AuthController {
 
     @Autowired
     private AdminService adminService;
-
-    @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
 
     @ApiOperation("登录")
     @PostMapping("/login")
