@@ -1,11 +1,13 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.o11eh.servicedemo.admin.security.AuthInfo;
+import com.o11eh.servicedemo.admin.config.AuthInfo;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.config.BusinessException;
 import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.admin.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -19,6 +21,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("auth")
@@ -29,7 +32,7 @@ public class AuthController {
     private AdminService adminService;
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private PermissionService permissionService;
 
     @ApiOperation("登录")
     @PostMapping("/login")
@@ -55,8 +58,8 @@ public class AuthController {
     @ApiOperation("用户信息")
     @GetMapping("info")
     public Result getUserInfo() {
-        AuthInfo info = (AuthInfo) SecurityUtils.getSubject().getPrincipal();
-        return Result.success(info);
+        List<Permission> permissionByRoleId = permissionService.getPermissionByRoleId(1L);
+        return Result.success(permissionByRoleId);
     }
 
     @GetMapping("logout")

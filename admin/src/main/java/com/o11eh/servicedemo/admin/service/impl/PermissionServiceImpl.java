@@ -1,9 +1,12 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
-import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
+import com.o11eh.servicedemo.admin.service.PermissionService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +21,26 @@ import java.util.stream.Collectors;
  * @since 2022/02/27 12:21
  */
 @Service
+@Slf4j
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
     @Autowired
     private PermissionMapper permissionMapper;
 
     @Override
-    public List<String> getKeysByRoleId(Long roleId) {
-        List<String> keys = permissionMapper.selectKeys(roleId);
-        return keys;
+    public List<Permission> getPermissionByRoleId(Long roleId) {
+        List<Permission> permissions = permissionMapper.selectKeys(roleId);
+
+        Map<ResourceType, List<Permission>> resources = permissions.stream()
+                .collect(Collectors.groupingBy(Permission::getResourceType));
+
+        List<Permission> menu = resources.get(ResourceType.MENU);
+        Map<Long, List<Permission>> menuMap = menu.stream().collect(Collectors.groupingBy(Permission::getParentId));
+
+        List<Permission> operations = resources.get(ResourceType.OPERATION);
+
+        log.info(String.valueOf(menu));
+        return permissions;
     }
 
     @Override

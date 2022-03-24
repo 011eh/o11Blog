@@ -2,12 +2,13 @@ package com.o11eh.servicedemo.admin.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.constants.Constants;
+import com.o11eh.servicedemo.admin.entry.PageParam;
+import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
-import com.o11eh.servicedemo.admin.constants.Constants;
-import com.o11eh.servicedemo.admin.entry.PageParam;
-import com.o11eh.servicedemo.admin.entry.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class RoleController extends BaseController {
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable Long id) {
         Role role = roleService.getById(id);
-        List<String> keys = permissionService.getKeysByRoleId(id);
-        role.setPermissionKeys(keys);
+        List<Permission> keys = permissionService.getPermissionByRoleId(id);
+        role.setPermissionKeys(null);
         return Result.success(role);
     }
 

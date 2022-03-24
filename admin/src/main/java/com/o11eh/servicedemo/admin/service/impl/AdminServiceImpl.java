@@ -1,26 +1,23 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
-import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.service.AdminService;
-import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.admin.service.RoleService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.config.BusinessException;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
-import com.o11eh.servicedemo.admin.entry.BaseEntry;
-import com.o11eh.servicedemo.admin.config.BusinessException;
+import com.o11eh.servicedemo.admin.service.AdminService;
+import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.o11eh.servicedemo.admin.service.RoleService;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <p>
@@ -80,9 +77,8 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         admin.setRole(role);
 
         if (ObjectUtil.isNotNull(role)) {
-            List<String> keys = permissionService.getKeysByRoleId(role.getId());
-            permissionService.list(Wrappers.<Permission>lambdaQuery)
-            role.setPermissionKeys(keys);
+            permissionService.getPermissionByRoleId(role.getId());
+            role.setPermissionKeys(null);
         }
 
         return admin;

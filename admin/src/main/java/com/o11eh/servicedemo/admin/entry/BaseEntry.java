@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.o11eh.servicedemo.admin.utils.Views;
 import com.o11eh.servicedemo.admin.utils.Add;
 import com.o11eh.servicedemo.admin.utils.Query;
 import com.o11eh.servicedemo.admin.utils.Update;
@@ -32,13 +30,11 @@ public class BaseEntry<T extends Model<T>> extends Model<T> implements Serializa
     private Long id;
 
     @ApiModelProperty("创建时间")
-    @JsonView(Views.Detail.class)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     @ApiModelProperty("更新时间")
-    @JsonView(Views.Detail.class)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;

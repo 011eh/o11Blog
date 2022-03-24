@@ -9,10 +9,15 @@
         from back_role_permission
         where role_id = #{roleId}
     </delete>
-    <select id="selectKeys" resultType="java.lang.String">
+
+    <resultMap id="permission" type="com.o11eh.servicedemo.admin.entry.Permission">
+        <result property="router" column="router"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+    </resultMap>
+    <select id="selectKeys" resultMap="permission">
         select *
-        from back_role_permission rp
-                 join back_permission p on rp.permission_id = p.id
-        where role_id = #{roleId};
+        from back_permission p
+                 join back_role_permission rp on p.id = rp.permission_id
+        where role_id = #{roleId}
     </select>
 </mapper>

@@ -11,53 +11,6 @@ spring:
     username: root
     password: 9zHu2:HGqqB_G7s
     driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-
-    druid:
-      initialSize: 20
-      minIdle: 5
-      maxActive: 100
-
-      # 连接等待超时时间
-      maxWait: 30000
-
-      # 检查空闲连接时间间隔
-      timeBetweenEvictionRunsMillis: 60000
-
-      # 连接的最小生存时间
-      minEvictableIdleTimeMillis: 300000
-
-      # 判断数据库是否连通的方式
-      validationQuery: select 1
-
-      # 申请连接时，连接池会判断这条连接是否是可用的
-      test-on-borrow: false
-
-      # 申请连接时，连接池将会判断连接是否处于空闲状态（test-on-borrow为false情况下）
-      test-while-idle: true
-
-      # 使用完连接，连接池回收连接的时候会判断该连接是否还可用
-      test-on-return: false
-
-      # 是否缓存preparedStatement
-      pool-prepared-statements: false
-
-      # 每个连接上PSCache的大小
-      max-pool-prepared-statement-per-connection-size: -1
-
-      # 合并多个DruidDataSource的监控数据
-      use-global-data-source-stat: true
-
-      #泄露的连接可以被删除的超时时间（秒），该值应设置为应用程序查询可能执行的最长时间
-      remove-abandoned-timeout: 180
-
-      # 是否自动回收超时连接
-      remove-abandoned: true
-
-      # 打开mergeSql功能；慢SQL记录
-      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-
-      filters: wall,stat,log4j
 
   redis:
     host: redis
@@ -66,6 +19,6 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath:mappers/*.xml
+  type-enums-package: com.o11eh.servicedemo.admin.enums
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    map-underscore-to-camel-case: true
