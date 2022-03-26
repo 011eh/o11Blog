@@ -7,12 +7,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum ResourceType {
 
-    MENU(1, "菜单"),
+    MENU("菜单"),
+    OPERATION("操作");
 
-    OPERATION(2, "操作");
-
-    private int value;
-    @EnumValue
     @JsonValue
-    private String name;
+    @EnumValue
+    private final String name;
 }

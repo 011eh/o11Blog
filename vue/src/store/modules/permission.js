@@ -1,6 +1,5 @@
 import {constantRoutes} from '@/router'
 import {menu} from "@/api/user";
-import {setComponent} from "@/utils/routers";
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -49,24 +48,11 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({commit}) {
+  generateRoutes({commit}, roles, routers) {
     return new Promise(resolve => {
       let accessedRoutes
       menu().then(res => {
-        const routers = res.data
-        debugger
-        for (const router of routers) {
-          setComponent(router)
-        }
-        accessedRoutes = routers
-
-        //accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-        // for (const r of accessedRoutes) {
-        //   setComponent(r)
-        // }
-        commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
-
       })
     })
   }

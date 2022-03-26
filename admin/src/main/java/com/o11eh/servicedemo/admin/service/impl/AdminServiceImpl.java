@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -12,10 +13,6 @@ import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +41,6 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         if (ObjectUtil.isNotNull(adminInDB)) {
             throw BusinessException.e("该用户已存在");
         }
-        ByteSource credentialsSalt = ByteSource.Util.bytes(admin.getUsername());
-        String password = new SimpleHash(Md5Hash.ALGORITHM_NAME, admin.getPassword(), credentialsSalt,
-                5).toString();
-        admin.setPassword(password);
         admin.insert();
         return admin.getId();
     }
@@ -65,21 +58,16 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     }
 
     @Override
-    public Admin getByUsername(String username) {
+    public Admin loginByUsername(String username) {
 
         Admin admin = getOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername, username).last(LIMIT_1));
         if (ObjectUtil.isNull(admin)) {
-            throw new UnknownAccountException();
+            throw BusinessException.e("帐号或密码错误");
         }
 
         Role role = roleService.getOne(Wrappers.<Role>lambdaQuery().eq(BaseEntry::getId, admin.getRoleId())
                 .last(LIMIT_1));
         admin.setRole(role);
-
-        if (ObjectUtil.isNotNull(role)) {
-            permissionService.getPermissionByRoleId(role.getId());
-            role.setPermissionKeys(null);
-        }
 
         return admin;
     }

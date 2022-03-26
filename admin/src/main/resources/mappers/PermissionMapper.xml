@@ -11,10 +11,10 @@
     </delete>
 
     <resultMap id="permission" type="com.o11eh.servicedemo.admin.entry.Permission">
-        <result property="router" column="router"
+        <result property="routerInfo" column="router_info"
                 typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
     </resultMap>
-    <select id="selectKeys" resultMap="permission">
+    <select id="selectPermission" resultMap="permission">
         select *
         from back_permission p
                  join back_role_permission rp on p.id = rp.permission_id

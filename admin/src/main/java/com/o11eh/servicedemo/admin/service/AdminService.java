@@ -14,7 +14,8 @@ public interface AdminService extends BaseService<Admin> {
 
     Long add(Admin admin);
 
-    Admin getByUsername(String username);
+    Admin loginByUsername(String username);
 
     Long updateAdmin(Admin admin);
+
 }

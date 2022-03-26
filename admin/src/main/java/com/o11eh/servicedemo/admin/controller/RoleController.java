@@ -39,7 +39,6 @@ public class RoleController extends BaseController {
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable Long id) {
         Role role = roleService.getById(id);
-        List<Permission> keys = permissionService.getPermissionByRoleId(id);
         role.setPermissionKeys(null);
         return Result.success(role);
     }

@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.admin.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
@@ -43,6 +44,7 @@ public class AdminController extends BaseController {
 
     @Override
     @ApiOperation(Constants.Doc.PAGE)
+    @SaCheckPermission("admin:list")
     @PostMapping(Constants.Api.PAGE)
     public Result page(@RequestBody @Valid PageParam param) {
         Page<Admin> page = adminService.page(param.getCurrent(), param.getSize());

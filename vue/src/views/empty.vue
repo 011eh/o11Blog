@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
-    用户管理
+    空白页
   </div>
 </template>
 
 <script>
-
-import {getInfo} from "@/api/user";
-
 export default {
-  created() {
-  }
+  name: "Empty"
 }
 </script>
+
+<style scoped>
+
+</style>
