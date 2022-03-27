@@ -37,7 +37,7 @@ public class AdminController extends BaseController {
     @Override
     @ApiOperation(Constants.Doc.DETAIL)
     @GetMapping(Constants.Api.PATH_ID)
-    public Result detail(@PathVariable Long id) {
+    public Result detail(@PathVariable String id) {
         Admin admin = adminService.getById(id);
         return Result.success(admin);
     }
@@ -46,7 +46,7 @@ public class AdminController extends BaseController {
     @ApiOperation(Constants.Doc.PAGE)
     @SaCheckPermission("admin:list")
     @PostMapping(Constants.Api.PAGE)
-    public Result page(@RequestBody @Valid PageParam param) {
+    public Result list(@RequestBody @Valid PageParam param) {
         Page<Admin> page = adminService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
@@ -55,14 +55,14 @@ public class AdminController extends BaseController {
     @PostMapping(Constants.Api.ADD)
     @ApiOperation(Constants.Doc.ADD)
     public Result add(@Valid @RequestBody Admin admin) {
-        Long id = adminService.add(admin);
+        String id = adminService.add(admin);
         return Result.success(id);
     }
 
     @ApiOperation(Constants.Doc.UPDATE)
     @PutMapping(Constants.Api.UPDATE)
     public Result update(@Validated(Update.class) @RequestBody Admin admin) {
-        Long id = adminService.updateAdmin(admin);
+        String id = adminService.updateAdmin(admin);
         return Result.success(id);
     }
 

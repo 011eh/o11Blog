@@ -1,6 +1,5 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -34,7 +33,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     private PermissionService permissionService;
 
     @Override
-    public Long add(Admin admin) {
+    public String add(Admin admin) {
         LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery()
                 .select(Admin::getUsername).eq(Admin::getUsername, admin.getUsername());
         Admin adminInDB = getOne(wrapper);
@@ -46,7 +45,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     }
 
     @Override
-    public Page<Admin> page(Long current, Long size) {
+    public Page<Admin> page(long current, long size) {
         LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery().select(Admin.class,
                 i -> !i.getColumn().equals("password"));
         Page<Admin> page = page(current, size, wrapper);
@@ -73,7 +72,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     }
 
     @Override
-    public Long updateAdmin(Admin admin) {
+    public String updateAdmin(Admin admin) {
         this.updateById(admin);
         return admin.getId();
     }

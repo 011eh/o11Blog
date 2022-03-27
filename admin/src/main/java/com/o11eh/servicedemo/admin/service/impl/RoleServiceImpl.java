@@ -22,14 +22,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     private PermissionService permissionService;
 
     @Override
-    public Long add(Role role) {
+    public String add(Role role) {
         role.insert();
         permissionService.grantPermissions(role.getId(), role.getPermissionIds());
         return role.getId();
     }
 
     @Override
-    public Long updateRole(Role role) {
+    public String updateRole(Role role) {
         role.updateById();
         permissionService.grantPermissions(role.getId(), role.getPermissionIds());
         return role.getId();

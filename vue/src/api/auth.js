@@ -24,10 +24,3 @@ export function logout() {
     method: 'get'
   })
 }
-
-export function menu() {
-  return request({
-    url: '/resource/menu',
-    method: 'get'
-  })
-}

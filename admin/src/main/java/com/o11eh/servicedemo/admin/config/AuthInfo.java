@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,19 +39,18 @@ public class AuthInfo {
     }
 
     public void setPermission(List<Permission> permissions) {
-        Map<ResourceType, List<Permission>> permissionMap = permissions.stream()
+        Map<ResourceType, List<Permission>> typeMap = permissions.stream().sorted(Comparator.comparing(Permission::getSort))
                 .collect(Collectors.groupingBy(Permission::getResourceType));
 
-        Map<Long, List<Permission>> parentIdMap = permissionMap.get(ResourceType.MENU).stream()
+        setPermissionKeys(typeMap.get(ResourceType.OPERATION).stream().map(Permission::getPermissionKey)
+                .collect(Collectors.toList()));
+
+        Map<String, List<Permission>> parentIdMap = typeMap.get(ResourceType.MENU).stream()
                 .collect(Collectors.groupingBy(Permission::getParentId));
-        List<String> permissionKeys = permissions.stream().map(Permission::getPermissionKey)
-                .collect(Collectors.toList());
+        parentIdMap.values().stream().flatMap(Collection::stream).
+                forEach(router -> router.setChildren(parentIdMap.get(router.getId())));
 
-        List<Permission> routers = parentIdMap.values().stream().flatMap(Collection::stream).
-                peek(router -> router.setChildren(parentIdMap.get(router.getId())))
-                .filter(permission -> permission.getParentId() == 0L).collect(Collectors.toList());
-
-        setPermissionKeys(permissionKeys);
-        setRouters(routers);
+        String rootParentId = "0";
+        setRouters(parentIdMap.get(rootParentId));
     }
 }

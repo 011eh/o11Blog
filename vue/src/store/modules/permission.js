@@ -1,5 +1,5 @@
 import {constantRoutes} from '@/router'
-import {menu} from "@/api/user";
+import {menu} from "@/api/auth";
 
 /**
  * Use meta.role to determine if the current user has permission

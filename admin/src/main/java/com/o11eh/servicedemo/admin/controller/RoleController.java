@@ -4,7 +4,6 @@ package com.o11eh.servicedemo.admin.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.PageParam;
-import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.PermissionService;
@@ -37,7 +36,7 @@ public class RoleController extends BaseController {
     @Override
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
-    public Result detail(@PathVariable Long id) {
+    public Result detail(@PathVariable String id) {
         Role role = roleService.getById(id);
         role.setPermissionKeys(null);
         return Result.success(role);
@@ -46,7 +45,7 @@ public class RoleController extends BaseController {
     @Override
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
-    public Result page(@RequestBody PageParam param) {
+    public Result list(@RequestBody PageParam param) {
         Page<Role> page = roleService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
@@ -54,7 +53,7 @@ public class RoleController extends BaseController {
     @ApiOperation(Constants.Doc.ADD)
     @PostMapping(Constants.Api.ADD)
     public Result add(@RequestBody Role role) {
-        Long id = roleService.add(role);
+        String id = roleService.add(role);
         return Result.success(id);
     }
 
@@ -62,7 +61,7 @@ public class RoleController extends BaseController {
     @PutMapping(Constants.Api.UPDATE)
     @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Role role) {
-        Long id = roleService.updateRole(role);
+        String id = roleService.updateRole(role);
         return Result.success(id);
     }
 

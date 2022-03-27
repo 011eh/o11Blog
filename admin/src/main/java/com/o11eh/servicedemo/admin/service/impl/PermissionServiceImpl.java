@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
@@ -10,8 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,18 +32,23 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
 
     @Override
     public List<Permission> getPermissions() {
-        final long rootParentId = 0;
+        Map<String, List<Permission>> parentIdMap = this.list().stream().sorted(Comparator.comparing(Permission::getSort)).collect(Collectors
+                .groupingBy(Permission::getParentId, LinkedHashMap::new, Collectors.toList()));
 
-        Map<Long, List<Permission>> group = this.list().stream().collect(Collectors.groupingBy(Permission::getParentId));
-        List<Permission> roots = this.list().stream().collect(Collectors.groupingBy(Permission::getParentId))
-                .remove(rootParentId);
+        String rootParentId = "0";
+        parentIdMap.values().stream().flatMap(Collection::stream)
+                .forEach(permission -> permission.setChildren(parentIdMap.get(permission.getId())));
 
-        roots.forEach(root -> root.setChildren(group.get(root.getId())));
-        return roots;
+        return parentIdMap.get(rootParentId);
     }
 
     @Override
-    public void grantPermissions(Long roleId, List<Long> permissionIds) {
+    public Page<Permission> page(long current, long size) {
+        return super.page(current, size);
+    }
+
+    @Override
+    public void grantPermissions(String roleId, List<String> permissionIds) {
         SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false);
         PermissionMapper mapper = session.getMapper(PermissionMapper.class);
         mapper.deletePermission(roleId);

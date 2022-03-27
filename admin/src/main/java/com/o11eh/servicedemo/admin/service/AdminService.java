@@ -12,10 +12,10 @@ import com.o11eh.servicedemo.admin.entry.Admin;
  */
 public interface AdminService extends BaseService<Admin> {
 
-    Long add(Admin admin);
+    String add(Admin admin);
 
     Admin loginByUsername(String username);
 
-    Long updateAdmin(Admin admin);
+    String updateAdmin(Admin admin);
 
 }

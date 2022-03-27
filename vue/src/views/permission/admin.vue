@@ -6,8 +6,6 @@
 
 <script>
 
-import {getInfo} from "@/api/user";
-
 export default {
   created() {
   }

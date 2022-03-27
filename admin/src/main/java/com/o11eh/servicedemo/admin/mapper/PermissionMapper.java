@@ -14,7 +14,7 @@ import java.util.List;
 public interface PermissionMapper extends BaseMapperO<Permission> {
     List<Permission> selectPermission(Long roleId);
 
-    void insertPermission(@Param("roleId") Long id, @Param("pId") Long permissionId);
+    void insertPermission(@Param("roleId") String id, @Param("pId") String permissionId);
 
-    void deletePermission(Long roleId);
+    void deletePermission(String roleId);
 }

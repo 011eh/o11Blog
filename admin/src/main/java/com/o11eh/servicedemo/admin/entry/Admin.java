@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.o11eh.servicedemo.admin.enums.Status;
 import com.o11eh.servicedemo.admin.utils.Add;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -36,8 +37,7 @@ public class Admin extends BaseEntry<Admin> {
     private String avatar;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ApiModelProperty("状态")
-    private Integer status;
+    private Status status;
 
     @JsonUnwrapped(prefix = "role")
     @TableField(exist = false)

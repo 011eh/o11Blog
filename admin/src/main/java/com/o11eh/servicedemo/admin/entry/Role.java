@@ -32,5 +32,5 @@ public class Role extends BaseEntry<Role> {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField(exist = false)
-    private List<Long> permissionIds;
+    private List<String> permissionIds;
 }

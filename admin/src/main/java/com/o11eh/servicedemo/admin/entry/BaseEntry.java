@@ -27,7 +27,7 @@ public class BaseEntry<T extends Model<T>> extends Model<T> implements Serializa
     @NotNull(groups = {Query.class, Update.class})
     @Null(groups = Add.class)
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     @ApiModelProperty("创建时间")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

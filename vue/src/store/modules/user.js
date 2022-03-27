@@ -1,4 +1,4 @@
-import {getInfo, login, logout} from '@/api/user'
+import {getInfo, login, logout} from '@/api/auth'
 import {getToken, removeToken, setToken} from '@/utils/auth'
 import router, {constantRoutes, resetRouter} from '@/router'
 import {setComponent} from "@/utils/routers";
@@ -70,6 +70,10 @@ const actions = {
         commit('SET_NAME', nickName)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', nickName)
+
+        // 访问不存在的菜单会跳转
+        routers.push({"path": "*", "hidden": true, "redirect": "/404"})
+
         for (const router of routers) {
           setComponent(router)
         }

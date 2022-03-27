@@ -11,7 +11,7 @@ import com.o11eh.servicedemo.admin.entry.Role;
  * @since 2022-02-14
  */
 public interface RoleService extends BaseService<Role> {
-    Long add(Role role);
+    String add(Role role);
 
-    Long updateRole(Role role);
+    String updateRole(Role role);
 }

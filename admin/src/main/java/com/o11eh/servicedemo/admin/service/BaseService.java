@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface BaseService<T> extends IService<T> {
-    default Page<T> page(Long current, Long size) {
+    default Page<T> page(long current, long size) {
         throw new UnsupportedOperationException();
     }
 }

@@ -6,7 +6,7 @@ import com.o11eh.servicedemo.admin.entry.Result;
 import java.util.List;
 
 public class BaseController {
-    public Result page(PageParam param) {
+    public Result list(PageParam param) {
         throw new UnsupportedOperationException();
     }
 
@@ -14,7 +14,7 @@ public class BaseController {
         throw new UnsupportedOperationException();
     }
 
-    public Result detail(Long id) {
+    public Result detail(String id) {
         throw new UnsupportedOperationException();
     }
 }

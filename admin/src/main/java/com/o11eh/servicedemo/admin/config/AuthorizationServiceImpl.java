@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class AuthorizationC implements StpInterface {
+public class AuthorizationServiceImpl implements StpInterface {
 
     @Autowired
     private PermissionService permissionService;

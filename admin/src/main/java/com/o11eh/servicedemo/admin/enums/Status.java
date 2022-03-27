@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum ResourceType {
-
-    MENU("菜单"),
-    OPERATION("操作");
+public enum Status {
+    Enable("启用"),
+    Disable("禁用");
 
     @JsonValue
     @EnumValue
-    private final String type;
+    private final String status;
+
+    public String getStatus() {
+        return status;
+    }
 }
