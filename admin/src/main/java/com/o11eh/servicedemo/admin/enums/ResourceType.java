@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum ResourceType {
 
-    MENU("菜单"),
+    MENU("一级菜单"),
+    SUB_MENU("二级菜单"),
     OPERATION("操作");
 
     @JsonValue

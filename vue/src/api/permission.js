@@ -6,3 +6,11 @@ export function list() {
     method: 'get'
   });
 }
+
+export function detail(id) {
+  return request({
+    url: `/permission/${id}`,
+    method: 'get',
+  });
+}
+

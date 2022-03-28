@@ -3,7 +3,7 @@ const routerMap = {
   role: () => import('@/views/permission/menu'),
   directive: () => import('@/views/permission/role'),
   layout: () => import('@/layout'),
-  empty:()=> import('@/views/empty')
+  empty: () => import('@/views/empty')
 }
 
 export function setComponent(router) {
@@ -16,3 +16,5 @@ export function setComponent(router) {
     }
   }
 }
+
+export {routerMap}
