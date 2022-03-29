@@ -50,7 +50,7 @@ public class AuthInfo {
         parentIdMap.values().stream().flatMap(Collection::stream).
                 forEach(router -> router.setChildren(parentIdMap.get(router.getId())));
 
-        String rootParentId = "0";
+        String rootParentId = "";
         setRouters(parentIdMap.get(rootParentId));
     }
 }

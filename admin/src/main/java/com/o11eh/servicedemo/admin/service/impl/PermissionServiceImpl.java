@@ -35,7 +35,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         Map<String, List<Permission>> parentIdMap = this.list().stream().sorted(Comparator.comparing(Permission::getSort)).collect(Collectors
                 .groupingBy(Permission::getParentId, LinkedHashMap::new, Collectors.toList()));
 
-        String rootParentId = "0";
+        String rootParentId = "";
         parentIdMap.values().stream().flatMap(Collection::stream)
                 .forEach(permission -> permission.setChildren(parentIdMap.get(permission.getId())));
 

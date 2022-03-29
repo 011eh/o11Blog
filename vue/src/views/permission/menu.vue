@@ -45,14 +45,14 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog @close="resetData" :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="150px"
-               style="width: 400px; margin-left:50px;">
+    <el-dialog v-cloak :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
+               style="width: 60%; margin-left: 35px">
         <el-form-item label="资源名称" prop="name">
           <el-input v-model="dataOperating.name"/>
         </el-form-item>
         <el-form-item label="资源类型" prop="resourceType">
-          <el-select v-model="dataOperating.resourceType" class="m-2" placeholder="Select">
+          <el-select v-model="dataOperating.resourceType" class="m-2" placeholder="无">
             <el-option
               v-for="item in resourceTypeOptions"
               :key="item"
@@ -65,9 +65,10 @@
           <el-input v-model="dataOperating.permissionKey"/>
         </el-form-item>
         <el-form-item label="父级资源" prop="parentId">
-          <el-select v-model="dataOperating.parentId" class="m-2" placeholder="Select">
+          <el-select v-model="dataOperating.parentId" class="m-2" placeholder="无"
+          >
             <el-option
-              v-for="item in parentOptions"
+              v-for="item in flattedData"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -84,7 +85,7 @@
             <el-input v-model="dataOperating.path"/>
           </el-form-item>
           <el-form-item label="Vue组件名" prop="component">
-            <el-select v-model="dataOperating.component" class="m-2" placeholder="Select">
+            <el-select v-model="dataOperating.component" class="m-2" placeholder="无">
               <el-option
                 v-for="item in componentOptions"
                 :key="item"
@@ -101,7 +102,7 @@
             <el-input v-model="dataOperating.redirect"/>
           </el-form-item>
           <el-form-item label="图标" prop="meta.icon">
-
+            <svg-icon icon-class="el-icon-phone"/>
           </el-form-item>
           <el-form-item label="固定在面包屑" prop="meta.affix">
             <el-radio v-model="dataOperating.meta.affix" :label="true" border>是</el-radio>
@@ -139,7 +140,7 @@
 </template>
 
 <script>
-import {detail, list} from "@/api/permission";
+import {list} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 
 export default {
@@ -147,32 +148,30 @@ export default {
     return {
       componentOptions: Object.keys(routerMap),
       permissionKeyOptions: [],
-      parentOptions: [{id: '0', name: '资源1'}],
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
       tableData: [],
-
-      dataTemplate: {
+      flattedData: [],
+      dataOperating: {
+        id: null,
         name: '',
-        path: '',
-        component: '',
+        resourceType: '操作',
         permissionKey: '',
         parentId: '',
         sort: 100,
-        resourceType: '',
+        path: null,
+        component: null,
         meta: {
-          icon: '',
-          affix: false,
-          title: '',
-          noCache: true,
-          breadcrumb: false
+          icon: null,
+          affix: null,
+          title: null,
+          noCache: null,
+          breadcrumb: null
         },
-        hidden: false,
-        redirect: '',
-        alwaysShow: false
-
+        hidden: null,
+        redirect: null,
+        alwaysShow: null
       },
-      dataOperating: {},
       listLoading: false,
       expandRowIds: [],
 
@@ -192,6 +191,7 @@ export default {
   methods: {
     list() {
       this.listLoading = true
+      this.flattedData = []
       return new Promise(() => {
         list().then(res => {
           const {data: permissions} = res
@@ -199,6 +199,7 @@ export default {
           for (let permission of permissions) {
             this.expandRowIds.push(permission.id);
           }
+          this.flatTableData(this.tableData)
         }).finally(() => {
           this.listLoading = false
         });
@@ -207,16 +208,10 @@ export default {
     handleUpdate(row) {
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
-      return new Promise(() => {
-        detail(row.id).then(res => {
-          console.log('assign')
-          Object.assign(this.dataOperating, res.data)
-          console.log(this.dataOperating)
-        });
-      });
-
+      this.dataOperating = Object.assign({}, row)
     },
     handleCreate() {
+      this.resetDataOperating()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
@@ -226,10 +221,35 @@ export default {
     updateData() {
       console.log(this.dataOperating)
     },
-    resetData() {
-      console.log('reset')
-      Object.assign(this.dataOperating, this.dataTemplate)
-      console.log(this.dataOperating)
+    resetDataOperating() {
+      this.dataOperating = {
+        name: '',
+        resourceType: '操作',
+        permissionKey: '',
+        parentId: '',
+        sort: 100,
+        path: null,
+        component: null,
+        meta: {
+          icon: null,
+          affix: null,
+          title: null,
+          noCache: null,
+          breadcrumb: null
+        },
+        hidden: null,
+        redirect: null,
+        alwaysShow: null
+      }
+    },
+    flatTableData(list) {
+      for (const item of list) {
+        const {id, name: name = '无'} = item
+        this.flattedData.push({id, name})
+        if (item.children) {
+          this.flatTableData(item.children)
+        }
+      }
     },
   },
   filters: {
