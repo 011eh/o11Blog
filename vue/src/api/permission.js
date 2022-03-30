@@ -14,3 +14,10 @@ export function detail(id) {
   });
 }
 
+export function update(permission) {
+  return request({
+    url: `/permission`,
+    method: 'put',
+    permission
+  });
+}

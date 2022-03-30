@@ -7,18 +7,19 @@
         添加
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
+                 v-loading.fullscreen.lock="this.loading"
                  @click="list">
         查询
       </el-button>
     </div>
     <el-table
       :data="tableData"
-      style="width: 100%"
+      style="width: 100%;"
       row-key="id"
       :expand-row-keys="expandRowIds"
-      v-loading="listLoading"
       border
       :tree-props="{ children: 'children' }"
+      element-loading-background="rgba(0, 0, 0, 0.7)"
     >
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="resourceType" label="资源类型">
@@ -33,7 +34,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="sort" label="排序"/>
-      <el-table-column label="Actions" align="center" width="230">
+      <el-table-column fixed="right" label="Actions" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)">
             编辑
@@ -44,8 +45,7 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog v-cloak :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
                style="width: 60%; margin-left: 35px">
         <el-form-item label="资源名称" prop="name">
@@ -67,12 +67,6 @@
         <el-form-item label="父级资源" prop="parentId">
           <el-select v-model="dataOperating.parentId" class="m-2" placeholder="无"
           >
-            <el-option
-              v-for="item in flattedData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
           </el-select>
 
         </el-form-item>
@@ -106,23 +100,23 @@
           </el-form-item>
           <el-form-item label="固定在面包屑" prop="meta.affix">
             <el-radio v-model="dataOperating.meta.affix" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.meta.affix" :label="false" border>否</el-radio>
+            <el-radio v-model="dataOperating.meta.affix" :label="null" border>否</el-radio>
           </el-form-item>
           <el-form-item label="开启Vue缓存" prop="meta.noCache">
-            <el-radio v-model="dataOperating.meta.noCache" :label="false" border>是</el-radio>
+            <el-radio v-model="dataOperating.meta.noCache" :label="null" border>是</el-radio>
             <el-radio v-model="dataOperating.meta.noCache" :label="true" border>否</el-radio>
           </el-form-item>
           <el-form-item label="面包屑上显示" prop="breadcrumb">
             <el-radio v-model="dataOperating.meta.breadcrumb" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.meta.breadcrumb" :label="false" border>否</el-radio>
+            <el-radio v-model="dataOperating.meta.breadcrumb" :label="null" border>否</el-radio>
           </el-form-item>
           <el-form-item label="在侧边栏隐藏" prop="hidden">
             <el-radio v-model="dataOperating.hidden" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.hidden" :label="false" border>否</el-radio>
+            <el-radio v-model="dataOperating.hidden" :label="null" border>否</el-radio>
           </el-form-item>
           <el-form-item label="总是显示菜单" prop="alwaysShow">
             <el-radio v-model="dataOperating.alwaysShow" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.alwaysShow" :label="false" border>否</el-radio>
+            <el-radio v-model="dataOperating.alwaysShow" :label="null" border>否</el-radio>
           </el-form-item>
         </div>
       </el-form>
@@ -140,18 +134,17 @@
 </template>
 
 <script>
-import {list} from "@/api/permission";
+import {detail, list} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
-
+import svgIcons from '@/icons/svg-icons'
+import elementIcons from '@/icons/element-icons'
 export default {
   data() {
     return {
       componentOptions: Object.keys(routerMap),
-      permissionKeyOptions: [],
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
       tableData: [],
-      flattedData: [],
       dataOperating: {
         id: null,
         name: '',
@@ -165,14 +158,14 @@ export default {
           icon: null,
           affix: null,
           title: null,
-          noCache: null,
+          noCache: true,
           breadcrumb: null
         },
         hidden: null,
         redirect: null,
         alwaysShow: null
       },
-      listLoading: false,
+      loading: false,
       expandRowIds: [],
 
       operationMap: {
@@ -180,18 +173,17 @@ export default {
         update: '修改'
       },
       dialogStatus: '',
-      dialogFormVisible: false
+      dialogFormVisible: false,
     }
   },
   computed: {},
   created() {
-    Object.assign(this.dataOperating, this.dataTemplate)
     this.list()
   },
   methods: {
     list() {
-      this.listLoading = true
-      this.flattedData = []
+      this.loading = true
+      this.expandRowIds = []
       return new Promise(() => {
         list().then(res => {
           const {data: permissions} = res
@@ -199,16 +191,41 @@ export default {
           for (let permission of permissions) {
             this.expandRowIds.push(permission.id);
           }
-          this.flatTableData(this.tableData)
+          console.log(this.expandRowIds)
         }).finally(() => {
-          this.listLoading = false
+          this.loading = false
         });
       });
     },
     handleUpdate(row) {
       this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.dataOperating = Object.assign({}, row)
+      return new Promise(() => {
+        detail(row.id).then(res => {
+          let {data} = res
+          data.meta = Object.assign(this.dataOperating.meta, data.meta);
+          this.dataOperating = Object.assign({
+            name: null,
+            resourceType: '操作',
+            permissionKey: '',
+            parentId: '',
+            sort: 100,
+            path: null,
+            component: null,
+            meta: {
+              icon: null,
+              affix: null,
+              title: null,
+              noCache: null,
+              breadcrumb: null
+            },
+            hidden: null,
+            redirect: null,
+            alwaysShow: null
+          }, data)
+          this.dialogFormVisible = true
+        });
+      })
+
     },
     handleCreate() {
       this.resetDataOperating()
@@ -234,21 +251,12 @@ export default {
           icon: null,
           affix: null,
           title: null,
-          noCache: null,
+          noCache: true,
           breadcrumb: null
         },
         hidden: null,
         redirect: null,
         alwaysShow: null
-      }
-    },
-    flatTableData(list) {
-      for (const item of list) {
-        const {id, name: name = '无'} = item
-        this.flattedData.push({id, name})
-        if (item.children) {
-          this.flatTableData(item.children)
-        }
       }
     },
   },

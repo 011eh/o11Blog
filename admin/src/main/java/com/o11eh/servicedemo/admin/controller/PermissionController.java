@@ -45,14 +45,14 @@ public class PermissionController extends BaseController {
         return Result.success(page);
     }
 
-    @PostMapping(Constants.Api.ADD)
+    @PostMapping
     @ApiOperation(Constants.Doc.ADD)
     public Result add(@RequestBody Permission permission) {
         permissionService.save(permission);
         return Result.success(permission.getId());
     }
 
-    @PutMapping(Constants.Api.UPDATE)
+    @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Permission permission) {
         permissionService.updateById(permission);
@@ -71,7 +71,7 @@ public class PermissionController extends BaseController {
     @ApiOperation("授权列表")
     @GetMapping("list")
     public Result getPermissions() {
-        List<Permission> permissions = permissionService.getPermissions();
+        List<Permission> permissions = permissionService.getPermissionList();
         return Result.success(permissions);
     }
 }

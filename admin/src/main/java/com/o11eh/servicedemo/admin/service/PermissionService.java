@@ -11,7 +11,7 @@ import java.util.List;
 public interface PermissionService extends BaseService<Permission> {
     List<Permission> getPermissionByRoleId(Long roleId);
 
-    List<Permission> getPermissions();
+    List<Permission> getPermissionList();
 
     void grantPermissions(String id, List<String> permissionIds);
 }

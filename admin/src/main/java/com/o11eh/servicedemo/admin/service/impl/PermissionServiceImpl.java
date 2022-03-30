@@ -1,7 +1,9 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
@@ -31,9 +33,13 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     }
 
     @Override
-    public List<Permission> getPermissions() {
-        Map<String, List<Permission>> parentIdMap = this.list().stream().sorted(Comparator.comparing(Permission::getSort)).collect(Collectors
-                .groupingBy(Permission::getParentId, LinkedHashMap::new, Collectors.toList()));
+    public List<Permission> getPermissionList() {
+        List<Permission> list = this.list(Wrappers.<Permission>lambdaQuery()
+                .select(BaseEntry::getId, Permission::getParentId, Permission::getName,
+                        Permission::getPermissionKey, Permission::getSort, Permission::getResourceType, Permission::getStatus));
+
+        Map<String, List<Permission>> parentIdMap = list.stream().sorted(Comparator.comparing(Permission::getSort))
+                .collect(Collectors.groupingBy(Permission::getParentId, LinkedHashMap::new, Collectors.toList()));
 
         String rootParentId = "";
         parentIdMap.values().stream().flatMap(Collection::stream)
