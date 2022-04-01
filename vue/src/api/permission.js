@@ -21,3 +21,10 @@ export function update(permission) {
     permission
   });
 }
+
+export function parentSelect() {
+  return request({
+    url: `/sysConfig/permissionSelect`,
+    method: 'get',
+  });
+}

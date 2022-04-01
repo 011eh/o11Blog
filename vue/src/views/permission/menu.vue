@@ -50,6 +50,9 @@
         <el-form-item label="资源名称" prop="name">
           <el-input v-model="dataOperating.name"/>
         </el-form-item>
+        <el-form-item label="权限关键字" prop="permissionKey">
+          <el-input v-model="dataOperating.permissionKey"/>
+        </el-form-item>
         <el-form-item label="资源类型" prop="resourceType">
           <el-select v-model="dataOperating.resourceType" class="m-2" placeholder="无">
             <el-option
@@ -57,18 +60,20 @@
               :key="item"
               :label="item"
               :value="item"
-            />
+            >
+            </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="权限关键字" prop="permissionKey">
-          <el-input v-model="dataOperating.permissionKey"/>
         </el-form-item>
         <el-form-item label="父级资源" prop="parentId">
           <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
                      placeholder="无"
           >
+            <el-option v-for="item in parentOptionFilter" :key="item.id" :label="item.name" :value="item.id">
+              <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
+                                            :type="item.resourceType | tagFilter">{{ item.resourceType }}</el-tag>
+              </span>
+            </el-option>
           </el-select>
-
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="dataOperating.sort" :min="1" :max="100"/>
@@ -128,7 +133,6 @@
           </el-form-item>
         </div>
       </el-form>
-
       <el-dialog
         :visible.sync="iconDialogVisible"
         title="修改图标"
@@ -161,8 +165,6 @@
           </el-tab-pane>
         </el-tabs>
       </el-dialog>
-
-
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -178,7 +180,7 @@
 </template>
 
 <script>
-import {detail, list} from "@/api/permission";
+import {detail, list, parentSelect} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
@@ -221,11 +223,23 @@ export default {
       dialogStatus: '',
       dialogFormVisible: false,
       iconDialogVisible: false,
+      parentOptions: []
     }
   },
-  computed: {},
   created() {
     this.list()
+    this.getParentSelect()
+  },
+  computed: {
+    parentOptionFilter() {
+      let options = this.parentOptions.filter(p => {
+        if (this.dataOperating.resourceType === '二级菜单') {
+          return p.resourceType === '一级菜单';
+        }
+        return p.resourceType !== '操作';
+      });
+      return options
+    },
   },
   methods: {
     list() {
@@ -319,8 +333,13 @@ export default {
       this.dataOperating.meta.icon = null
       this.iconDialogVisible = false
     },
-
-
+    getParentSelect() {
+      return new Promise(() => {
+        return parentSelect().then(res => {
+          this.parentOptions = res.data
+        });
+      })
+    },
   },
   filters: {
     tagFilter(type) {
@@ -365,9 +384,9 @@ export default {
   margin: 0;
   height: 85px;
   text-align: center;
-  width: 75px;
+  width: 102px;
   float: left;
-  font-size: 25px;
+  font-size: 22px;
   color: #24292e;
   cursor: pointer;
 }

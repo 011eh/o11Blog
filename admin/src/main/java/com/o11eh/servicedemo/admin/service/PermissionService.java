@@ -14,4 +14,6 @@ public interface PermissionService extends BaseService<Permission> {
     List<Permission> getPermissionList();
 
     void grantPermissions(String id, List<String> permissionIds);
+
+    List<Permission> getParentSelect();
 }

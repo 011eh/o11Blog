@@ -61,4 +61,13 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         permissionIds.forEach(pId -> mapper.insertPermission(roleId, pId));
         session.commit();
     }
+
+    @Override
+    public List<Permission> getParentSelect() {
+        List<Permission> list = list(Wrappers.<Permission>lambdaQuery().select(BaseEntry::getId,
+                Permission::getPermissionKey, Permission::getResourceType, Permission::getName, Permission::getSort));
+        list.sort(Comparator.comparing((Permission p) -> p.getResourceType().getSort())
+                .thenComparing(Permission::getSort));
+        return list;
+    }
 }
