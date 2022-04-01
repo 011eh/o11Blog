@@ -19,7 +19,6 @@
       :expand-row-keys="expandRowIds"
       border
       :tree-props="{ children: 'children' }"
-      element-loading-background="rgba(0, 0, 0, 0.7)"
     >
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="resourceType" label="资源类型">
@@ -65,7 +64,8 @@
           <el-input v-model="dataOperating.permissionKey"/>
         </el-form-item>
         <el-form-item label="父级资源" prop="parentId">
-          <el-select v-model="dataOperating.parentId" class="m-2" placeholder="无"
+          <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
+                     placeholder="无"
           >
           </el-select>
 
@@ -91,12 +91,20 @@
           <el-form-item hidden label="路由标题" prop="title">
             <el-input v-model="dataOperating.name"/>
           </el-form-item>
-
           <el-form-item v-if="" label="面包屑重定向地址" prop="redirect">
             <el-input v-model="dataOperating.redirect"/>
           </el-form-item>
           <el-form-item label="图标" prop="meta.icon">
-            <svg-icon icon-class="el-icon-phone"/>
+            <template>
+              <el-button class="iconInDataOperatingDialog" @click="iconDialogVisible = true">
+                <i v-if="notNull(dataOperating.meta.icon) && isElIcon(dataOperating.meta.icon)"
+                   :class="dataOperating.meta.icon"/>
+                <svg-icon class="iconInDataOperatingDialog"
+                          v-if="notNull(dataOperating.meta.icon) && !isElIcon(dataOperating.meta.icon)"
+                          :icon-class="dataOperating.meta.icon"/>
+                <span style="font-size: 5px" v-if="!notNull(dataOperating.meta.icon)">无</span>
+              </el-button>
+            </template>
           </el-form-item>
           <el-form-item label="固定在面包屑" prop="meta.affix">
             <el-radio v-model="dataOperating.meta.affix" :label="true" border>是</el-radio>
@@ -121,14 +129,50 @@
         </div>
       </el-form>
 
-      <div slot="footer" class="dialog-footer">
+      <el-dialog
+        :visible.sync="iconDialogVisible"
+        title="修改图标"
+        append-to-body>
+
+        <div style="padding-bottom:5px;text-align: right">
+          <el-button @click="cancelIcon">取消图标</el-button>
+        </div>
+
+        <el-tabs type="border-card">
+          <el-tab-pane label="Icons">
+            <div class="grid">
+              <div v-for="item of svgIcons" :key="item" @click="handleSelectIcon(item)">
+                <div class="icon-item">
+                  <svg-icon :icon-class="item" class-name="disabled"/>
+                  <span class="iconSpan">{{ item }}</span>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="Element-UI Icons">
+            <div class="grid">
+              <div v-for="item of elementIcons" :key="item" @click="handleSelectIcon('el-icon-' + item)">
+                <div class="icon-item">
+                  <i :class="'el-icon-' + item"/>
+                  <span class="iconSpan">{{ item }}</span>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </el-dialog>
+
+
+      <template #footer>
+      <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
           确定
         </el-button>
-      </div>
+      </span>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -138,9 +182,11 @@ import {detail, list} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
+
 export default {
   data() {
     return {
+      svgIcons, elementIcons,
       componentOptions: Object.keys(routerMap),
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
@@ -174,6 +220,7 @@ export default {
       },
       dialogStatus: '',
       dialogFormVisible: false,
+      iconDialogVisible: false,
     }
   },
   computed: {},
@@ -191,7 +238,6 @@ export default {
           for (let permission of permissions) {
             this.expandRowIds.push(permission.id);
           }
-          console.log(this.expandRowIds)
         }).finally(() => {
           this.loading = false
         });
@@ -259,6 +305,22 @@ export default {
         alwaysShow: null
       }
     },
+    isElIcon(icon) {
+      return icon.includes('el-icon')
+    },
+    notNull(icon) {
+      return icon !== null
+    },
+    handleSelectIcon(icon) {
+      this.dataOperating.meta.icon = icon
+      this.iconDialogVisible = false
+    },
+    cancelIcon() {
+      this.dataOperating.meta.icon = null
+      this.iconDialogVisible = false
+    },
+
+
   },
   filters: {
     tagFilter(type) {
@@ -292,4 +354,36 @@ export default {
     margin-bottom: 30px;
   }
 }
+
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 2fr));
+}
+
+.icon-item {
+  margin: 0;
+  height: 85px;
+  text-align: center;
+  width: 75px;
+  float: left;
+  font-size: 25px;
+  color: #24292e;
+  cursor: pointer;
+}
+
+.iconSpan {
+  display: block;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.iconInDataOperatingDialog {
+  font-size: 15px;
+}
+
 </style>

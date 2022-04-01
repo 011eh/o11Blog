@@ -1,6 +1,15 @@
 <template>
   <div class="app-container">
-    角色管理
+    <el-popover placement="right" :width="400" trigger="click">
+      <template #reference>
+        <el-button style="margin-right: 16px">Click to activate</el-button>
+      </template>
+      <el-table :data="[]">
+        <el-table-column width="150" property="date" label="date" />
+        <el-table-column width="100" property="name" label="name" />
+        <el-table-column width="300" property="address" label="address" />
+      </el-table>
+    </el-popover>
   </div>
 </template>
 
