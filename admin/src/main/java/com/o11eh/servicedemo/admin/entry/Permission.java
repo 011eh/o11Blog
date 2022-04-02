@@ -10,6 +10,7 @@ import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.enums.Status;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
  * @since 2022/02/27 12:18
  */
 @Data
-@TableName(value = "back_permission",autoResultMap = true)
+@TableName(value = "back_permission", autoResultMap = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Permission extends BaseEntry<Permission> {
     private String name;
@@ -29,9 +30,8 @@ public class Permission extends BaseEntry<Permission> {
     private Integer sort;
     private ResourceType resourceType;
 
-    @JsonAnySetter
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private Map<String, Object> routerInfo = resourceType == ResourceType.MENU ? new HashMap<>() : null;
+    private Map<String, Object> routerInfo = new HashMap<>();
 
     @TableField(exist = false)
     private List<Permission> children;
@@ -39,5 +39,10 @@ public class Permission extends BaseEntry<Permission> {
     @JsonAnyGetter
     public Map<String, Object> getRouterInfo() {
         return routerInfo;
+    }
+
+    @JsonAnySetter
+    public void add(String key, Object value) {
+        routerInfo.put(key, value);
     }
 }

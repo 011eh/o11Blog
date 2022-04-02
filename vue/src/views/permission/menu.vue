@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import {detail, list, parentSelect} from "@/api/permission";
+import {detail, list, parentSelect, update} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
@@ -297,6 +297,11 @@ export default {
     },
     updateData() {
       console.log(this.dataOperating)
+      return new Promise(() => {
+        update(this.dataOperating).finally(() => {
+          this.list()
+        });
+      })
     },
     resetDataOperating() {
       this.dataOperating = {

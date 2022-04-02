@@ -18,7 +18,7 @@ export function update(permission) {
   return request({
     url: `/permission`,
     method: 'put',
-    permission
+    data: permission
   });
 }
 

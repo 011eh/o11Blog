@@ -7,7 +7,7 @@ import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.entry.PageParam;
 import com.o11eh.servicedemo.admin.entry.Result;
-import com.o11eh.servicedemo.admin.utils.Update;
+import com.o11eh.servicedemo.admin.utils.validate.Update;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

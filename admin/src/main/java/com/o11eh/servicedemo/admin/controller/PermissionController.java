@@ -2,15 +2,18 @@ package com.o11eh.servicedemo.admin.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.PageParam;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.o11eh.servicedemo.admin.utils.validate.Create;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
 @RestController
 @Api(tags = "权限")
 @RequestMapping("permission")
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
@@ -47,7 +51,7 @@ public class PermissionController extends BaseController {
 
     @PostMapping
     @ApiOperation(Constants.Doc.ADD)
-    public Result add(@RequestBody Permission permission) {
+    public Result add(@Validated(Create.class) @RequestBody Permission permission) {
         permissionService.save(permission);
         return Result.success(permission.getId());
     }
@@ -55,7 +59,7 @@ public class PermissionController extends BaseController {
     @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Permission permission) {
-        permissionService.updateById(permission);
+//        permissionService.updateById(permission);
         return Result.success(permission.getId());
     }
 
