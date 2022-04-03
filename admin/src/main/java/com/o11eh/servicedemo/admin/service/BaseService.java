@@ -7,4 +7,5 @@ public interface BaseService<T> extends IService<T> {
     default Page<T> page(long current, long size) {
         throw new UnsupportedOperationException();
     }
+
 }

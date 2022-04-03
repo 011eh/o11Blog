@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.o11eh.servicedemo.admin.config.BusinessException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class JsonUtl {
         if (StrUtil.isNotBlank(json)) {
             try {
                 return OBJECT_MAPPER.readValue(json, collectionType);
-            } catch (JsonProcessingException e) {
+            } catch (IOException e) {
                 throw BusinessException.e(e.getMessage());
             }
         }
@@ -33,7 +34,7 @@ public class JsonUtl {
     public static <T> T jsonToObject(String json, Class<T> aClass) {
         try {
             return OBJECT_MAPPER.readValue(json, aClass);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             throw BusinessException.e(e.getMessage());
         }
     }
