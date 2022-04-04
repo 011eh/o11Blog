@@ -78,6 +78,12 @@
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="dataOperating.sort" :min="1" :max="100"/>
         </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-switch
+            v-model="dataOperating.status"
+            size="large"
+          />
+        </el-form-item>
 
         <div v-if="dataOperating.resourceType!=='操作'">
           <el-form-item label="路由路径" prop="path">
@@ -92,9 +98,6 @@
                 :value="item"
               />
             </el-select>
-          </el-form-item>
-          <el-form-item hidden label="路由标题" prop="title">
-            <el-input v-model="dataOperating.name"/>
           </el-form-item>
           <el-form-item v-if="" label="面包屑重定向地址" prop="redirect">
             <el-input v-model="dataOperating.redirect"/>
@@ -115,9 +118,9 @@
             <el-radio v-model="dataOperating.meta.affix" :label="true" border>是</el-radio>
             <el-radio v-model="dataOperating.meta.affix" :label="null" border>否</el-radio>
           </el-form-item>
-          <el-form-item label="开启Vue缓存" prop="meta.noCache">
-            <el-radio v-model="dataOperating.meta.noCache" :label="null" border>是</el-radio>
-            <el-radio v-model="dataOperating.meta.noCache" :label="true" border>否</el-radio>
+          <el-form-item label="禁用Vue缓存" prop="meta.noCache">
+            <el-radio v-model="dataOperating.meta.noCache" :label="true" border>是</el-radio>
+            <el-radio v-model="dataOperating.meta.noCache" :label="null" border>否</el-radio>
           </el-form-item>
           <el-form-item label="面包屑上显示" prop="breadcrumb">
             <el-radio v-model="dataOperating.meta.breadcrumb" :label="true" border>是</el-radio>
@@ -170,7 +173,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="handleConfirm(dialogStatus)">
           确定
         </el-button>
       </span>
@@ -200,13 +203,14 @@ export default {
         permissionKey: '',
         parentId: '',
         sort: 100,
+        status:true,
         path: null,
         component: null,
         meta: {
           icon: null,
           affix: null,
           title: null,
-          noCache: true,
+          noCache: null,
           breadcrumb: null
         },
         hidden: null,
@@ -232,13 +236,12 @@ export default {
   },
   computed: {
     parentOptionFilter() {
-      let options = this.parentOptions.filter(p => {
+      return this.parentOptions.filter(p => {
         if (this.dataOperating.resourceType === '二级菜单') {
           return p.resourceType === '一级菜单';
         }
         return p.resourceType !== '操作';
-      });
-      return options
+      })
     },
   },
   methods: {
@@ -293,13 +296,13 @@ export default {
       this.dialogFormVisible = true
     },
     createData() {
-      console.log(this.dataOperating)
+
     },
     updateData() {
-      console.log(this.dataOperating)
       return new Promise(() => {
-        update(this.dataOperating).finally(() => {
-          this.list()
+        update(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.list();
         });
       })
     },
@@ -310,6 +313,7 @@ export default {
         permissionKey: '',
         parentId: '',
         sort: 100,
+        status:true,
         path: null,
         component: null,
         meta: {
@@ -344,6 +348,16 @@ export default {
           this.parentOptions = res.data
         });
       })
+    },
+    handleConfirm(action) {
+      this.dataOperating.meta.title = this.dataOperating.name
+      if (action === 'create') {
+        this.createData()
+        return
+      }
+      if (action === 'update') {
+        this.updateData();
+      }
     },
   },
   filters: {

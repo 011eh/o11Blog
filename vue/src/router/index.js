@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
-import PagePermission from '@/views/permission/admin'
+import PagePermission from '@/views/permission/user'
 import DirectivePermission from '@/views/permission/role'
 /* Router Modules */
 
@@ -133,7 +133,7 @@ export const asyncRoutes = [
       },
       {
         path: 'role',
-        component: import('@/views/permission/menu'),
+        component: import('@/views/permission/permission'),
         name: 'RolePermission',
         meta: {
           title: 'Role Permission',

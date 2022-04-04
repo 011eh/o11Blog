@@ -30,18 +30,13 @@ public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
 
-    @Override
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable String id) {
-        Permission permission = permissionService.getOne(Wrappers.<Permission>lambdaQuery()
-                .select(Permission.class, tableFieldInfo -> {
-                    return !tableFieldInfo.getProperty().equals("status");
-                }).eq(BaseEntry::getId, id));
+        Permission permission = permissionService.getOne(Wrappers.<Permission>lambdaQuery().eq(BaseEntry::getId, id));
         return Result.success(permission);
     }
 
-    @Override
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
     public Result list(@RequestBody PageParam param) {
@@ -51,7 +46,7 @@ public class PermissionController extends BaseController {
 
     @PostMapping
     @ApiOperation(Constants.Doc.ADD)
-    public Result add(@Validated(Create.class) @RequestBody Permission permission) {
+    public Result create(@Validated(Create.class) @RequestBody Permission permission) {
         permissionService.save(permission);
         return Result.success(permission.getId());
     }
@@ -59,12 +54,11 @@ public class PermissionController extends BaseController {
     @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Permission permission) {
-//        permissionService.updateById(permission);
+        permissionService.updateById(permission);
         return Result.success(permission.getId());
     }
 
 
-    @Override
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     @DeleteMapping(Constants.Api.DELETE)
     public Result deleteBatch(@RequestBody List<Long> ids) {

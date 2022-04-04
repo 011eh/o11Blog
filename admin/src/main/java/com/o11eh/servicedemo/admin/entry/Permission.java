@@ -26,10 +26,10 @@ import java.util.Map;
 public class Permission extends BaseEntry<Permission> {
     private String name;
     private String permissionKey;
-    private Status status;
+    private ResourceType resourceType;
     private String parentId;
     private Integer sort;
-    private ResourceType resourceType;
+    private Status status;
 
     @TableField(exist = false)
     private List<Permission> children;

@@ -34,7 +34,6 @@ public class AdminController extends BaseController {
     @Autowired
     private AdminService adminService;
 
-    @Override
     @ApiOperation(Constants.Doc.DETAIL)
     @GetMapping(Constants.Api.PATH_ID)
     public Result detail(@PathVariable String id) {
@@ -42,7 +41,6 @@ public class AdminController extends BaseController {
         return Result.success(admin);
     }
 
-    @Override
     @ApiOperation(Constants.Doc.PAGE)
     @SaCheckPermission("admin:list")
     @PostMapping(Constants.Api.PAGE)
@@ -66,7 +64,6 @@ public class AdminController extends BaseController {
         return Result.success(id);
     }
 
-    @Override
     @DeleteMapping(Constants.Api.DELETE)
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     public Result deleteBatch(@RequestBody List<Long> ids) {

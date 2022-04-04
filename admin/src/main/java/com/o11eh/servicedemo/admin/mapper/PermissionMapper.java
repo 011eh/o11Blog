@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Mapper
 public interface PermissionMapper extends BaseMapperO<Permission> {
-    List<Permission> selectPermission(Long roleId);
+    List<Permission> selectPermissionByRoleId(Long roleId);
 
     void insertPermission(@Param("roleId") String id, @Param("pId") String permissionId);
 

@@ -1,9 +1,10 @@
 const routerMap = {
-  page: () => import('@/views/permission/admin'),
-  role: () => import('@/views/permission/menu'),
-  directive: () => import('@/views/permission/role'),
   layout: () => import('@/layout'),
-  empty: () => import('@/views/empty')
+  empty: () => import('@/views/empty'),
+
+  permission: () => import('@/views/permission/permission'),
+  role: () => import('@/views/permission/role'),
+  user: () => import('@/views/permission/user')
 }
 
 export function setComponent(router) {

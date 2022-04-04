@@ -29,7 +29,9 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
 
     @Override
     public List<Permission> getPermissionByRoleId(Long roleId) {
-        return permissionMapper.selectPermission(roleId);
+        List<Permission> permissions = permissionMapper.selectPermissionByRoleId(roleId);
+        permissions.sort(Comparator.comparing(Permission::getSort));
+        return permissions;
     }
 
     @Override
