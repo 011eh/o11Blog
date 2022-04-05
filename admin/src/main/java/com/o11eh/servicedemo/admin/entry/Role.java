@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @TableName("back_role")
 @ApiModel(value = "Role对象", description = "角色")
-public class Role extends BaseEntry<Role> {
+public class Role extends BaseEntry {
 
     private static final long serialVersionUID = 1L;
 

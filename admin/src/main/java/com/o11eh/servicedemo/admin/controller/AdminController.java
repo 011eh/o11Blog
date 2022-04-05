@@ -3,17 +3,15 @@ package com.o11eh.servicedemo.admin.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.Admin;
-import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.entry.PageParam;
 import com.o11eh.servicedemo.admin.entry.Result;
-import com.o11eh.servicedemo.admin.utils.validate.Update;
+import com.o11eh.servicedemo.admin.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.o11eh.servicedemo.admin.constants.Constants;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -59,7 +57,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation(Constants.Doc.UPDATE)
     @PutMapping(Constants.Api.UPDATE)
-    public Result update(@Validated(Update.class) @RequestBody Admin admin) {
+    public Result update(@Valid @RequestBody Admin admin) {
         String id = adminService.updateAdmin(admin);
         return Result.success(id);
     }

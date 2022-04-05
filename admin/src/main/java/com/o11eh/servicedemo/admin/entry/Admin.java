@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.enums.Status;
-import com.o11eh.servicedemo.admin.utils.validate.Create;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -22,14 +21,14 @@ import javax.validation.constraints.NotBlank;
 @Data
 @TableName("back_admin")
 @ApiModel(value = "Admin对象", description = "管理员")
-public class Admin extends BaseEntry<Admin> {
+public class Admin extends BaseEntry {
 
-    @NotBlank(groups = Create.class)
+    @NotBlank
     private String username;
 
     private String nickName;
 
-    @NotBlank(groups = Create.class)
+    @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private Long roleId;

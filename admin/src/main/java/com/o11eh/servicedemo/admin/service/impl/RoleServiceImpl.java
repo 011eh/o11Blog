@@ -1,9 +1,9 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
-import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.admin.service.RoleService;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.RoleMapper;
+import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.o11eh.servicedemo.admin.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +23,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
     @Override
     public String add(Role role) {
-        role.insert();
+        this.save(role);
         permissionService.grantPermissions(role.getId(), role.getPermissionIds());
         return role.getId();
     }
 
     @Override
     public String updateRole(Role role) {
-        role.updateById();
+        this.updateById(role);
         permissionService.grantPermissions(role.getId(), role.getPermissionIds());
         return role.getId();
     }

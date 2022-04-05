@@ -33,7 +33,6 @@ public class RoleController extends BaseController {
     @Autowired
     private PermissionService permissionService;
 
-    @Override
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable String id) {
@@ -42,7 +41,6 @@ public class RoleController extends BaseController {
         return Result.success(role);
     }
 
-    @Override
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
     public Result list(@RequestBody PageParam param) {
@@ -65,7 +63,6 @@ public class RoleController extends BaseController {
         return Result.success(id);
     }
 
-    @Override
     @DeleteMapping(Constants.Api.DELETE)
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     public Result deleteBatch(@RequestBody List<Long> ids) {

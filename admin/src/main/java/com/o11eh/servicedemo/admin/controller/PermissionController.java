@@ -1,21 +1,19 @@
 package com.o11eh.servicedemo.admin.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.o11eh.servicedemo.admin.constants.Constants;
-import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.PageParam;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
 import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.admin.utils.validate.Create;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +23,6 @@ import java.util.List;
 @RestController
 @Api(tags = "权限")
 @RequestMapping("permission")
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
@@ -33,7 +30,7 @@ public class PermissionController extends BaseController {
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable String id) {
-        Permission permission = permissionService.getOne(Wrappers.<Permission>lambdaQuery().eq(BaseEntry::getId, id));
+        Permission permission = permissionService.detail(id);
         return Result.success(permission);
     }
 
@@ -46,14 +43,15 @@ public class PermissionController extends BaseController {
 
     @PostMapping
     @ApiOperation(Constants.Doc.ADD)
-    public Result create(@Validated(Create.class) @RequestBody Permission permission) {
+    public Result create(@RequestBody PermissionVo vo) {
+        Permission permission = BeanUtil.copyProperties(vo, Permission.class);
         permissionService.save(permission);
         return Result.success(permission.getId());
     }
 
     @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
-    public Result update(@RequestBody Permission permission) {
+    public Result update(@Valid @RequestBody Permission permission) {
         permissionService.updateById(permission);
         return Result.success(permission.getId());
     }

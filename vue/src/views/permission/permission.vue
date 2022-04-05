@@ -54,7 +54,7 @@
           <el-input v-model="dataOperating.permissionKey"/>
         </el-form-item>
         <el-form-item label="资源类型" prop="resourceType">
-          <el-select v-model="dataOperating.resourceType" class="m-2" placeholder="无">
+          <el-select v-model="dataOperating.resourceType" class="m-2" @change="resourceTypeChange" placeholder="无">
             <el-option
               v-for="item in resourceTypeOptions"
               :key="item"
@@ -82,6 +82,8 @@
           <el-switch
             v-model="dataOperating.status"
             size="large"
+            active-value="启用"
+            inactive-value="禁用"
           />
         </el-form-item>
 
@@ -99,7 +101,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item v-if="" label="面包屑重定向地址" prop="redirect">
+          <el-form-item label="重定向地址" prop="redirect">
             <el-input v-model="dataOperating.redirect"/>
           </el-form-item>
           <el-form-item label="图标" prop="meta.icon">
@@ -130,7 +132,7 @@
             <el-radio v-model="dataOperating.hidden" :label="true" border>是</el-radio>
             <el-radio v-model="dataOperating.hidden" :label="null" border>否</el-radio>
           </el-form-item>
-          <el-form-item label="总是显示菜单" prop="alwaysShow">
+          <el-form-item v-if="dataOperating.resourceType==='一级菜单'" label="作为嵌套菜单" prop="alwaysShow">
             <el-radio v-model="dataOperating.alwaysShow" :label="true" border>是</el-radio>
             <el-radio v-model="dataOperating.alwaysShow" :label="null" border>否</el-radio>
           </el-form-item>
@@ -183,7 +185,7 @@
 </template>
 
 <script>
-import {detail, list, parentSelect, update} from "@/api/permission";
+import {create, detail, list, parentSelect, update} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
@@ -201,9 +203,9 @@ export default {
         name: '',
         resourceType: '操作',
         permissionKey: '',
-        parentId: '',
+        parentId: null,
         sort: 100,
-        status:true,
+        status: '启用',
         path: null,
         component: null,
         meta: {
@@ -237,6 +239,9 @@ export default {
   computed: {
     parentOptionFilter() {
       return this.parentOptions.filter(p => {
+        if (this.dataOperating.id === p.id) {
+          return false;
+        }
         if (this.dataOperating.resourceType === '二级菜单') {
           return p.resourceType === '一级菜单';
         }
@@ -270,7 +275,7 @@ export default {
             name: null,
             resourceType: '操作',
             permissionKey: '',
-            parentId: '',
+            parentId: null,
             sort: 100,
             path: null,
             component: null,
@@ -295,12 +300,18 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
-    createData() {
-
-    },
-    updateData() {
+    createData(data) {
+      console.log(data)
       return new Promise(() => {
-        update(this.dataOperating).then(() => {
+        create(data).then(() => {
+          this.dialogFormVisible = false;
+          this.list();
+        });
+      })
+    },
+    updateData(data) {
+      return new Promise(() => {
+        update(data).then(() => {
           this.dialogFormVisible = false;
           this.list();
         });
@@ -311,9 +322,9 @@ export default {
         name: '',
         resourceType: '操作',
         permissionKey: '',
-        parentId: '',
+        parentId: null,
         sort: 100,
-        status:true,
+        status: '启用',
         path: null,
         component: null,
         meta: {
@@ -350,13 +361,41 @@ export default {
       })
     },
     handleConfirm(action) {
-      this.dataOperating.meta.title = this.dataOperating.name
+      let dataSend = null
+      if (this.dataOperating.resourceType !== '操作') {
+        this.dataOperating.meta.title = this.dataOperating.name
+        dataSend = this.dataOperating
+      } else if (this.dataOperating.resourceType === '操作') {
+        dataSend = (({
+                       name,
+                       permissionKey,
+                       resourceType,
+                       parentId,
+                       sort,
+                       status
+                     }) => ({
+          name,
+          permissionKey,
+          resourceType,
+          parentId,
+          sort,
+          status
+        }))(this.dataOperating)
+      }
       if (action === 'create') {
-        this.createData()
-        return
+        this.createData(dataSend);
+        return;
       }
       if (action === 'update') {
-        this.updateData();
+        this.updateData(dataSend);
+      }
+    },
+    resourceTypeChange(value) {
+      if (value === '一级菜单') {
+        this.dataOperating.parentId = null;
+      }
+      if (value === '二级菜单') {
+        this.dataOperating.alwaysShow = null;
       }
     },
   },

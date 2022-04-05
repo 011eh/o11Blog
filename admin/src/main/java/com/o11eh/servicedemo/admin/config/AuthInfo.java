@@ -45,12 +45,13 @@ public class AuthInfo {
         setPermissionKeys(typeMap.remove(ResourceType.OPERATION).stream().map(Permission::getPermissionKey)
                 .collect(Collectors.toList()));
 
-        Map<String, List<Permission>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
-                .collect(Collectors.groupingBy(Permission::getParentId));
-        parentIdMap.values().stream().flatMap(Collection::stream).
-                forEach(router -> router.setChildren(parentIdMap.get(router.getId())));
-
         String rootParentId = "";
+        Map<String, List<Permission>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(permission ->
+                        permission.getParentId() != null ? permission.getParentId() : rootParentId));
+        parentIdMap.values().stream().flatMap(Collection::stream).
+                forEach((router) -> router.setChildren(parentIdMap.get(router.getId())));
+
         setRouters(parentIdMap.get(rootParentId));
     }
 }

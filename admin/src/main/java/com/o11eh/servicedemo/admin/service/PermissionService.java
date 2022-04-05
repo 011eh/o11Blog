@@ -9,11 +9,13 @@ import java.util.List;
  * @since 2022/02/27 12:21
  */
 public interface PermissionService extends BaseService<Permission> {
-    List<Permission> getPermissionByRoleId(Long roleId);
+    List<Permission> getAuthInfoByRoleId(Long roleId);
 
     List<Permission> getPermissionList();
 
     void grantPermissions(String id, List<String> permissionIds);
 
     List<Permission> getParentSelect();
+
+    Permission detail(String id);
 }

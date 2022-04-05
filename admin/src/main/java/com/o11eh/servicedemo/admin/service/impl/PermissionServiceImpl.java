@@ -28,9 +28,8 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     private PermissionMapper permissionMapper;
 
     @Override
-    public List<Permission> getPermissionByRoleId(Long roleId) {
+    public List<Permission> getAuthInfoByRoleId(Long roleId) {
         List<Permission> permissions = permissionMapper.selectPermissionByRoleId(roleId);
-        permissions.sort(Comparator.comparing(Permission::getSort));
         return permissions;
     }
 
@@ -40,10 +39,12 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
                 .select(BaseEntry::getId, Permission::getParentId, Permission::getName,
                         Permission::getPermissionKey, Permission::getSort, Permission::getResourceType, Permission::getStatus));
 
-        Map<String, List<Permission>> parentIdMap = list.stream().sorted(Comparator.comparing(Permission::getSort))
-                .collect(Collectors.groupingBy(Permission::getParentId, LinkedHashMap::new, Collectors.toList()));
-
         String rootParentId = "";
+        Map<String, List<Permission>> parentIdMap = list.stream().sorted(Comparator.comparing(Permission::getSort))
+                .collect(Collectors.groupingBy(
+                        permission -> permission.getParentId() != null ? permission.getParentId() : rootParentId,
+                        LinkedHashMap::new, Collectors.toList()));
+
         parentIdMap.values().stream().flatMap(Collection::stream)
                 .forEach(permission -> permission.setChildren(parentIdMap.get(permission.getId())));
 
@@ -71,5 +72,10 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         list.sort(Comparator.comparing((Permission p) -> p.getResourceType().getSort())
                 .thenComparing(Permission::getSort));
         return list;
+    }
+
+    @Override
+    public Permission detail(String id) {
+        return getById(id);
     }
 }

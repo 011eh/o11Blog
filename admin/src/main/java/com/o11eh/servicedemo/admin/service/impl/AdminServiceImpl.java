@@ -40,7 +40,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         if (ObjectUtil.isNotNull(adminInDB)) {
             throw BusinessException.e("该用户已存在");
         }
-        admin.insert();
+        this.save(admin);
         return admin.getId();
     }
 

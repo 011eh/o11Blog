@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.o11eh.servicedemo.admin.mapper.DBUtilMapper">
+    <select id="recordExists" resultType="java.lang.Boolean">
+        select exists(select 1 from ${table} where id = #{id})
+    </select>
+    <select id="selectIdIfExist" resultType="java.lang.String">
+        select id
+        from ${table}
+        where id in(
+        <foreach collection="ids" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+</mapper>

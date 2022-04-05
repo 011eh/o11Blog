@@ -14,6 +14,14 @@ export function detail(id) {
   });
 }
 
+export function create(permission) {
+  return request({
+    url: `/permission`,
+    method: 'post',
+    data: permission
+  });
+}
+
 export function update(permission) {
   return request({
     url: `/permission`,

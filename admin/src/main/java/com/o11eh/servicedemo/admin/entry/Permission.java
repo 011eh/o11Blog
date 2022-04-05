@@ -1,20 +1,18 @@
 package com.o11eh.servicedemo.admin.entry;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.enums.Status;
+import com.o11eh.servicedemo.validation.RefId;
 import lombok.Data;
 
-import java.util.Date;
-import java.util.HashMap;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 011eh
@@ -23,10 +21,19 @@ import java.util.Map;
 @Data
 @TableName(value = "back_permission", autoResultMap = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Permission extends BaseEntry<Permission> {
+
+public class Permission extends BaseEntry {
+
+    @NotNull
     private String name;
+
+    @NotNull
     private String permissionKey;
+
     private ResourceType resourceType;
+
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @RefId(tableName = "back_permission")
     private String parentId;
     private Integer sort;
     private Status status;
@@ -35,6 +42,6 @@ public class Permission extends BaseEntry<Permission> {
     private List<Permission> children;
 
     @JsonUnwrapped
-    @TableField(typeHandler = JacksonTypeHandler.class)
+    @TableField(typeHandler = JacksonTypeHandler.class, insertStrategy = FieldStrategy.IGNORED)
     private RouterInfo routerInfo;
 }

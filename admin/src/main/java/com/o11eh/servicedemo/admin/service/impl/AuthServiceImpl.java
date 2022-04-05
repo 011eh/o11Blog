@@ -24,8 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private PermissionService permissionService;
 
     @Override
-    public String
-    login(String username, String password) {
+    public String login(String username, String password) {
         Admin admin = adminService.loginByUsername(username);
         if (ObjectUtil.isNull(admin) ||
                 !StrUtil.equals(SaSecureUtil.md5BySalt(password, username), admin.getPassword())) {
@@ -34,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
         StpUtil.login(username);
 
         AuthInfo authInfo = new AuthInfo(admin);
-        authInfo.setPermission(permissionService.getPermissionByRoleId(admin.getRoleId()));
+        authInfo.setPermission(permissionService.getAuthInfoByRoleId(admin.getRoleId()));
         SaSession session = StpUtil.getSession();
         session.set("authInfo", authInfo);
         session.set("admin", admin);
