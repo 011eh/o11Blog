@@ -23,7 +23,7 @@ public class AuthInfo {
     private String nickName;
     private String roleName;
     private String avatar;
-    private Long roleId;
+    private String roleId;
     private List<String> permissionKeys;
     private List<Permission> routers;
 

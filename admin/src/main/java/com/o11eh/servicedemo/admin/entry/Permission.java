@@ -11,6 +11,7 @@ import com.o11eh.servicedemo.admin.enums.Status;
 import com.o11eh.servicedemo.validation.RefId;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -24,12 +25,13 @@ import java.util.List;
 
 public class Permission extends BaseEntry {
 
-    @NotNull
+    @NotEmpty
     private String name;
 
-    @NotNull
+    @NotEmpty
     private String permissionKey;
 
+    @NotNull
     private ResourceType resourceType;
 
     @TableField(updateStrategy = FieldStrategy.IGNORED)

@@ -36,22 +36,21 @@ public class RoleController extends BaseController {
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable String id) {
-        Role role = roleService.getById(id);
-        role.setPermissionKeys(null);
-        return Result.success(role);
+        // todo 不使用详情接口，方法将被移除
+        return null;
     }
 
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
-    public Result list(@RequestBody PageParam param) {
+    public Result page(@RequestBody PageParam param) {
         Page<Role> page = roleService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
 
     @ApiOperation(Constants.Doc.ADD)
     @PostMapping(Constants.Api.ADD)
-    public Result add(@RequestBody Role role) {
-        String id = roleService.add(role);
+    public Result create(@RequestBody Role role) {
+        String id = roleService.create(role);
         return Result.success(id);
     }
 

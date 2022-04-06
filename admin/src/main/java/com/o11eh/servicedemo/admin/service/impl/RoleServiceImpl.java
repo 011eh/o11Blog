@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.RoleMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
@@ -21,8 +22,18 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Autowired
     private PermissionService permissionService;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
     @Override
-    public String add(Role role) {
+    public Page<Role> page(long current, long size) {
+        Page<Role> page = new Page<>(current, size);
+        roleMapper.selectPage(page);
+        return page;
+    }
+
+    @Override
+    public String create(Role role) {
         this.save(role);
         permissionService.grantPermissions(role.getId(), role.getPermissionIds());
         return role.getId();

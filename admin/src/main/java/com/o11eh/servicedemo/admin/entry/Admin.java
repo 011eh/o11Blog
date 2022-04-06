@@ -31,7 +31,7 @@ public class Admin extends BaseEntry {
     @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    private Long roleId;
+    private String roleId;
     private String avatar;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

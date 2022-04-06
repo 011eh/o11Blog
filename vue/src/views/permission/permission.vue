@@ -38,9 +38,13 @@
           <el-button type="primary" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button type="danger" size="small">
-            删除
-          </el-button>
+          <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
+            <template #reference>
+              <el-button type="danger" size="small">
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -175,7 +179,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="handleConfirm(dialogStatus)">
+        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
           确定
         </el-button>
       </span>
@@ -185,7 +189,7 @@
 </template>
 
 <script>
-import {create, detail, list, parentSelect, update} from "@/api/permission";
+import {create, detail, doDelete, list, parentSelect, update} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
@@ -301,7 +305,6 @@ export default {
       this.dialogFormVisible = true
     },
     createData(data) {
-      console.log(data)
       return new Promise(() => {
         create(data).then(() => {
           this.dialogFormVisible = false;
@@ -360,7 +363,7 @@ export default {
         });
       })
     },
-    handleConfirm(action) {
+    doCreateOrUpdate(action) {
       let dataSend = null
       if (this.dataOperating.resourceType !== '操作') {
         this.dataOperating.meta.title = this.dataOperating.name
@@ -397,6 +400,13 @@ export default {
       if (value === '二级菜单') {
         this.dataOperating.alwaysShow = null;
       }
+    },
+    doDelete(id) {
+      return new Promise(() => {
+        doDelete(id).then(() => {
+          this.list();
+        });
+      });
     },
   },
   filters: {

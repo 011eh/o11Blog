@@ -36,3 +36,11 @@ export function parentSelect() {
     method: 'get',
   });
 }
+
+export function doDelete(id) {
+  return request({
+    url: `/permission`,
+    method: 'delete',
+    data: [id]
+  });
+}

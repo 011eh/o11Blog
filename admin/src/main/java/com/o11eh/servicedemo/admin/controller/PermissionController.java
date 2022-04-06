@@ -36,7 +36,7 @@ public class PermissionController extends BaseController {
 
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
-    public Result list(@RequestBody PageParam param) {
+    public Result page(@RequestBody PageParam param) {
         Page<Permission> page = permissionService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }
@@ -58,7 +58,7 @@ public class PermissionController extends BaseController {
 
 
     @ApiOperation(Constants.Doc.BATCH_DELETE)
-    @DeleteMapping(Constants.Api.DELETE)
+    @DeleteMapping
     public Result deleteBatch(@RequestBody List<Long> ids) {
         permissionService.removeBatchByIds(ids);
         return Result.success();
