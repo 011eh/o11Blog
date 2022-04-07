@@ -1,25 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit"
-                 @click="handleCreate"
-      >
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
-                 v-loading.fullscreen.lock="this.loading"
-                 @click="list">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="list">
         查询
       </el-button>
     </div>
-    <el-table
-      :data="tableData"
-      style="width: 100%;"
-      row-key="id"
-      :expand-row-keys="expandRowIds"
-      border
-      :tree-props="{ children: 'children' }"
-    >
+    <el-table :data="tableData" style="width: 100%;" row-key="id" :expand-row-keys="expandRowIds" border
+              :tree-props="{ children: 'children' }">
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="resourceType" label="资源类型">
         <template slot-scope="{row}">
@@ -193,6 +183,7 @@ import {create, detail, doDelete, list, parentSelect, update} from "@/api/permis
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
+import {dialogStatus, operationMap, tableData, tagFilter} from '@/utils/tableBase'
 
 export default {
   data() {
@@ -201,7 +192,7 @@ export default {
       componentOptions: Object.keys(routerMap),
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
-      tableData: [],
+      tableData,
       dataOperating: {
         id: null,
         name: '',
@@ -226,11 +217,8 @@ export default {
       loading: false,
       expandRowIds: [],
 
-      operationMap: {
-        create: '添加',
-        update: '修改'
-      },
-      dialogStatus: '',
+      operationMap,
+      dialogStatus,
       dialogFormVisible: false,
       iconDialogVisible: false,
       parentOptions: []
@@ -410,23 +398,7 @@ export default {
     },
   },
   filters: {
-    tagFilter(type) {
-      if (type === '一级菜单') {
-        return 'success'
-      }
-      if (type === '二级菜单') {
-        return
-      }
-      if (type === '操作') {
-        return 'danger'
-      }
-      if (type === '启用') {
-        return
-      }
-      if (type === '禁用') {
-        return 'info'
-      }
-    },
+    tagFilter
   }
 }
 </script>

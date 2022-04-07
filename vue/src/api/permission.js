@@ -32,7 +32,7 @@ export function update(permission) {
 
 export function parentSelect() {
   return request({
-    url: `/sysConfig/permissionSelect`,
+    url: `/sysConfig/permissionDto`,
     method: 'get',
   });
 }

@@ -1,25 +1,215 @@
 <template>
   <div class="app-container">
-    <el-popover placement="right" :width="400" trigger="click">
-      <template #reference>
-        <el-button style="margin-right: 16px">Click to activate</el-button>
+    <div class="filter-container">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
+        添加
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page">
+        查询
+      </el-button>
+    </div>
+    <el-table :data="tableData" style="width: 100%;" row-key="id" border>
+      <el-table-column align="center" label="序号" width="50" type="index"/>
+      <el-table-column align="center" prop="name" label="名称"/>
+      <el-table-column align="center" prop="summary" label="简介"/>
+      <el-table-column align="center" prop="status" label="状态">
+        <template slot-scope="{row}">
+          <el-tag :type="row.status | tagFilter">{{ row.status }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" label="Actions" align="center" width="230">
+        <template slot-scope="{row,$index}">
+          <el-button type="primary" size="small" @click="handleUpdate(row)">
+            编辑
+          </el-button>
+          <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
+            <template #reference>
+              <el-button type="danger" size="small">
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
+               style="width: 60%; margin-left: 35px">
+        <el-form-item label="资源名称" prop="name">
+          <el-input v-model="dataOperating.name"/>
+        </el-form-item>
+        <el-form-item label="权限关键字" prop="permissionKey">
+          <el-input v-model="dataOperating.permissionKey"/>
+        </el-form-item>
+        <el-form-item label="资源类型" prop="resourceType">
+          <el-select v-model="dataOperating.resourceType" class="m-2" @change="resourceTypeChange" placeholder="无">
+            <el-option
+              v-for="item in resourceTypeOptions"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="父级资源" prop="parentId">
+          <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
+                     placeholder="无"
+          >
+            <el-option v-for="item in parentOptionFilter" :key="item.id" :label="item.name" :value="item.id">
+              <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
+                                            :type="item.resourceType | tagFilter">{{ item.resourceType }}</el-tag>
+              </span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="dataOperating.sort" :min="1" :max="100"/>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-switch
+            v-model="dataOperating.status"
+            size="large"
+            active-value="启用"
+            inactive-value="禁用"
+          />
+        </el-form-item>
+
+        <div v-if="dataOperating.resourceType!=='操作'">
+          <el-form-item label="路由路径" prop="path">
+            <el-input v-model="dataOperating.path"/>
+          </el-form-item>
+          <el-form-item label="Vue组件名" prop="component">
+            <el-select v-model="dataOperating.component" class="m-2" placeholder="无">
+              <el-option
+                v-for="item in componentOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="重定向地址" prop="redirect">
+            <el-input v-model="dataOperating.redirect"/>
+          </el-form-item>
+          <el-form-item label="图标" prop="meta.icon">
+            <template>
+              <el-button class="iconInDataOperatingDialog" @click="iconDialogVisible = true">
+                <i v-if="notNull(dataOperating.meta.icon) && isElIcon(dataOperating.meta.icon)"
+                   :class="dataOperating.meta.icon"/>
+                <svg-icon class="iconInDataOperatingDialog"
+                          v-if="notNull(dataOperating.meta.icon) && !isElIcon(dataOperating.meta.icon)"
+                          :icon-class="dataOperating.meta.icon"/>
+                <span style="font-size: 5px" v-if="!notNull(dataOperating.meta.icon)">无</span>
+              </el-button>
+            </template>
+          </el-form-item>
+          <el-form-item label="固定在面包屑" prop="meta.affix">
+            <el-radio v-model="dataOperating.meta.affix" :label="true" border>是</el-radio>
+            <el-radio v-model="dataOperating.meta.affix" :label="null" border>否</el-radio>
+          </el-form-item>
+          <el-form-item label="禁用Vue缓存" prop="meta.noCache">
+            <el-radio v-model="dataOperating.meta.noCache" :label="true" border>是</el-radio>
+            <el-radio v-model="dataOperating.meta.noCache" :label="null" border>否</el-radio>
+          </el-form-item>
+          <el-form-item label="面包屑上显示" prop="breadcrumb">
+            <el-radio v-model="dataOperating.meta.breadcrumb" :label="true" border>是</el-radio>
+            <el-radio v-model="dataOperating.meta.breadcrumb" :label="null" border>否</el-radio>
+          </el-form-item>
+          <el-form-item label="在侧边栏隐藏" prop="hidden">
+            <el-radio v-model="dataOperating.hidden" :label="true" border>是</el-radio>
+            <el-radio v-model="dataOperating.hidden" :label="null" border>否</el-radio>
+          </el-form-item>
+          <el-form-item v-if="dataOperating.resourceType==='一级菜单'" label="作为嵌套菜单" prop="alwaysShow">
+            <el-radio v-model="dataOperating.alwaysShow" :label="true" border>是</el-radio>
+            <el-radio v-model="dataOperating.alwaysShow" :label="null" border>否</el-radio>
+          </el-form-item>
+        </div>
+      </el-form>
+      <el-dialog
+        :visible.sync="iconDialogVisible"
+        title="修改图标"
+        append-to-body>
+
+        <div style="padding-bottom:5px;text-align: right">
+          <el-button @click="cancelIcon">取消图标</el-button>
+        </div>
+
+        <el-tabs type="border-card">
+          <el-tab-pane label="Icons">
+            <div class="grid">
+              <div v-for="item of svgIcons" :key="item" @click="handleSelectIcon(item)">
+                <div class="icon-item">
+                  <svg-icon :icon-class="item" class-name="disabled"/>
+                  <span class="iconSpan">{{ item }}</span>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="Element-UI Icons">
+            <div class="grid">
+              <div v-for="item of elementIcons" :key="item" @click="handleSelectIcon('el-icon-' + item)">
+                <div class="icon-item">
+                  <i :class="'el-icon-' + item"/>
+                  <span class="iconSpan">{{ item }}</span>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </el-dialog>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+          确定
+        </el-button>
+      </span>
       </template>
-      <el-table :data="[]">
-        <el-table-column width="150" property="date" label="date" />
-        <el-table-column width="100" property="name" label="name" />
-        <el-table-column width="300" property="address" label="address" />
-      </el-table>
-    </el-popover>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
+import {tagFilter} from "@/utils/tableBase";
+
 export default {
   data() {
-    return {}
+    return {
+      tableData: [
+        {
+          "id": "1497825987499515916",
+          "createTime": "2022-02-22T02:30:39",
+          "updateTime": "2022-02-22T02:30:39",
+          "name": "普通管理员",
+          "summary": "普通管理员有普通权限",
+          "status": "启用",
+          "permissionIds": [
+            "1497825987499515915",
+            "1497825987499515907"
+          ]
+        }
+      ],
+      dialogFormVisible: false
+    }
   },
-  methods: {}
+  methods: {
+    page() {
+
+    },
+    handleUpdate(row) {
+    },
+    handleCreate() {
+    },
+    doDelete(id) {
+    }
+  },
+  filters: {
+    tagFilter
+  }
 }
 </script>
 

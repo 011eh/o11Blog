@@ -67,7 +67,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
 
     @Override
     public List<Permission> getParentSelect() {
-        List<Permission> list = list(Wrappers.<Permission>lambdaQuery().select(BaseEntry::getId,
+        List<Permission> list = this.getDtoList(Wrappers.<Permission>lambdaQuery().select(BaseEntry::getId,
                 Permission::getPermissionKey, Permission::getResourceType, Permission::getName, Permission::getSort));
         list.sort(Comparator.comparing((Permission p) -> p.getResourceType().getSort())
                 .thenComparing(Permission::getSort));
