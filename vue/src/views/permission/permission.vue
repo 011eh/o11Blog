@@ -4,7 +4,8 @@
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="list">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
+                 v-loading.fullscreen.lock="loading" @click="list">
         查询
       </el-button>
     </div>
@@ -183,7 +184,7 @@ import {create, detail, doDelete, list, parentSelect, update} from "@/api/permis
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
-import {dialogStatus, operationMap, tableData, tagFilter} from '@/utils/tableBase'
+import {dialogFormVisible, dialogStatus, loading, operationMap, tableData, tagFilter} from '@/utils/tableBase'
 
 export default {
   data() {
@@ -193,6 +194,10 @@ export default {
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
       tableData,
+      operationMap,
+      dialogStatus,
+      loading,
+      dialogFormVisible,
       dataOperating: {
         id: null,
         name: '',
@@ -214,12 +219,7 @@ export default {
         redirect: null,
         alwaysShow: null
       },
-      loading: false,
       expandRowIds: [],
-
-      operationMap,
-      dialogStatus,
-      dialogFormVisible: false,
       iconDialogVisible: false,
       parentOptions: []
     }
@@ -358,6 +358,7 @@ export default {
         dataSend = this.dataOperating
       } else if (this.dataOperating.resourceType === '操作') {
         dataSend = (({
+                       id,
                        name,
                        permissionKey,
                        resourceType,
@@ -365,6 +366,7 @@ export default {
                        sort,
                        status
                      }) => ({
+          id,
           name,
           permissionKey,
           resourceType,

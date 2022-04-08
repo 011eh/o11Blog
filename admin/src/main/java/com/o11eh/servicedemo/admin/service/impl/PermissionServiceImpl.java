@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entry.vo.PermissionTreeVo;
+import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import lombok.extern.slf4j.Slf4j;
@@ -66,12 +68,29 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     }
 
     @Override
-    public List<Permission> getParentSelect() {
+    public List<Permission> dtoList() {
         List<Permission> list = this.getDtoList(Wrappers.<Permission>lambdaQuery().select(BaseEntry::getId,
-                Permission::getPermissionKey, Permission::getResourceType, Permission::getName, Permission::getSort));
+                Permission::getParentId, Permission::getResourceType, Permission::getName, Permission::getSort));
         list.sort(Comparator.comparing((Permission p) -> p.getResourceType().getSort())
                 .thenComparing(Permission::getSort));
         return list;
+    }
+
+    public List<PermissionTreeVo> treeDtoList() {
+        List<Permission> permissionList = this.dtoList();
+        String rootParentId = "";
+        Map<String, List<Permission>> parentIdMap = permissionList.stream()
+                .collect(Collectors.groupingBy(
+                        permission -> permission.getParentId() != null ? permission.getParentId() : rootParentId));
+
+        Map<ResourceType, List<Permission>> typeMap = permissionList.stream().collect(Collectors.groupingBy(Permission::getResourceType, LinkedHashMap::new, Collectors.toList()));
+        typeMap.remove(ResourceType.OPERATION);
+
+        List<PermissionTreeVo> treeVoList = typeMap.values().stream().flatMap(Collection::stream).
+                map(PermissionTreeVo::new).collect(Collectors.toList());
+
+        treeVoList.forEach(treeVo -> treeVo.setChildren(parentIdMap.get(treeVo.getId())));
+        return treeVoList;
     }
 
     @Override

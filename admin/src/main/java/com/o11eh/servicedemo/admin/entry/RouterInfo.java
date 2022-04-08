@@ -3,11 +3,18 @@ package com.o11eh.servicedemo.admin.entry;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import java.util.prefs.PreferencesFactory;
-
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RouterInfo {
+
+    private String routerParentId;
+    private String path;
+    private String component;
+    private String redirect;
+    private Boolean hidden;
+    private Boolean alwaysShow;
+    private Meta meta;
+
     @Data
     @JsonInclude(JsonInclude.Include.NON_NULL)
     static class Meta {
@@ -18,10 +25,4 @@ public class RouterInfo {
         private Boolean affix;
     }
 
-    private String path;
-    private String component;
-    private String redirect;
-    private Boolean hidden;
-    private Boolean alwaysShow;
-    private Meta meta;
 }

@@ -35,36 +35,11 @@
     <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
                style="width: 60%; margin-left: 35px">
-        <el-form-item label="资源名称" prop="name">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="dataOperating.name"/>
         </el-form-item>
-        <el-form-item label="权限关键字" prop="permissionKey">
-          <el-input v-model="dataOperating.permissionKey"/>
-        </el-form-item>
-        <el-form-item label="资源类型" prop="resourceType">
-          <el-select v-model="dataOperating.resourceType" class="m-2" @change="resourceTypeChange" placeholder="无">
-            <el-option
-              v-for="item in resourceTypeOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="父级资源" prop="parentId">
-          <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
-                     placeholder="无"
-          >
-            <el-option v-for="item in parentOptionFilter" :key="item.id" :label="item.name" :value="item.id">
-              <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
-                                            :type="item.resourceType | tagFilter">{{ item.resourceType }}</el-tag>
-              </span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input-number v-model="dataOperating.sort" :min="1" :max="100"/>
+        <el-form-item label="简介" prop="summary">
+          <el-input v-model="dataOperating.summary"/>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-switch
@@ -74,89 +49,45 @@
             inactive-value="禁用"
           />
         </el-form-item>
-
-        <div v-if="dataOperating.resourceType!=='操作'">
-          <el-form-item label="路由路径" prop="path">
-            <el-input v-model="dataOperating.path"/>
-          </el-form-item>
-          <el-form-item label="Vue组件名" prop="component">
-            <el-select v-model="dataOperating.component" class="m-2" placeholder="无">
-              <el-option
-                v-for="item in componentOptions"
-                :key="item"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="重定向地址" prop="redirect">
-            <el-input v-model="dataOperating.redirect"/>
-          </el-form-item>
-          <el-form-item label="图标" prop="meta.icon">
-            <template>
-              <el-button class="iconInDataOperatingDialog" @click="iconDialogVisible = true">
-                <i v-if="notNull(dataOperating.meta.icon) && isElIcon(dataOperating.meta.icon)"
-                   :class="dataOperating.meta.icon"/>
-                <svg-icon class="iconInDataOperatingDialog"
-                          v-if="notNull(dataOperating.meta.icon) && !isElIcon(dataOperating.meta.icon)"
-                          :icon-class="dataOperating.meta.icon"/>
-                <span style="font-size: 5px" v-if="!notNull(dataOperating.meta.icon)">无</span>
-              </el-button>
-            </template>
-          </el-form-item>
-          <el-form-item label="固定在面包屑" prop="meta.affix">
-            <el-radio v-model="dataOperating.meta.affix" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.meta.affix" :label="null" border>否</el-radio>
-          </el-form-item>
-          <el-form-item label="禁用Vue缓存" prop="meta.noCache">
-            <el-radio v-model="dataOperating.meta.noCache" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.meta.noCache" :label="null" border>否</el-radio>
-          </el-form-item>
-          <el-form-item label="面包屑上显示" prop="breadcrumb">
-            <el-radio v-model="dataOperating.meta.breadcrumb" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.meta.breadcrumb" :label="null" border>否</el-radio>
-          </el-form-item>
-          <el-form-item label="在侧边栏隐藏" prop="hidden">
-            <el-radio v-model="dataOperating.hidden" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.hidden" :label="null" border>否</el-radio>
-          </el-form-item>
-          <el-form-item v-if="dataOperating.resourceType==='一级菜单'" label="作为嵌套菜单" prop="alwaysShow">
-            <el-radio v-model="dataOperating.alwaysShow" :label="true" border>是</el-radio>
-            <el-radio v-model="dataOperating.alwaysShow" :label="null" border>否</el-radio>
-          </el-form-item>
-        </div>
+        <el-form-item label="权限" prop="permissionIds">
+          <template>
+            <el-button @click="permissionGrantVisible = true">
+              授予权限
+            </el-button>
+          </template>
+        </el-form-item>
       </el-form>
-      <el-dialog
-        :visible.sync="iconDialogVisible"
-        title="修改图标"
-        append-to-body>
-
-        <div style="padding-bottom:5px;text-align: right">
-          <el-button @click="cancelIcon">取消图标</el-button>
-        </div>
-
-        <el-tabs type="border-card">
-          <el-tab-pane label="Icons">
-            <div class="grid">
-              <div v-for="item of svgIcons" :key="item" @click="handleSelectIcon(item)">
-                <div class="icon-item">
-                  <svg-icon :icon-class="item" class-name="disabled"/>
-                  <span class="iconSpan">{{ item }}</span>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="Element-UI Icons">
-            <div class="grid">
-              <div v-for="item of elementIcons" :key="item" @click="handleSelectIcon('el-icon-' + item)">
-                <div class="icon-item">
-                  <i :class="'el-icon-' + item"/>
-                  <span class="iconSpan">{{ item }}</span>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+          确定
+        </el-button>
+      </span>
+      </template>
+      <el-dialog :visible.sync="permissionGrantVisible" title="授予权限" append-to-body>
+        <el-tree
+          :check-strictly="true"
+          ref="tree"
+          :data="treeVoList"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          highlight-current
+          :props="treeProps"
+        />
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="permissionGrantVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="setTreeVo">
+          确定
+        </el-button>
+      </span>
+        </template>
       </el-dialog>
       <template #footer>
       <span class="dialog-footer">
@@ -174,26 +105,122 @@
 
 <script>
 
-import {tagFilter} from "@/utils/tableBase";
+import {dialogFormVisible, dialogStatus, loading, operationMap, tagFilter} from "@/utils/tableBase";
 
 export default {
   data() {
     return {
       tableData: [
         {
-          "id": "1497825987499515916",
-          "createTime": "2022-02-22T02:30:39",
-          "updateTime": "2022-02-22T02:30:39",
-          "name": "普通管理员",
-          "summary": "普通管理员有普通权限",
-          "status": "启用",
-          "permissionIds": [
+          id: "1497825987499515916",
+          createTime: "2022-02-22T02:30:39",
+          updateTime: "2022-02-22T02:30:39",
+          name: "普通管理员",
+          summary: "普通管理员有普通权限",
+          status: "启用",
+          permissionIds: [
             "1497825987499515915",
             "1497825987499515907"
           ]
         }
       ],
-      dialogFormVisible: false
+      dialogFormVisible,
+      dialogStatus,
+      loading,
+      operationMap,
+      dataOperating: {
+        status: '启用'
+      },
+      permissionGrantVisible: false,
+      treeProps: {label: 'name'},
+      treeVoList: [
+        {
+          id: '1497825987499515915',
+          name: "资源管理",
+          "children": [
+            {
+              id: '1497825987499515911',
+              name: "权限管理"
+            },
+            {
+              id: '1497825987499515907',
+              name: "角色管理"
+            },
+            {
+              id: '1497811057370992642',
+              name: "用户管理"
+            }
+          ]
+        },
+        {
+          id: '1512344969314701313',
+          name: "空页面",
+          "children": [
+            {
+              id: '1512345084280573954',
+              name: "空页面列表"
+            }
+          ]
+        },
+        {
+          id: '1497825987499515911',
+          name: "权限管理",
+          "children": [
+            {
+              id: '1497825987499515912',
+              name: "权限添加"
+            },
+            {
+              id: '1497825987499515913',
+              name: "权限更新"
+            },
+            {
+              id: '1497825987499515914',
+              name: "权限删除"
+            },
+            {
+              id: '1512328763396460545',
+              name: "权限列表"
+            }
+          ]
+        },
+        {
+          id: '1497825987499515907',
+          name: "角色管理",
+          "children": [
+            {
+              id: '1497825987499515908',
+              name: "角色添加"
+            },
+            {
+              id: '1497825987499515909',
+              name: "角色更新"
+            },
+            {
+              id: '1497825987499515910',
+              name: "角色删除"
+            }
+          ]
+        },
+        {
+          id: '1497811057370992642',
+          name: "用户管理",
+          "children": [
+            {
+              id: '1497811074932543489',
+              name: "用户添加"
+            },
+            {
+              id: '1497811107790721025',
+              name: "用户更新"
+            },
+            {
+              id: '1497825987499515906',
+              name: "用户删除"
+            }
+          ]
+        }
+      ]
     }
   },
   methods: {
@@ -201,11 +228,32 @@ export default {
 
     },
     handleUpdate(row) {
+      this.dialogStatus = 'update'
+      this.dataOperating = row
+      this.dialogFormVisible = true
     },
     handleCreate() {
+      this.dataOperating = {
+        status: '启用'
+      }
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
     },
     doDelete(id) {
-    }
+      console.log(id)
+    },
+    doCreateOrUpdate(dialogStatus) {
+      if (dialogStatus === 'create') {
+        console.log("c")
+      } else if (dialogStatus === 'update') {
+        console.log("u")
+      }
+      this.dialogFormVisible = false
+    },
+    setTreeVo() {
+      this.$refs.tree.setCheckedKeys(['1497825987499515911']);
+      console.log(this.$refs.tree.getCheckedKeys());
+    },
   },
   filters: {
     tagFilter

@@ -1,4 +1,4 @@
-export function tagFilter(type) {
+function tagFilter(type) {
   if (type === '一级菜单') {
     return 'success'
   }
@@ -23,5 +23,12 @@ let operationMap = {
   update: '修改'
 };
 let dialogFormVisible = false;
-
-export {tableData, dialogStatus, operationMap}
+let loading = false;
+export {
+  tableData,
+  dialogStatus,
+  operationMap,
+  dialogFormVisible,
+  loading,
+  tagFilter
+}
