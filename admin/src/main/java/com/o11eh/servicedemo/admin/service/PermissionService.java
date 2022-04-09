@@ -1,7 +1,6 @@
 package com.o11eh.servicedemo.admin.service;
 
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.entry.vo.PermissionTreeVo;
 
 import java.util.List;
 
@@ -20,5 +19,7 @@ public interface PermissionService extends BaseService<Permission> {
 
     Permission detail(String id);
 
-    List<PermissionTreeVo> treeDtoList();
+    List<Permission> treeDtoList();
+
+    List<String> getPermissionIdsGranted(String roleId);
 }

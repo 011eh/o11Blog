@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClose">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
                style="width: 60%; margin-left: 35px">
         <el-form-item label="名称" prop="name">
@@ -51,7 +51,7 @@
         </el-form-item>
         <el-form-item label="权限" prop="permissionIds">
           <template>
-            <el-button @click="permissionGrantVisible = true">
+            <el-button @click="handleGrantPermission">
               授予权限
             </el-button>
           </template>
@@ -68,22 +68,17 @@
       </span>
       </template>
       <el-dialog :visible.sync="permissionGrantVisible" title="授予权限" append-to-body>
-        <el-tree
-          :check-strictly="true"
-          ref="tree"
-          :data="treeVoList"
-          show-checkbox
-          default-expand-all
-          node-key="id"
-          highlight-current
-          :props="treeProps"
-        />
+
+        <el-tree :check-strictly="true" ref="tree" :data="permissionTreeList" show-checkbox default-expand-all node-key="id"
+                 highlight-current :props="treeProps" :expand-on-click-node="false" :check-on-click-node="true"
+                 :default-checked-keys="this.dataOperating.permissionIds" @check-change="handleCheckChange"/>
+
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="permissionGrantVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="setTreeVo">
+        <el-button type="primary" @click="confirmGrant">
           确定
         </el-button>
       </span>
@@ -100,14 +95,31 @@
       </span>
       </template>
     </el-dialog>
+
+    <el-footer>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="50"
+        class="mt-4"
+      />
+    </el-footer>
   </div>
 </template>
 
 <script>
 
 import {dialogFormVisible, dialogStatus, loading, operationMap, tagFilter} from "@/utils/tableBase";
+import {permissionTree} from "@/api/sysConfig";
+import {page} from "@/api/role";
+import {grantedTo} from "@/api/permission";
 
 export default {
+  created() {
+    this.permissionTree();
+    this.page(1, 10);
+  },
+
   data() {
     return {
       tableData: [
@@ -129,130 +141,97 @@ export default {
       loading,
       operationMap,
       dataOperating: {
-        status: '启用'
+        status: '启用',
+        permissionIds: []
       },
       permissionGrantVisible: false,
       treeProps: {label: 'name'},
-      treeVoList: [
-        {
-          id: '1497825987499515915',
-          name: "资源管理",
-          "children": [
-            {
-              id: '1497825987499515911',
-              name: "权限管理"
-            },
-            {
-              id: '1497825987499515907',
-              name: "角色管理"
-            },
-            {
-              id: '1497811057370992642',
-              name: "用户管理"
-            }
-          ]
-        },
-        {
-          id: '1512344969314701313',
-          name: "空页面",
-          "children": [
-            {
-              id: '1512345084280573954',
-              name: "空页面列表"
-            }
-          ]
-        },
-        {
-          id: '1497825987499515911',
-          name: "权限管理",
-          "children": [
-            {
-              id: '1497825987499515912',
-              name: "权限添加"
-            },
-            {
-              id: '1497825987499515913',
-              name: "权限更新"
-            },
-            {
-              id: '1497825987499515914',
-              name: "权限删除"
-            },
-            {
-              id: '1512328763396460545',
-              name: "权限列表"
-            }
-          ]
-        },
-        {
-          id: '1497825987499515907',
-          name: "角色管理",
-          "children": [
-            {
-              id: '1497825987499515908',
-              name: "角色添加"
-            },
-            {
-              id: '1497825987499515909',
-              name: "角色更新"
-            },
-            {
-              id: '1497825987499515910',
-              name: "角色删除"
-            }
-          ]
-        },
-        {
-          id: '1497811057370992642',
-          name: "用户管理",
-          "children": [
-            {
-              id: '1497811074932543489',
-              name: "用户添加"
-            },
-            {
-              id: '1497811107790721025',
-              name: "用户更新"
-            },
-            {
-              id: '1497825987499515906',
-              name: "用户删除"
-            }
-          ]
-        }
-      ]
+      permissionTreeList: [],
+      pageReq: {
+        current: 1,
+        size: 10,
+        keyword: '',
+      }
     }
   },
   methods: {
     page() {
-
+      new Promise(() => {
+        page(this.pageReq).then(value => {
+          this.tableData = value.data;
+        });
+      });
+    },
+    permissionTree() {
+      new Promise(() => {
+        permissionTree().then(value => {
+          this.permissionTreeList = value.data;
+        });
+      });
     },
     handleUpdate(row) {
       this.dialogStatus = 'update'
       this.dataOperating = row
+      this.permissionList()
       this.dialogFormVisible = true
     },
     handleCreate() {
-      this.dataOperating = {
-        status: '启用'
+      if (this.$refs.tree) {
+        this.$refs.tree.setCheckedKeys([]);
       }
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
     doDelete(id) {
-      console.log(id)
     },
     doCreateOrUpdate(dialogStatus) {
       if (dialogStatus === 'create') {
-        console.log("c")
       } else if (dialogStatus === 'update') {
-        console.log("u")
       }
       this.dialogFormVisible = false
     },
-    setTreeVo() {
-      this.$refs.tree.setCheckedKeys(['1497825987499515911']);
-      console.log(this.$refs.tree.getCheckedKeys());
+    handleCheckChange(node, checked) {
+      if (checked) {
+        this.checkParentNode(node);
+      } else if (node.children) {
+        this.uncheckChildrenNode(node);
+      }
+    },
+    checkParentNode(node) {
+      let keys = this.$refs.tree.getCheckedKeys();
+      keys.push(node.parentId);
+      this.$refs.tree.setCheckedKeys(keys);
+    },
+    uncheckChildrenNode(node) {
+      let childrenIds = node.children.map(node => {
+        return node.id;
+      });
+      let keys = this.$refs.tree.getCheckedKeys().filter(id => {
+        return childrenIds.indexOf(id) === -1;
+      });
+      this.$refs.tree.setCheckedKeys(keys);
+    },
+    confirmGrant() {
+      this.dataOperating.permissionIds = this.$refs.tree.getCheckedKeys();
+      this.permissionGrantVisible = false;
+    },
+    handleGrantPermission() {
+      this.permissionGrantVisible = true
+    },
+    dialogClose() {
+      if (this.dialogStatus === 'update') {
+        this.dataOperating = {
+          status: '启用',
+          permissionIds: []
+        }
+      }
+    },
+    permissionList() {
+      return new Promise(() => {
+        grantedTo(this.dataOperating.id).then(value => {
+          this.$refs.tree.setCheckedKeys(value.data)
+        });
+      });
     },
   },
   filters: {

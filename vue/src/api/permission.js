@@ -30,17 +30,17 @@ export function update(permission) {
   });
 }
 
-export function parentSelect() {
-  return request({
-    url: `/sysConfig/permissionDto`,
-    method: 'get',
-  });
-}
-
 export function doDelete(id) {
   return request({
     url: `/permission`,
     method: 'delete',
     data: [id]
+  });
+}
+
+export function grantedTo(roleId) {
+  return request({
+    url: `/permission/granted/${roleId}`,
+    method: 'get',
   });
 }

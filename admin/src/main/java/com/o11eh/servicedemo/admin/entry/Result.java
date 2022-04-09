@@ -57,6 +57,7 @@ public class Result {
     public static class PageResult<T> extends Result {
         private Long pageSize;
         private Long pageCurrent;
+        private Long total;
         private List<T> data;
 
         public PageResult(Page<T> page) {
@@ -64,6 +65,7 @@ public class Result {
             this.pageCurrent = page.getCurrent();
             this.pageSize = page.getSize();
             this.data = page.getRecords();
+            total = page.getTotal();
         }
     }
 }

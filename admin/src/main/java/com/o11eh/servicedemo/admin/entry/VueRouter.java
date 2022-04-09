@@ -2,7 +2,6 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.Data;
 
 import java.util.HashMap;

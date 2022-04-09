@@ -22,13 +22,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Autowired
     private PermissionService permissionService;
 
-    @Autowired
-    private RoleMapper roleMapper;
-
     @Override
     public Page<Role> page(long current, long size) {
-        Page<Role> page = new Page<>(current, size);
-        roleMapper.selectPage(page);
+        Page<Role> page = super.page(current, size);
         return page;
     }
 

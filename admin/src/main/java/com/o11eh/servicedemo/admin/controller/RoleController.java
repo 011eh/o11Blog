@@ -3,7 +3,7 @@ package com.o11eh.servicedemo.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.Constants;
-import com.o11eh.servicedemo.admin.entry.PageParam;
+import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.PermissionService;
@@ -27,33 +27,23 @@ import java.util.List;
 @RequestMapping("/role")
 @Api(tags = "角色")
 public class RoleController extends BaseController {
+
     @Autowired
     RoleService roleService;
 
-    @Autowired
-    private PermissionService permissionService;
-
-    @GetMapping(Constants.Api.PATH_ID)
-    @ApiOperation(Constants.Doc.DETAIL)
-    public Result detail(@PathVariable String id) {
-        // todo 不使用详情接口，方法将被移除
-        return null;
-    }
-
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
-    public Result page(@RequestBody PageParam param) {
-        Page<Role> page = roleService.page(param.getCurrent(), param.getSize());
+    public Result page(@RequestBody PageReq pageReq) {
+        Page<Role> page = roleService.page(pageReq.getCurrent(), pageReq.getSize());
         return Result.success(page);
     }
 
     @ApiOperation(Constants.Doc.ADD)
-    @PostMapping(Constants.Api.ADD)
+    @PostMapping
     public Result create(@RequestBody Role role) {
         String id = roleService.create(role);
         return Result.success(id);
     }
-
 
     @PutMapping(Constants.Api.UPDATE)
     @ApiOperation(Constants.Doc.UPDATE)
@@ -68,4 +58,5 @@ public class RoleController extends BaseController {
         roleService.removeBatchByIds(ids);
         return Result.success();
     }
+
 }

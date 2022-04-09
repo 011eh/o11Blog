@@ -5,7 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.Admin;
-import com.o11eh.servicedemo.admin.entry.PageParam;
+import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import io.swagger.annotations.Api;
@@ -42,7 +42,7 @@ public class AdminController extends BaseController {
     @ApiOperation(Constants.Doc.PAGE)
     @SaCheckPermission("admin:list")
     @PostMapping(Constants.Api.PAGE)
-    public Result list(@RequestBody @Valid PageParam param) {
+    public Result list(@RequestBody @Valid PageReq param) {
         Page<Admin> page = adminService.page(param.getCurrent(), param.getSize());
         return Result.success(page);
     }

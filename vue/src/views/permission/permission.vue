@@ -180,11 +180,12 @@
 </template>
 
 <script>
-import {create, detail, doDelete, list, parentSelect, update} from "@/api/permission";
+import {create, detail, doDelete, list, update} from "@/api/permission";
 import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
 import {dialogFormVisible, dialogStatus, loading, operationMap, tableData, tagFilter} from '@/utils/tableBase'
+import {permissionSelect} from "@/api/sysConfig";
 
 export default {
   data() {
@@ -346,7 +347,7 @@ export default {
     },
     getParentSelect() {
       return new Promise(() => {
-        return parentSelect().then(res => {
+        return permissionSelect().then(res => {
           this.parentOptions = res.data
         });
       })

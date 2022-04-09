@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.entry.vo.PermissionTreeVo;
-import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import lombok.extern.slf4j.Slf4j;
@@ -76,21 +74,25 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         return list;
     }
 
-    public List<PermissionTreeVo> treeDtoList() {
+    public List<Permission> treeDtoList() {
         List<Permission> permissionList = this.dtoList();
         String rootParentId = "";
         Map<String, List<Permission>> parentIdMap = permissionList.stream()
                 .collect(Collectors.groupingBy(
                         permission -> permission.getParentId() != null ? permission.getParentId() : rootParentId));
 
-        Map<ResourceType, List<Permission>> typeMap = permissionList.stream().collect(Collectors.groupingBy(Permission::getResourceType, LinkedHashMap::new, Collectors.toList()));
-        typeMap.remove(ResourceType.OPERATION);
+        parentIdMap.values().stream().flatMap(Collection::stream).forEach(permission -> {
+            permission.setChildren(parentIdMap.get(permission.getId()));
+        });
 
-        List<PermissionTreeVo> treeVoList = typeMap.values().stream().flatMap(Collection::stream).
-                map(PermissionTreeVo::new).collect(Collectors.toList());
+        return parentIdMap.get(rootParentId);
+    }
 
-        treeVoList.forEach(treeVo -> treeVo.setChildren(parentIdMap.get(treeVo.getId())));
-        return treeVoList;
+    @Override
+    public List<String> getPermissionIdsGranted(String roleId) {
+        List<String> permissionIds = permissionMapper.selectPermissionByRoleId(roleId)
+                .stream().map(BaseEntry::getId).collect(Collectors.toList());
+        return permissionIds;
     }
 
     @Override
