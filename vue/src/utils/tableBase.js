@@ -17,6 +17,7 @@ function tagFilter(type) {
 }
 
 let tableData = [];
+let tableMaxHeight = window.innerHeight - 210
 let dialogStatus = '';
 let operationMap = {
   create: '添加',
@@ -24,11 +25,28 @@ let operationMap = {
 };
 let dialogFormVisible = false;
 let loading = false;
+
+let pagination = {
+  current: 1,
+  size: 10,
+  pageSizeSelect: [10, 25, 50, 100],
+  total: 200
+}
+
+let pageReq = {
+  current: 1,
+  size: 10,
+  keyword: '',
+}
+
 export {
   tableData,
+  tableMaxHeight,
   dialogStatus,
   operationMap,
   dialogFormVisible,
   loading,
+  pageReq,
+  pagination,
   tagFilter
 }

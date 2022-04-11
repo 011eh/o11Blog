@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(String username, String password) {
-        Admin admin = adminService.loginByUsername(username);
+        Admin admin = adminService.login(username);
         if (ObjectUtil.isNull(admin) ||
                 !StrUtil.equals(SaSecureUtil.md5BySalt(password, username), admin.getPassword())) {
             throw BusinessException.e("帐号或密码错误");

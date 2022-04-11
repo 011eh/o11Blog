@@ -15,8 +15,8 @@ public interface PermissionMapper extends BaseMapperO<Permission> {
 
     List<Permission> selectPermissionByRoleId(String roleId);
 
-    void insertPermission(@Param("roleId") String id, @Param("pId") String permissionId);
+    void grantPermission(@Param("roleId") String id, @Param("pId") String permissionId);
 
-    void deletePermission(String roleId);
+    void deletePermissionGranted(String roleId);
 
 }

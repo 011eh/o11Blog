@@ -1,12 +1,18 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.entry.BaseEntry;
+import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.RoleMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -22,23 +28,37 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Autowired
     private PermissionService permissionService;
 
-    @Override
-    public Page<Role> page(long current, long size) {
-        Page<Role> page = super.page(current, size);
+    public Page<Role> page(PageReq req) {
+        Page<Role> page = super.page(req.getCurrent(), req.getSize(),
+                Wrappers.<Role>lambdaQuery().like(Role::getName, req.getKeyword()));
         return page;
     }
 
     @Override
+    public List<Role> dtoList() {
+        return super.getDtoList(Wrappers.<Role>lambdaQuery().select(BaseEntry::getId, Role::getName));
+    }
+
+    @Override
+    @Transactional
     public String create(Role role) {
         this.save(role);
-        permissionService.grantPermissions(role.getId(), role.getPermissionIds());
+        permissionService.grantPermissions(role.getId(), role.getPermissionIds(), false);
         return role.getId();
     }
 
     @Override
+    @Transactional
     public String updateRole(Role role) {
         this.updateById(role);
-        permissionService.grantPermissions(role.getId(), role.getPermissionIds());
+        permissionService.grantPermissions(role.getId(), role.getPermissionIds(), true);
         return role.getId();
+    }
+
+    @Override
+    @Transactional
+    public void deleteRole(List<String> roleIds) {
+        this.removeBatchByIds(roleIds);
+        permissionService.revokePermissions(roleIds);
     }
 }

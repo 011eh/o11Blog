@@ -28,9 +28,8 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     private PermissionMapper permissionMapper;
 
     @Override
-    public List<Permission> getAuthInfoByRoleId(String roleId) {
-        List<Permission> permissions = permissionMapper.selectPermissionByRoleId(roleId);
-        return permissions;
+    public Permission detail(String id) {
+        return getById(id);
     }
 
     @Override
@@ -52,16 +51,34 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     }
 
     @Override
-    public Page<Permission> page(long current, long size) {
-        return super.page(current, size);
+    public List<Permission> getAuthInfoByRoleId(String roleId) {
+        List<Permission> permissions = permissionMapper.selectPermissionByRoleId(roleId);
+        return permissions;
     }
 
     @Override
-    public void grantPermissions(String roleId, List<String> permissionIds) {
+    public List<String> getPermissionIdsGranted(String roleId) {
+        List<String> permissionIds = permissionMapper.selectPermissionByRoleId(roleId)
+                .stream().map(BaseEntry::getId).collect(Collectors.toList());
+        return permissionIds;
+    }
+
+    @Override
+    public void grantPermissions(String roleId, List<String> permissionIds, boolean doUpdate) {
         SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false);
         PermissionMapper mapper = session.getMapper(PermissionMapper.class);
-        mapper.deletePermission(roleId);
-        permissionIds.forEach(pId -> mapper.insertPermission(roleId, pId));
+        if (doUpdate) {
+            mapper.deletePermissionGranted(roleId);
+        }
+        permissionIds.forEach(pId -> mapper.grantPermission(roleId, pId));
+        session.commit();
+    }
+
+    @Override
+    public void revokePermissions(List<String> roleIds) {
+        SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false);
+        PermissionMapper mapper = session.getMapper(PermissionMapper.class);
+        roleIds.forEach(mapper::deletePermissionGranted);
         session.commit();
     }
 
@@ -86,17 +103,5 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
         });
 
         return parentIdMap.get(rootParentId);
-    }
-
-    @Override
-    public List<String> getPermissionIdsGranted(String roleId) {
-        List<String> permissionIds = permissionMapper.selectPermissionByRoleId(roleId)
-                .stream().map(BaseEntry::getId).collect(Collectors.toList());
-        return permissionIds;
-    }
-
-    @Override
-    public Permission detail(String id) {
-        return getById(id);
     }
 }

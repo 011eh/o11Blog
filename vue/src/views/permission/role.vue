@@ -4,11 +4,14 @@
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page">
+      <el-input  v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
+                 clearable class="filter-item"/>
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
+                 v-loading.fullscreen.lock="loading">
         查询
       </el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%;" row-key="id" border>
+    <el-table :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="summary" label="简介"/>
@@ -57,16 +60,6 @@
           </template>
         </el-form-item>
       </el-form>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
-          确定
-        </el-button>
-      </span>
-      </template>
       <el-dialog :visible.sync="permissionGrantVisible" title="授予权限" append-to-body>
 
         <el-tree :check-strictly="true" ref="tree" :data="permissionTreeList" show-checkbox default-expand-all node-key="id"
@@ -96,50 +89,55 @@
       </template>
     </el-dialog>
 
-    <el-footer>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="50"
-        class="mt-4"
-      />
+    <el-footer style="height: 0">
+      <div style="padding-top: 10px">
+        <el-pagination
+          v-model:currentPage="pagination.current"
+          v-model:page-size="pagination.size"
+          :page-sizes="pagination.pageSizeSelect"
+          :background="true"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pagination.total"
+          @size-change="handleSizeChange"
+          @current-change="handlePageChange"
+        />
+      </div>
     </el-footer>
   </div>
 </template>
 
 <script>
 
-import {dialogFormVisible, dialogStatus, loading, operationMap, tagFilter} from "@/utils/tableBase";
+import {
+  dialogFormVisible,
+  dialogStatus,
+  loading,
+  operationMap,
+  pageReq,
+  pagination,
+  tableData,
+  tableMaxHeight,
+  tagFilter
+} from "@/utils/tableBase";
 import {permissionTree} from "@/api/sysConfig";
-import {page} from "@/api/role";
+import {create, doDelete, page} from "@/api/role";
 import {grantedTo} from "@/api/permission";
 
 export default {
   created() {
+    this.page();
     this.permissionTree();
-    this.page(1, 10);
   },
-
   data() {
     return {
-      tableData: [
-        {
-          id: "1497825987499515916",
-          createTime: "2022-02-22T02:30:39",
-          updateTime: "2022-02-22T02:30:39",
-          name: "普通管理员",
-          summary: "普通管理员有普通权限",
-          status: "启用",
-          permissionIds: [
-            "1497825987499515915",
-            "1497825987499515907"
-          ]
-        }
-      ],
+      tableMaxHeight,
+      tableData,
       dialogFormVisible,
       dialogStatus,
       loading,
+      pagination,
       operationMap,
+      pageReq,
       dataOperating: {
         status: '启用',
         permissionIds: []
@@ -147,18 +145,18 @@ export default {
       permissionGrantVisible: false,
       treeProps: {label: 'name'},
       permissionTreeList: [],
-      pageReq: {
-        current: 1,
-        size: 10,
-        keyword: '',
-      }
     }
   },
   methods: {
     page() {
+      this.loading = true;
       new Promise(() => {
-        page(this.pageReq).then(value => {
-          this.tableData = value.data;
+        page(this.pageReq).then(pageResult => {
+          this.tableData = pageResult.data;
+          this.pagination.current = pageResult.pageCurrent
+          this.pagination.total = pageResult.total
+        }).finally(() => {
+          this.loading = false;
         });
       });
     },
@@ -172,7 +170,7 @@ export default {
     handleUpdate(row) {
       this.dialogStatus = 'update'
       this.dataOperating = row
-      this.permissionList()
+      this.permissionGranted()
       this.dialogFormVisible = true
     },
     handleCreate() {
@@ -183,9 +181,18 @@ export default {
       this.dialogFormVisible = true
     },
     doDelete(id) {
+      new Promise(() => {
+        doDelete([id]).finally(() => {
+          this.page();
+        });
+      });
     },
     doCreateOrUpdate(dialogStatus) {
       if (dialogStatus === 'create') {
+        if (this.$refs.tree) {
+          this.dataOperating.permissionIds = this.$refs.tree.getCheckedKeys();
+        }
+        this.createData(this.dataOperating);
       } else if (dialogStatus === 'update') {
       }
       this.dialogFormVisible = false
@@ -216,23 +223,55 @@ export default {
       this.permissionGrantVisible = false;
     },
     handleGrantPermission() {
-      this.permissionGrantVisible = true
+      if (this.$refs.tree) {
+        this.$refs.tree.setCheckedKeys(this.dataOperating.permissionIds)
+      }
+      this.permissionGrantVisible = true;
     },
     dialogClose() {
       if (this.dialogStatus === 'update') {
-        this.dataOperating = {
-          status: '启用',
-          permissionIds: []
-        }
+        this.resetDataOperating();
       }
     },
-    permissionList() {
+    permissionGranted() {
       return new Promise(() => {
         grantedTo(this.dataOperating.id).then(value => {
-          this.$refs.tree.setCheckedKeys(value.data)
+          this.dataOperating.permissionIds = value.data;
         });
       });
     },
+    createData(role) {
+      return new Promise(() => {
+        create(role).then(() => {
+          this.dialogFormVisible = false;
+          this.resetDataOperating();
+          this.page();
+        });
+      });
+    },
+    updateData() {
+
+    },
+    handlePageChange(currentPage) {
+      this.pagination.current = currentPage;
+      let {current, size} = this.pagination;
+      this.pageReq.current = current
+      this.pageReq.size = size
+      this.page();
+    },
+    handleSizeChange(currentSize) {
+      this.pagination.size = currentSize;
+      let {current, size} = this.pagination;
+      this.pageReq.current = current;
+      this.pageReq.size = size;
+      this.page();
+    },
+    resetDataOperating() {
+      this.dataOperating = {
+        status: '启用',
+        permissionIds: []
+      };
+    }
   },
   filters: {
     tagFilter
@@ -259,6 +298,10 @@ export default {
   ::v-deep .permission-tag {
     background-color: #ecf5ff;
   }
+}
+
+.table-wrapper {
+  height: calc(100% - 60px);
 }
 </style>
 

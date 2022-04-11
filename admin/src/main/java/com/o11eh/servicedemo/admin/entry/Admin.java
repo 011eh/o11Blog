@@ -2,6 +2,7 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.enums.Status;
@@ -37,7 +38,7 @@ public class Admin extends BaseEntry {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Status status;
 
-    @JsonUnwrapped(prefix = "role")
+    @JsonUnwrapped(suffix = "Role")
     @TableField(exist = false)
     private Role role;
 }

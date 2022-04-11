@@ -1,6 +1,8 @@
 package com.o11eh.servicedemo.admin.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.PageReq;
 
 /**
  * <p>
@@ -12,10 +14,11 @@ import com.o11eh.servicedemo.admin.entry.Admin;
  */
 public interface AdminService extends BaseService<Admin> {
 
-    String add(Admin admin);
+    String create(Admin admin);
 
-    Admin loginByUsername(String username);
+    Admin login(String username);
 
-    String updateAdmin(Admin admin);
+    String update(Admin admin);
 
+    Page<Admin> page(PageReq param);
 }

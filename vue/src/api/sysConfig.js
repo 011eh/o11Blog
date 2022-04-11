@@ -13,3 +13,10 @@ export function permissionTree() {
     method: 'get',
   });
 }
+
+export function roleSelect() {
+  return request({
+    url: `/sysConfig/roleDto`,
+    method: 'get',
+  });
+}

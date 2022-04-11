@@ -1,12 +1,15 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.config.BusinessException;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
+import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
@@ -27,37 +30,16 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implements AdminService {
 
     @Autowired
+    private AdminMapper adminMapper;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
     private PermissionService permissionService;
 
     @Override
-    public String add(Admin admin) {
-        LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery()
-                .select(Admin::getUsername).eq(Admin::getUsername, admin.getUsername());
-        Admin adminInDB = getOne(wrapper);
-        if (ObjectUtil.isNotNull(adminInDB)) {
-            throw BusinessException.e("该用户已存在");
-        }
-        this.save(admin);
-        return admin.getId();
-    }
-
-    @Override
-    public Page<Admin> page(long current, long size) {
-        LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery().select(Admin.class,
-                i -> !i.getColumn().equals("password"));
-        Page<Admin> page = page(current, size, wrapper);
-        page.getRecords().forEach(admin -> {
-            Role role = roleService.getById(admin.getRoleId());
-            admin.setRole(role);
-        });
-        return page;
-    }
-
-    @Override
-    public Admin loginByUsername(String username) {
+    public Admin login(String username) {
 
         Admin admin = getOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername, username).last(LIMIT_1));
         if (ObjectUtil.isNull(admin)) {
@@ -72,7 +54,32 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     }
 
     @Override
-    public String updateAdmin(Admin admin) {
+    public Page<Admin> page(PageReq param) {
+
+        Wrapper<Admin> wrapper = Wrappers.emptyWrapper();
+        if (StrUtil.isNotBlank(param.getKeyword())) {
+            wrapper = Wrappers.<Admin>lambdaQuery()
+                    .like(Admin::getUsername, param.getKeyword())
+                    .or(queryWrapper -> queryWrapper.like(Admin::getNickName, param.getKeyword()));
+        }
+        Page<Admin> page = adminMapper.selectPage(new Page<>(param.getCurrent(), param.getSize()), wrapper);
+        return super.page(param.getCurrent(), param.getSize(), wrapper);
+    }
+
+    @Override
+    public String create(Admin admin) {
+        LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery()
+                .select(Admin::getUsername).eq(Admin::getUsername, admin.getUsername());
+        Admin adminInDB = getOne(wrapper);
+        if (ObjectUtil.isNotNull(adminInDB)) {
+            throw BusinessException.e("该用户已存在");
+        }
+        this.save(admin);
+        return admin.getId();
+    }
+
+    @Override
+    public String update(Admin admin) {
         this.updateById(admin);
         return admin.getId();
     }

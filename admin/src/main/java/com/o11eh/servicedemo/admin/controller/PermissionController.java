@@ -1,9 +1,7 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.Constants;
-import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
@@ -27,18 +25,18 @@ public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
 
+    @ApiOperation("授权列表")
+    @GetMapping("list")
+    public Result list() {
+        List<Permission> permissions = permissionService.getPermissionList();
+        return Result.success(permissions);
+    }
+
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@PathVariable String id) {
         Permission permission = permissionService.detail(id);
         return Result.success(permission);
-    }
-
-    @PostMapping(Constants.Api.PAGE)
-    @ApiOperation(Constants.Doc.PAGE)
-    public Result page(@RequestBody PageReq param) {
-        Page<Permission> page = permissionService.page(param.getCurrent(), param.getSize());
-        return Result.success(page);
     }
 
     @PostMapping
@@ -59,20 +57,13 @@ public class PermissionController extends BaseController {
 
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     @DeleteMapping
-    public Result deleteBatch(@RequestBody List<Long> ids) {
+    public Result delete(@RequestBody List<Long> ids) {
         permissionService.removeBatchByIds(ids);
         return Result.success();
     }
 
-    @ApiOperation("授权列表")
-    @GetMapping("list")
-    public Result getPermissions() {
-        List<Permission> permissions = permissionService.getPermissionList();
-        return Result.success(permissions);
-    }
-
     @GetMapping("granted/{roleId}")
-    public Result gerRolePermissions(@PathVariable String roleId) {
+    public Result getRolePermissions(@PathVariable String roleId) {
         List<String> permissionIds = permissionService.getPermissionIdsGranted(roleId);
         return Result.success(permissionIds);
     }

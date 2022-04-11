@@ -394,7 +394,7 @@ export default {
     },
     doDelete(id) {
       return new Promise(() => {
-        doDelete(id).then(() => {
+        doDelete([id]).then(() => {
           this.list();
         });
       });

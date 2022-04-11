@@ -32,6 +32,13 @@ public class AdminController extends BaseController {
     @Autowired
     private AdminService adminService;
 
+    @ApiOperation(Constants.Doc.PAGE)
+    @PostMapping(Constants.Api.PAGE)
+    public Result page(@RequestBody @Valid PageReq param) {
+        Page<Admin> page = adminService.page(param);
+        return Result.success(page);
+    }
+
     @ApiOperation(Constants.Doc.DETAIL)
     @GetMapping(Constants.Api.PATH_ID)
     public Result detail(@PathVariable String id) {
@@ -39,26 +46,18 @@ public class AdminController extends BaseController {
         return Result.success(admin);
     }
 
-    @ApiOperation(Constants.Doc.PAGE)
-    @SaCheckPermission("admin:list")
-    @PostMapping(Constants.Api.PAGE)
-    public Result list(@RequestBody @Valid PageReq param) {
-        Page<Admin> page = adminService.page(param.getCurrent(), param.getSize());
-        return Result.success(page);
-    }
-
 
     @PostMapping(Constants.Api.ADD)
     @ApiOperation(Constants.Doc.ADD)
     public Result add(@Valid @RequestBody Admin admin) {
-        String id = adminService.add(admin);
+        String id = adminService.create(admin);
         return Result.success(id);
     }
 
     @ApiOperation(Constants.Doc.UPDATE)
     @PutMapping(Constants.Api.UPDATE)
     public Result update(@Valid @RequestBody Admin admin) {
-        String id = adminService.updateAdmin(admin);
+        String id = adminService.update(admin);
         return Result.success(id);
     }
 

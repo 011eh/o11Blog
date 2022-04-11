@@ -9,17 +9,19 @@ import java.util.List;
  * @since 2022/02/27 12:21
  */
 public interface PermissionService extends BaseService<Permission> {
-    List<Permission> getAuthInfoByRoleId(String roleId);
-
     List<Permission> getPermissionList();
 
-    void grantPermissions(String id, List<String> permissionIds);
-
-    List<Permission> dtoList();
+    List<Permission> getAuthInfoByRoleId(String roleId);
 
     Permission detail(String id);
 
-    List<Permission> treeDtoList();
+    void grantPermissions(String id, List<String> permissionIds, boolean doUpdate);
 
     List<String> getPermissionIdsGranted(String roleId);
+
+    void revokePermissions(List<String> ids);
+
+    List<Permission> dtoList();
+
+    List<Permission> treeDtoList();
 }

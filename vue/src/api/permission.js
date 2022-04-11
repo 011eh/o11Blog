@@ -30,11 +30,11 @@ export function update(permission) {
   });
 }
 
-export function doDelete(id) {
+export function doDelete(data) {
   return request({
     url: `/permission`,
     method: 'delete',
-    data: [id]
+    data
   });
 }
 

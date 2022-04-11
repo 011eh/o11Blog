@@ -1,12 +1,13 @@
 package com.o11eh.servicedemo.admin.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.Role;
-import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.o11eh.servicedemo.admin.entry.vo.RoleVo;
 import com.o11eh.servicedemo.admin.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,29 +35,29 @@ public class RoleController extends BaseController {
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
     public Result page(@RequestBody PageReq pageReq) {
-        Page<Role> page = roleService.page(pageReq.getCurrent(), pageReq.getSize());
+        Page<Role> page = roleService.page(pageReq);
         return Result.success(page);
     }
 
     @ApiOperation(Constants.Doc.ADD)
     @PostMapping
-    public Result create(@RequestBody Role role) {
+    public Result create(@RequestBody RoleVo roleVo) {
+        Role role = BeanUtil.copyProperties(roleVo, Role.class);
         String id = roleService.create(role);
         return Result.success(id);
     }
 
-    @PutMapping(Constants.Api.UPDATE)
+    @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@RequestBody Role role) {
         String id = roleService.updateRole(role);
         return Result.success(id);
     }
 
-    @DeleteMapping(Constants.Api.DELETE)
+    @DeleteMapping
     @ApiOperation(Constants.Doc.BATCH_DELETE)
-    public Result deleteBatch(@RequestBody List<Long> ids) {
-        roleService.removeBatchByIds(ids);
+    public Result deleteBatch(@RequestBody List<String> ids) {
+        roleService.deleteRole(ids);
         return Result.success();
     }
-
 }
