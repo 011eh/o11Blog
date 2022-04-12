@@ -30,7 +30,7 @@ let pagination = {
   current: 1,
   size: 10,
   pageSizeSelect: [10, 25, 50, 100],
-  total: 200
+  total: 0
 }
 
 let pageReq = {

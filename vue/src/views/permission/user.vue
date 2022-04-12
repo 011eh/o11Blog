@@ -17,7 +17,7 @@
       <el-table-column align="center" prop="nickName" label="昵称"/>
       <el-table-column align="center" prop="avatar" label="头像">
         <template slot-scope="{row,$index}">
-          <el-avatar :size="70" :src="row.avatar"/>
+          <el-avatar :size="65" :src="row.avatar"/>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="nameRole" label="角色">
@@ -42,7 +42,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClose">
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClosed">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
                style="width: 60%; margin-left: 35px">
         <el-form-item label="用户名" prop="username">
@@ -71,7 +71,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+        <el-button type="primary" @click="doCreateOrUpdate">
           确定
         </el-button>
       </span>
@@ -109,7 +109,7 @@ import {
   tagFilter
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysConfig";
-import {getPage} from "@/api/admin";
+import {create, page, update} from "@/api/admin";
 
 export default {
   created() {
@@ -127,6 +127,9 @@ export default {
       operationMap,
       pageReq,
       dataOperating: {
+        username: '',
+        nickName: '',
+        roleId: '',
         status: '启用'
       },
       roleOptions: [],
@@ -134,26 +137,56 @@ export default {
   },
   methods: {
     page() {
+      this.loading = true;
       return new Promise(() => {
-        getPage(this.pageReq).then(value => {
-          this.tableData = value.data;
+        page(this.pageReq).then(pageResult => {
+          this.tableData = pageResult.data;
+          this.pagination.current = pageResult.pageCurrent
+          this.pagination.total = pageResult.total
+        }).finally(() => {
+          this.loading = false;
         });
       });
     },
     doCreateOrUpdate() {
-
+      if (this.dialogStatus === 'create') {
+        this.createData();
+      } else if (this.dialogStatus === 'update') {
+        this.updateData();
+      }
     },
     handleCreate() {
+      this.dialogStatus = 'create'
       this.dialogFormVisible = true;
     },
-    handleUpdate() {
+    handleUpdate(row) {
+      Object.assign(this.dataOperating, row);
+      this.dialogStatus = 'update'
       this.dialogFormVisible = true;
     },
-    doDelete() {
+    doDelete(id) {
 
     },
-    dialogClose() {
-
+    dialogClosed() {
+      if (this.dialogStatus === 'update') {
+        this.resetDataOperating();
+      }
+    },
+    createData() {
+      return new Promise(() => {
+        create(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+        });
+      });
+    },
+    updateData() {
+      return new Promise(() => {
+        update(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+        });
+      });
     },
     handlePageChange() {
     },
@@ -168,6 +201,14 @@ export default {
           console.log(this.roleOptions)
         });
       });
+    },
+    resetDataOperating() {
+      this.dataOperating = {
+        username: '',
+        nickName: '',
+        roleId: '',
+        status: '启用'
+      }
     },
   },
   filters: {

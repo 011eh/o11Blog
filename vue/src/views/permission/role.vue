@@ -4,8 +4,8 @@
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加
       </el-button>
-      <el-input  v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
-                 clearable class="filter-item"/>
+      <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
+                clearable class="filter-item"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
                  v-loading.fullscreen.lock="loading">
         查询
@@ -120,7 +120,7 @@ import {
   tagFilter
 } from "@/utils/tableBase";
 import {permissionTree} from "@/api/sysConfig";
-import {create, doDelete, page} from "@/api/role";
+import {create, doDelete, page, update} from "@/api/role";
 import {grantedTo} from "@/api/permission";
 
 export default {
@@ -169,7 +169,7 @@ export default {
     },
     handleUpdate(row) {
       this.dialogStatus = 'update'
-      this.dataOperating = row
+      Object.assign(this.dataOperating, row);
       this.permissionGranted()
       this.dialogFormVisible = true
     },
@@ -194,6 +194,7 @@ export default {
         }
         this.createData(this.dataOperating);
       } else if (dialogStatus === 'update') {
+        this.updateData()
       }
       this.dialogFormVisible = false
     },
@@ -250,7 +251,12 @@ export default {
       });
     },
     updateData() {
-
+      return new Promise(() => {
+        update(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+        })
+      });
     },
     handlePageChange(currentPage) {
       this.pagination.current = currentPage;

@@ -4,22 +4,22 @@ import com.o11eh.servicedemo.validation.StringId;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.regex.Pattern;
 
 public class StringIdValidator implements ConstraintValidator<StringId, String> {
 
     private boolean required;
-    private int length;
+    private Pattern pattern;
 
     @Override
     public void initialize(StringId annotation) {
-        ConstraintValidator.super.initialize(annotation);
         required = annotation.required();
-        length = annotation.length();
+        pattern = Pattern.compile("[0-9]{19}");
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value != null && value.length() == length) {
+        if (value != null && pattern.matcher(value).matches()) {
             return true;
         } else return value == null && !required;
     }

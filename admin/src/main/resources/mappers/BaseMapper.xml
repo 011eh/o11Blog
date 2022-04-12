@@ -14,4 +14,9 @@
     <select id="recordExists" resultType="java.lang.Boolean">
         select exists(select 1 from ${table} where id = #{id})
     </select>
+
+    <select id="columnUnique" resultType="java.lang.Boolean">
+        select not exists(select 1 from ${table} where ${columnName} = #{value})
+    </select>
+
 </mapper>

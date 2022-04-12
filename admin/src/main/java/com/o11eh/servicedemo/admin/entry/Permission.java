@@ -22,7 +22,6 @@ import java.util.List;
 @Data
 @TableName(value = "back_permission", autoResultMap = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
 public class Permission extends BaseEntry {
 
     @NotEmpty
@@ -44,6 +43,6 @@ public class Permission extends BaseEntry {
     private List<Permission> children;
 
     @JsonUnwrapped
-    @TableField(typeHandler = JacksonTypeHandler.class, insertStrategy = FieldStrategy.IGNORED)
+    @TableField(typeHandler = JacksonTypeHandler.class, updateStrategy = FieldStrategy.IGNORED)
     private RouterInfo routerInfo;
 }

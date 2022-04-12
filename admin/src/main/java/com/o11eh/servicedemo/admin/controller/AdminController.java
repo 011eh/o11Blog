@@ -1,12 +1,13 @@
 package com.o11eh.servicedemo.admin.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.admin.entry.vo.AdminVo;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,31 +40,24 @@ public class AdminController extends BaseController {
         return Result.success(page);
     }
 
-    @ApiOperation(Constants.Doc.DETAIL)
-    @GetMapping(Constants.Api.PATH_ID)
-    public Result detail(@PathVariable String id) {
-        Admin admin = adminService.getById(id);
-        return Result.success(admin);
-    }
-
-
-    @PostMapping(Constants.Api.ADD)
+    @PostMapping
     @ApiOperation(Constants.Doc.ADD)
-    public Result add(@Valid @RequestBody Admin admin) {
+    public Result create(@Valid @RequestBody AdminVo adminVo) {
+        Admin admin = BeanUtil.copyProperties(adminVo, Admin.class);
         String id = adminService.create(admin);
         return Result.success(id);
     }
 
     @ApiOperation(Constants.Doc.UPDATE)
-    @PutMapping(Constants.Api.UPDATE)
+    @PutMapping
     public Result update(@Valid @RequestBody Admin admin) {
         String id = adminService.update(admin);
         return Result.success(id);
     }
 
-    @DeleteMapping(Constants.Api.DELETE)
+    @DeleteMapping
     @ApiOperation(Constants.Doc.BATCH_DELETE)
-    public Result deleteBatch(@RequestBody List<Long> ids) {
+    public Result delete(@RequestBody List<Long> ids) {
         adminService.removeBatchByIds(ids);
         return Result.success();
     }
