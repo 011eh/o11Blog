@@ -12,11 +12,11 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @NotNull
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RUNTIME)
 @Constraint(validatedBy = ColumnUniqueValidator.class)
 public @interface ColumnsUnique {
-    String message() default "已存在";
+    String message() default "唯一字段值已存在";
 
     Class<?>[] groups() default {};
 
@@ -24,5 +24,5 @@ public @interface ColumnsUnique {
 
     String tableName();
 
-    String columnName();
+    String[] properties();
 }

@@ -7,9 +7,9 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
+@ColumnsUnique(tableName = "back_admin", properties = "username")
 public class AdminVo {
     @NotBlank
-    @ColumnsUnique(tableName = "back_admin", columnName = "userName")
     private String username;
 
     @NotBlank

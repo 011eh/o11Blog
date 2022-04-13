@@ -16,7 +16,11 @@
     </select>
 
     <select id="columnUnique" resultType="java.lang.Boolean">
-        select not exists(select 1 from ${table} where ${columnName} = #{value})
+        select not exists(select 1 from ${table} where ${columnName} = #{value}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+        ) `unique`
     </select>
 
 </mapper>

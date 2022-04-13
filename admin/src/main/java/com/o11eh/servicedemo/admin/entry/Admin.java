@@ -20,9 +20,9 @@ import lombok.Data;
 @Data
 @TableName("back_admin")
 @ApiModel(value = "Admin对象", description = "管理员")
+@ColumnsUnique(tableName = "back_admin", properties = "username")
 public class Admin extends BaseEntry {
 
-    @ColumnsUnique(tableName = "back_admin", columnName = "userName")
     private String username;
     private String nickName;
 

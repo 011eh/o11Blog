@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.enums.Status;
+import com.o11eh.servicedemo.validation.ColumnsUnique;
 import com.o11eh.servicedemo.validation.RefId;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ import java.util.List;
 @Data
 @TableName(value = "back_permission", autoResultMap = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ColumnsUnique(tableName = "back_permission", properties = "name")
 public class Permission extends BaseEntry {
 
     @NotEmpty

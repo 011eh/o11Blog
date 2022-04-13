@@ -10,7 +10,7 @@ import java.util.Set;
 public interface BaseMapper {
     boolean recordExists(@Param("table") String table, @Param("id") String id);
 
-    boolean columnUnique(@Param("table") String table, @Param("columnName") String columnName, @Param("value") Object value);
+    boolean columnUnique(@Param("table") String table, @Param("columnName") String columnName, @Param("value") Object value, @Param("id") String id);
 
     Set<String> selectIdIfExist(@Param("table") String table, @Param("ids") List<String> ids);
 }
