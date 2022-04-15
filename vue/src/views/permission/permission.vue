@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
+                 :disabled="!checkPermission(['permission:create'])">
         添加
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
-                 v-loading.fullscreen.lock="loading" @click="list">
+                 v-loading.fullscreen.lock="loading" @click="list" :disabled="!checkPermission(['permission:list'])">
         查询
       </el-button>
     </div>
@@ -26,12 +27,13 @@
       <el-table-column align="center" prop="sort" label="排序"/>
       <el-table-column fixed="right" label="Actions" align="center" width="230">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="small" @click="handleUpdate(row)">
+          <el-button type="primary" size="small" @click="handleUpdate(row)"
+                     :disabled="!checkPermission(['permission:update'])">
             编辑
           </el-button>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small">
+              <el-button type="danger" size="small" :disabled="!checkPermission(['permission:delete'])">
                 删除
               </el-button>
             </template>
@@ -127,7 +129,7 @@
             <el-radio v-model="dataOperating.hidden" :label="true" border>是</el-radio>
             <el-radio v-model="dataOperating.hidden" :label="null" border>否</el-radio>
           </el-form-item>
-          <el-form-item v-if="dataOperating.resourceType==='一级菜单'" label="作为嵌套菜单" prop="alwaysShow">
+          <el-form-item v-if="dataOperating.resourceType==='一级菜单'" label="始终作为嵌套菜单" prop="alwaysShow">
             <el-radio v-model="dataOperating.alwaysShow" :label="true" border>是</el-radio>
             <el-radio v-model="dataOperating.alwaysShow" :label="null" border>否</el-radio>
           </el-form-item>
@@ -186,6 +188,7 @@ import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
 import {dialogFormVisible, dialogStatus, loading, operationMap, tableData, tagFilter} from '@/utils/tableBase'
 import {permissionSelect} from "@/api/sysConfig";
+import checkPermission from '@/utils/permission.js'
 
 export default {
   data() {
@@ -244,7 +247,10 @@ export default {
   },
   methods: {
     list() {
-      this.loading = true
+      if (!checkPermission(['permission:list'])) {
+        return;
+      }
+      this.loading = true;
       this.expandRowIds = []
       return new Promise(() => {
         list().then(res => {
@@ -399,6 +405,7 @@ export default {
         });
       });
     },
+    checkPermission
   },
   filters: {
     tagFilter

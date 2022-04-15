@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -34,14 +35,14 @@ public class RoleController extends BaseController {
 
     @PostMapping(Constants.Api.PAGE)
     @ApiOperation(Constants.Doc.PAGE)
-    public Result page(@RequestBody PageReq pageReq) {
+    public Result page(@Valid @RequestBody PageReq pageReq) {
         Page<Role> page = roleService.page(pageReq);
         return Result.success(page);
     }
 
     @ApiOperation(Constants.Doc.ADD)
     @PostMapping
-    public Result create(@RequestBody RoleVo roleVo) {
+    public Result create(@Valid @RequestBody RoleVo roleVo) {
         Role role = BeanUtil.copyProperties(roleVo, Role.class);
         String id = roleService.create(role);
         return Result.success(id);
@@ -49,7 +50,7 @@ public class RoleController extends BaseController {
 
     @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
-    public Result update(@RequestBody Role role) {
+    public Result update(@Valid @RequestBody Role role) {
         String id = roleService.updateRole(role);
         return Result.success(id);
     }

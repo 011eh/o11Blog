@@ -1,5 +1,4 @@
 import {constantRoutes} from '@/router'
-import {menu} from "@/api/auth";
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -51,9 +50,9 @@ const actions = {
   generateRoutes({commit}, roles, routers) {
     return new Promise(resolve => {
       let accessedRoutes
-      menu().then(res => {
-        resolve(accessedRoutes)
-      })
+      // menu().then(res => {
+      //   resolve(accessedRoutes)
+      // })
     })
   }
 }

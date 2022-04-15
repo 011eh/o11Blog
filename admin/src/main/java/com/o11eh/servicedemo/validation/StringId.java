@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.validation;
 
+import com.o11eh.servicedemo.validation.validator.StringIdListValidator;
 import com.o11eh.servicedemo.validation.validator.StringIdValidator;
 
 import javax.validation.Constraint;
@@ -12,8 +13,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {StringIdValidator.class})
+@Constraint(validatedBy = {StringIdValidator.class, StringIdListValidator.class})
 public @interface StringId {
+
     String message() default "Id格式不正确";
 
     Class<?>[] groups() default {};
@@ -22,5 +24,4 @@ public @interface StringId {
 
     boolean required() default true;
 
-    int length() default 19;
 }

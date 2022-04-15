@@ -60,17 +60,16 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const {permissionKeys, routers, nickName, avatar} = data
+        let {permissionKeys, routers, nickName, avatar} = data
 
         // roles must be a non-empty array
         if (!permissionKeys || permissionKeys.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          permissionKeys = [""]
         }
         commit('SET_ROLES', permissionKeys)
         commit('SET_NAME', nickName)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', nickName)
-
         // 访问不存在的菜单会跳转
         routers.push({"path": "*", "hidden": true, "redirect": "/404"})
 

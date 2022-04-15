@@ -55,7 +55,15 @@
           <el-select v-model="dataOperating.roleId" class="m-2" @change="roleChange" placeholder="无">
             <el-option v-for="item in roleOptions" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
-
+        </el-form-item>
+        <el-form-item label="头像" prop="avatar">
+          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false" :on-success="uploadSuccess">
+            <img v-if="this.dataOperating.avatar" :src="this.dataOperating.avatar" class="avatar"/>
+            <div v-else class="avatar-uploader-icon">
+              <i class="el-icon-plus"/>
+            </div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-switch
@@ -77,7 +85,6 @@
       </span>
       </template>
     </el-dialog>
-
     <el-footer style="height: 0">
       <div style="padding-top: 10px">
         <el-pagination
@@ -105,11 +112,12 @@ import {
   operationMap,
   pageReq,
   pagination,
+  tableData,
   tableMaxHeight,
   tagFilter
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysConfig";
-import {create, page, update} from "@/api/admin";
+import {create, doDelete, page, update} from "@/api/admin";
 
 export default {
   created() {
@@ -119,7 +127,7 @@ export default {
   data() {
     return {
       tableMaxHeight,
-      tableData: [],
+      tableData,
       dialogFormVisible,
       dialogStatus,
       loading,
@@ -165,7 +173,11 @@ export default {
       this.dialogFormVisible = true;
     },
     doDelete(id) {
-
+      return new Promise(() => {
+        doDelete([id]).then(() => {
+          this.page();
+        });
+      });
     },
     dialogClosed() {
       if (this.dialogStatus === 'update') {
@@ -198,7 +210,6 @@ export default {
       return new Promise(() => {
         roleSelect().then(value => {
           this.roleOptions = value.data;
-          console.log(this.roleOptions)
         });
       });
     },
@@ -209,6 +220,9 @@ export default {
         roleId: '',
         status: '启用'
       }
+    },
+    uploadSuccess() {
+      console.log('success');
     },
   },
   filters: {
@@ -237,5 +251,35 @@ export default {
 
 .disabled {
   pointer-events: none;
+}
+
+.avatar-uploader .avatar {
+  width: 120px;
+  height: 120px;
+  display: block;
+}
+</style>
+
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 60px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: .2s;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  line-height: 120px;
 }
 </style>

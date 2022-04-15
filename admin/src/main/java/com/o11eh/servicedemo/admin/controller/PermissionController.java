@@ -6,6 +6,7 @@ import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
 import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.o11eh.servicedemo.validation.StringId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,14 @@ public class PermissionController extends BaseController {
 
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
-    public Result detail(@PathVariable String id) {
+    public Result detail(@Valid @StringId @PathVariable String id) {
         Permission permission = permissionService.detail(id);
         return Result.success(permission);
     }
 
     @PostMapping
     @ApiOperation(Constants.Doc.ADD)
-    public Result create(@RequestBody PermissionVo vo) {
+    public Result create(@Valid @RequestBody PermissionVo vo) {
         Permission permission = BeanUtil.copyProperties(vo, Permission.class);
         permissionService.save(permission);
         return Result.success(permission.getId());
@@ -53,7 +54,6 @@ public class PermissionController extends BaseController {
         permissionService.updateById(permission);
         return Result.success(permission.getId());
     }
-
 
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     @DeleteMapping

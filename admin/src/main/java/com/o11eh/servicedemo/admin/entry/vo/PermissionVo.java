@@ -19,7 +19,7 @@ public class PermissionVo {
     private String permissionKey;
     private Status status;
 
-    @RefId(tableName = "back_permission")
+    @RefId("back_permission")
     private String parentId;
     private Integer sort;
 

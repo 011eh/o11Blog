@@ -169,7 +169,7 @@ export default {
     },
     handleUpdate(row) {
       this.dialogStatus = 'update'
-      Object.assign(this.dataOperating, row);
+      this.dataOperating = Object.assign({}, row);
       this.permissionGranted()
       this.dialogFormVisible = true
     },

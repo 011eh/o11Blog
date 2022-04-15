@@ -22,5 +22,5 @@ public @interface RefId {
 
     Class<? extends Payload>[] payload() default {};
 
-    String tableName();
+    String value();
 }

@@ -42,9 +42,11 @@ public class AuthInfo {
         Map<ResourceType, List<Permission>> typeMap = permissions.stream().sorted(Comparator.comparing(Permission::getSort))
                 .collect(Collectors.groupingBy(Permission::getResourceType));
 
-        setPermissionKeys(typeMap.remove(ResourceType.OPERATION).stream().map(Permission::getPermissionKey)
-                .collect(Collectors.toList()));
-
+        List<Permission> operations = typeMap.remove(ResourceType.OPERATION);
+        if (operations != null) {
+            setPermissionKeys(operations.stream().map(Permission::getPermissionKey)
+                    .collect(Collectors.toList()));
+        }
         String rootParentId = "";
         Map<String, List<Permission>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(permission ->

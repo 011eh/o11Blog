@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.enums.Status;
 import com.o11eh.servicedemo.validation.ColumnsUnique;
+import com.o11eh.servicedemo.validation.RefId;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -28,6 +29,8 @@ public class Admin extends BaseEntry {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    @RefId("back_role")
     private String roleId;
     private String avatar;
     private Status status;

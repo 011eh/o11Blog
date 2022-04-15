@@ -36,7 +36,7 @@ public class Permission extends BaseEntry {
     private ResourceType resourceType;
 
     @TableField(updateStrategy = FieldStrategy.IGNORED)
-    @RefId(tableName = "back_permission")
+    @RefId("back_permission")
     private String parentId;
     private Integer sort;
     private Status status;

@@ -1,6 +1,7 @@
 import store from '@/store'
 
 function checkPermission(el, binding) {
+  el.classList.add('is-disabled')
   const {value} = binding
   const roles = store.getters && store.getters.roles
 
@@ -11,8 +12,8 @@ function checkPermission(el, binding) {
       const hasPermission = roles.some(role => {
         return permissionRoles.includes(role)
       })
-
       if (!hasPermission) {
+
         el.parentNode && el.parentNode.removeChild(el)
       }
     }

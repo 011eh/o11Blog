@@ -35,7 +35,7 @@ public class AdminController extends BaseController {
 
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
-    public Result page(@RequestBody @Valid PageReq param) {
+    public Result page(@Valid @RequestBody PageReq param) {
         Page<Admin> page = adminService.page(param);
         return Result.success(page);
     }
