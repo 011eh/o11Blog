@@ -39,9 +39,9 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     private PermissionService permissionService;
 
     @Override
-    public Admin login(String username) {
+    public Admin login(String username, String password) {
 
-        Admin admin = getOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername, username).last(LIMIT_1));
+        Admin admin = this.getOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername, username).last(LIMIT_1));
         if (ObjectUtil.isNull(admin)) {
             throw BusinessException.e("帐号或密码错误");
         }

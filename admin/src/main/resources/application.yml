@@ -27,3 +27,6 @@ mybatis-plus:
   type-enums-package: com.o11eh.servicedemo.admin.enums
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+sa-token:
+  token-style: simple-uuid

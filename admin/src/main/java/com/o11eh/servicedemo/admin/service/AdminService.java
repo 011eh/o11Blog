@@ -16,7 +16,7 @@ public interface AdminService extends BaseService<Admin> {
 
     String create(Admin admin);
 
-    Admin login(String username);
+    Admin login(String username, String password);
 
     String update(Admin admin);
 

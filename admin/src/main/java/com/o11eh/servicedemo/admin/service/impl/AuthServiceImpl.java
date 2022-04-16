@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(String username, String password) {
-        Admin admin = adminService.login(username);
+        Admin admin = adminService.login(username,password);
         if (ObjectUtil.isNull(admin) ||
                 !StrUtil.equals(SaSecureUtil.md5BySalt(password, username), admin.getPassword())) {
             throw BusinessException.e("帐号或密码错误");
@@ -36,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
         authInfo.setPermission(permissionService.getAuthInfoByRoleId(admin.getRoleId()));
         SaSession session = StpUtil.getSession();
         session.set("authInfo", authInfo);
-        session.set("admin", admin);
 
         return StpUtil.getTokenValue();
     }
