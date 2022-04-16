@@ -1,8 +1,8 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Role;
@@ -31,7 +31,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
     public Page<Role> page(PageReq req) {
         Page<Role> page = super.page(req.getCurrent(), req.getSize(),
-                Wrappers.<Role>lambdaQuery().like(Role::getName, req.getKeyword()));
+                Wrappers.<Role>lambdaQuery().like(StrUtil.isNotBlank(req.getKeyword()), Role::getName, req.getKeyword()));
         return page;
     }
 
@@ -44,7 +44,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Transactional
     public String create(Role role) {
         this.save(role);
-        permissionService.grantPermissions(role.getId(), role.getPermissionIds(), false);
+        permissionService.grantPermissions(role.getId(), role.getPermissionKeys(), false);
         return role.getId();
     }
 
@@ -52,7 +52,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Transactional
     public String updateRole(Role role) {
         this.updateById(role);
-        permissionService.grantPermissions(role.getId(), role.getPermissionIds(), true);
+        permissionService.grantPermissions(role.getId(), role.getPermissionKeys(), true);
         return role.getId();
     }
 

@@ -1,7 +1,6 @@
 package com.o11eh.servicedemo.admin.entry.vo;
 
 import com.o11eh.servicedemo.admin.enums.Status;
-import com.o11eh.servicedemo.validation.RefId;
 import lombok.Data;
 
 import java.util.List;
@@ -20,8 +19,6 @@ public class RoleVo {
     private String name;
     private String summary;
     private Status status;
-
-    @RefId("back_permission")
-    private List<String> permissionIds;
+    private List<String> permissionKeys;
 
 }

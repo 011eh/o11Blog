@@ -32,7 +32,6 @@ public class Role extends BaseEntry {
 
 
     @TableField(exist = false)
-    @RefId("back_permission")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<String> permissionIds;
+    private List<String> permissionKeys;
 }

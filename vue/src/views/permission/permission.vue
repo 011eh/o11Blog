@@ -19,6 +19,17 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="permissionKey" label="关键字"/>
+      <el-table-column align="center" prop="path" label="路由"/>
+      <el-table-column align="center" prop="meta.icon" label="图标">
+        <template slot-scope="{row}" v-if="row.resourceType!=='操作'">
+          <i v-if="notNull(row.meta.icon) && isElIcon(row.meta.icon)"
+             :class="row.meta.icon"/>
+          <svg-icon class="iconInDataOperatingDialog"
+                    v-if="notNull(row.meta.icon) && !isElIcon(row.meta.icon)"
+                    :icon-class="row.meta.icon"/>
+          <span style="font-size: 5px" v-if="!notNull(row.meta.icon)">无</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="status" label="状态">
         <template slot-scope="{row}">
           <el-tag :type="row.status | tagFilter">{{ row.status }}</el-tag>
@@ -42,7 +53,7 @@
       </el-table-column>
     </el-table>
     <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
+      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="23%"
                style="width: 60%; margin-left: 35px">
         <el-form-item label="资源名称" prop="name">
           <el-input v-model="dataOperating.name"/>
@@ -229,6 +240,8 @@ export default {
     }
   },
   created() {
+    this.notNull(undefined);
+    this.notNull(null);
     this.list()
     this.getParentSelect()
   },
@@ -341,7 +354,8 @@ export default {
       return icon.includes('el-icon')
     },
     notNull(icon) {
-      return icon !== null
+      return !!icon;
+
     },
     handleSelectIcon(icon) {
       this.dataOperating.meta.icon = icon

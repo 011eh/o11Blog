@@ -1,9 +1,9 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.config.BusinessException;
@@ -56,24 +56,16 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     @Override
     public Page<Admin> page(PageReq param) {
 
-        Wrapper<Admin> wrapper = Wrappers.emptyWrapper();
-        if (StrUtil.isNotBlank(param.getKeyword())) {
-            wrapper = Wrappers.<Admin>lambdaQuery()
-                    .like(Admin::getUsername, param.getKeyword())
-                    .or(queryWrapper -> queryWrapper.like(Admin::getNickName, param.getKeyword()));
-        }
-        Page<Admin> page = adminMapper.selectPage(new Page<>(param.getCurrent(), param.getSize()), wrapper);
+        Wrapper<Admin> wrapper = StrUtil.isBlank(param.getKeyword()) ?
+                Wrappers.emptyWrapper() : Wrappers.<Admin>lambdaQuery().like(Admin::getUsername, param.getKeyword())
+                .or(queryWrapper -> queryWrapper.like(Admin::getNickName, param.getKeyword()));
         return super.page(param.getCurrent(), param.getSize(), wrapper);
     }
 
     @Override
     public String create(Admin admin) {
-        LambdaQueryWrapper<Admin> wrapper = Wrappers.<Admin>lambdaQuery()
-                .select(Admin::getUsername).eq(Admin::getUsername, admin.getUsername());
-        Admin adminInDB = getOne(wrapper);
-        if (ObjectUtil.isNotNull(adminInDB)) {
-            throw BusinessException.e("该用户已存在");
-        }
+        String password = "11111";
+        admin.setPassword(SaSecureUtil.md5BySalt(password, admin.getUsername()));
         this.save(admin);
         return admin.getId();
     }

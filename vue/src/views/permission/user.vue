@@ -1,13 +1,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
+                 :disabled="!checkPermission(['admin:create'])">
         添加
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
                 clearable class="filter-item"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 v-loading.fullscreen.lock="loading">
+                 v-loading.fullscreen.lock="loading" :disabled="!checkPermission(['admin:list'])">
         查询
       </el-button>
     </div>
@@ -17,7 +18,11 @@
       <el-table-column align="center" prop="nickName" label="昵称"/>
       <el-table-column align="center" prop="avatar" label="头像">
         <template slot-scope="{row,$index}">
-          <el-avatar :size="65" :src="row.avatar"/>
+          <el-avatar :size="65" :src="row.avatar" @error="true">
+            <img
+              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+            />
+          </el-avatar>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="nameRole" label="角色">
@@ -29,12 +34,13 @@
       </el-table-column>
       <el-table-column fixed="right" label="Actions" align="center" width="230">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="small" @click="handleUpdate(row)">
+          <el-button type="primary" size="small" @click="handleUpdate(row)"
+                     :disabled="!checkPermission(['admin:update'])">
             编辑
           </el-button>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small">
+              <el-button type="danger" size="small" :disabled="!checkPermission(['admin:delete'])">
                 删除
               </el-button>
             </template>
@@ -58,7 +64,7 @@
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
           <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false" :on-success="uploadSuccess">
+                     :show-file-list="false" :on-success="uploadSuccess">
             <img v-if="this.dataOperating.avatar" :src="this.dataOperating.avatar" class="avatar"/>
             <div v-else class="avatar-uploader-icon">
               <i class="el-icon-plus"/>
@@ -118,6 +124,7 @@ import {
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysConfig";
 import {create, doDelete, page, update} from "@/api/admin";
+import checkPermission from "@/utils/permission";
 
 export default {
   created() {
@@ -127,13 +134,13 @@ export default {
   data() {
     return {
       tableMaxHeight,
-      tableData,
+      operationMap,
+      loading,
       dialogFormVisible,
       dialogStatus,
-      loading,
-      pagination,
-      operationMap,
-      pageReq,
+      tableData,
+      pagination: Object.assign({}, pagination),
+      pageReq: Object.assign({}, pageReq),
       dataOperating: {
         username: '',
         nickName: '',
@@ -145,6 +152,10 @@ export default {
   },
   methods: {
     page() {
+      if (!checkPermission(['admin:list'])) {
+        return;
+      }
+
       this.loading = true;
       return new Promise(() => {
         page(this.pageReq).then(pageResult => {
@@ -224,6 +235,7 @@ export default {
     uploadSuccess() {
       console.log('success');
     },
+    checkPermission
   },
   filters: {
     tagFilter,

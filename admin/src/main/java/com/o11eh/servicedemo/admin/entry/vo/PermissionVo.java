@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.entry.vo;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.entry.RouterInfo;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.enums.Status;
@@ -25,5 +26,7 @@ public class PermissionVo {
 
     @NotNull
     private ResourceType resourceType;
+
+    @JsonUnwrapped
     private RouterInfo routerInfo;
 }

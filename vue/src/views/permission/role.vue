@@ -1,13 +1,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
+                 :disabled="!checkPermission(['role:create'])">
         添加
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
                 clearable class="filter-item"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 v-loading.fullscreen.lock="loading">
+                 v-loading.fullscreen.lock="loading" :disabled="!checkPermission(['role:list'])">
         查询
       </el-button>
     </div>
@@ -22,12 +23,13 @@
       </el-table-column>
       <el-table-column fixed="right" label="Actions" align="center" width="230">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="small" @click="handleUpdate(row)">
+          <el-button type="primary" size="small" @click="handleUpdate(row)"
+                     :disabled="!checkPermission(['role:update'])">
             编辑
           </el-button>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small">
+              <el-button type="danger" size="small" :disabled="!checkPermission(['role:delete'])">
                 删除
               </el-button>
             </template>
@@ -64,7 +66,7 @@
 
         <el-tree :check-strictly="true" ref="tree" :data="permissionTreeList" show-checkbox default-expand-all node-key="id"
                  highlight-current :props="treeProps" :expand-on-click-node="false" :check-on-click-node="true"
-                 :default-checked-keys="this.dataOperating.permissionIds" @check-change="handleCheckChange"/>
+                 :default-checked-keys="this.permissionIdsGranted" @check-change="handleCheckChange"/>
 
         <template #footer>
       <span class="dialog-footer">
@@ -122,6 +124,7 @@ import {
 import {permissionTree} from "@/api/sysConfig";
 import {create, doDelete, page, update} from "@/api/role";
 import {grantedTo} from "@/api/permission";
+import checkPermission from "@/utils/permission";
 
 export default {
   created() {
@@ -135,20 +138,24 @@ export default {
       dialogFormVisible,
       dialogStatus,
       loading,
-      pagination,
       operationMap,
-      pageReq,
+      pagination: Object.assign({}, pagination),
+      pageReq: Object.assign({}, pageReq),
       dataOperating: {
         status: '启用',
-        permissionIds: []
+        permissionKeys: []
       },
       permissionGrantVisible: false,
       treeProps: {label: 'name'},
       permissionTreeList: [],
+      permissionIdsGranted: []
     }
   },
   methods: {
     page() {
+      if (!checkPermission(['role:list'])) {
+        return;
+      }
       this.loading = true;
       new Promise(() => {
         page(this.pageReq).then(pageResult => {
@@ -160,16 +167,9 @@ export default {
         });
       });
     },
-    permissionTree() {
-      new Promise(() => {
-        permissionTree().then(value => {
-          this.permissionTreeList = value.data;
-        });
-      });
-    },
     handleUpdate(row) {
       this.dialogStatus = 'update'
-      this.dataOperating = Object.assign({}, row);
+      this.dataOperating = Object.assign(this.dataOperating, row);
       this.permissionGranted()
       this.dialogFormVisible = true
     },
@@ -180,6 +180,34 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
     },
+    doCreateOrUpdate(dialogStatus) {
+      if (dialogStatus === 'create') {
+        if (this.$refs.tree) {
+          this.dataOperating.permissionKeys = this.$refs.tree.getCheckedKeys();
+        }
+        this.createData(this.dataOperating);
+      } else if (dialogStatus === 'update') {
+        this.updateData();
+      }
+      this.dialogFormVisible = false
+    },
+    createData(role) {
+      return new Promise(() => {
+        create(role).then(() => {
+          this.dialogFormVisible = false;
+          this.resetDataOperating();
+          this.page();
+        });
+      });
+    },
+    updateData() {
+      return new Promise(() => {
+        update(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+        })
+      });
+    },
     doDelete(id) {
       new Promise(() => {
         doDelete([id]).finally(() => {
@@ -187,16 +215,17 @@ export default {
         });
       });
     },
-    doCreateOrUpdate(dialogStatus) {
-      if (dialogStatus === 'create') {
-        if (this.$refs.tree) {
-          this.dataOperating.permissionIds = this.$refs.tree.getCheckedKeys();
-        }
-        this.createData(this.dataOperating);
-      } else if (dialogStatus === 'update') {
-        this.updateData()
+    dialogClose() {
+      if (this.dialogStatus === 'update') {
+        this.resetDataOperating();
       }
-      this.dialogFormVisible = false
+    },
+    resetDataOperating() {
+      this.dataOperating = {
+        status: '启用',
+        permissionKeys: []
+      };
+      this.permissionIdsGranted = [];
     },
     handleCheckChange(node, checked) {
       if (checked) {
@@ -219,43 +248,37 @@ export default {
       });
       this.$refs.tree.setCheckedKeys(keys);
     },
-    confirmGrant() {
-      this.dataOperating.permissionIds = this.$refs.tree.getCheckedKeys();
-      this.permissionGrantVisible = false;
-    },
     handleGrantPermission() {
       if (this.$refs.tree) {
-        this.$refs.tree.setCheckedKeys(this.dataOperating.permissionIds)
+        this.$refs.tree.setCheckedKeys(this.permissionIdsGranted)
       }
       this.permissionGrantVisible = true;
     },
-    dialogClose() {
-      if (this.dialogStatus === 'update') {
-        this.resetDataOperating();
-      }
+    confirmGrant() {
+      const set = new Set(this.$refs.tree.getCheckedNodes().map(p => {
+        return p.permissionKey;
+      }));
+      this.dataOperating.permissionKeys = Array.from(set);
+      this.permissionGrantVisible = false;
     },
     permissionGranted() {
       return new Promise(() => {
         grantedTo(this.dataOperating.id).then(value => {
-          this.dataOperating.permissionIds = value.data;
+          const set = new Set();
+          value.data.forEach(p => {
+            this.permissionIdsGranted.push(p.id);
+            set.add(p.permissionKey)
+          })
+          this.dataOperating.permissionKeys = Array.from(set);
         });
+
       });
     },
-    createData(role) {
-      return new Promise(() => {
-        create(role).then(() => {
-          this.dialogFormVisible = false;
-          this.resetDataOperating();
-          this.page();
+    permissionTree() {
+      new Promise(() => {
+        permissionTree().then(value => {
+          this.permissionTreeList = value.data;
         });
-      });
-    },
-    updateData() {
-      return new Promise(() => {
-        update(this.dataOperating).then(() => {
-          this.dialogFormVisible = false;
-          this.page();
-        })
       });
     },
     handlePageChange(currentPage) {
@@ -272,12 +295,7 @@ export default {
       this.pageReq.size = size;
       this.page();
     },
-    resetDataOperating() {
-      this.dataOperating = {
-        status: '启用',
-        permissionIds: []
-      };
-    }
+    checkPermission
   },
   filters: {
     tagFilter

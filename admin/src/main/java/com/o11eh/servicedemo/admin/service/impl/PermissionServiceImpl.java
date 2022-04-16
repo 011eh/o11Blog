@@ -1,7 +1,6 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.Permission;
@@ -35,7 +34,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     @Override
     public List<Permission> getPermissionList() {
         List<Permission> list = this.list(Wrappers.<Permission>lambdaQuery()
-                .select(BaseEntry::getId, Permission::getParentId, Permission::getName,
+                .select(BaseEntry::getId, Permission::getParentId, Permission::getName, Permission::getRouterInfo,
                         Permission::getPermissionKey, Permission::getSort, Permission::getResourceType, Permission::getStatus));
 
         String rootParentId = "";
@@ -57,42 +56,47 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     }
 
     @Override
-    public List<String> getPermissionIdsGranted(String roleId) {
-        List<String> permissionIds = permissionMapper.selectPermissionByRoleId(roleId)
-                .stream().map(BaseEntry::getId).collect(Collectors.toList());
+    public List<Permission> getPermissionIdsGranted(String roleId) {
+        List<Permission> permissionIds = permissionMapper.selectPermissionByRoleId(roleId);
         return permissionIds;
     }
 
     @Override
-    public void grantPermissions(String roleId, List<String> permissionIds, boolean doUpdate) {
-        SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false);
-        PermissionMapper mapper = session.getMapper(PermissionMapper.class);
-        if (doUpdate) {
-            mapper.deletePermissionGranted(roleId);
+    public void grantPermissions(String roleId, List<String> permissionKeys, boolean doUpdate) {
+        permissionKeys = permissionKeys.stream().distinct().collect(Collectors.toList());
+        try (SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false)) {
+            PermissionMapper mapper = session.getMapper(PermissionMapper.class);
+            if (doUpdate) {
+                mapper.deletePermissionGranted(roleId);
+            }
+            permissionKeys.forEach(key -> mapper.grantPermission(roleId, key));
+            session.commit();
         }
-        permissionIds.forEach(pId -> mapper.grantPermission(roleId, pId));
-        session.commit();
     }
 
     @Override
     public void revokePermissions(List<String> roleIds) {
-        SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false);
-        PermissionMapper mapper = session.getMapper(PermissionMapper.class);
-        roleIds.forEach(mapper::deletePermissionGranted);
-        session.commit();
+        try (SqlSession session = SqlHelper.FACTORY.openSession(ExecutorType.BATCH, false)) {
+            PermissionMapper mapper = session.getMapper(PermissionMapper.class);
+            roleIds.forEach(mapper::deletePermissionGranted);
+            session.commit();
+        }
     }
 
     @Override
     public List<Permission> dtoList() {
         List<Permission> list = this.getDtoList(Wrappers.<Permission>lambdaQuery().select(BaseEntry::getId,
-                Permission::getParentId, Permission::getResourceType, Permission::getName, Permission::getSort));
-        list.sort(Comparator.comparing((Permission p) -> p.getResourceType().getSort())
-                .thenComparing(Permission::getSort));
+                        Permission::getParentId, Permission::getResourceType, Permission::getName)
+                .orderBy(true, true, Permission::getSort));
+        list.sort(Comparator.comparing((Permission p) -> p.getResourceType().getSort()));
         return list;
     }
 
     public List<Permission> treeDtoList() {
-        List<Permission> permissionList = this.dtoList();
+        List<Permission> permissionList = this.getDtoList(Wrappers.<Permission>lambdaQuery()
+                .select(BaseEntry::getId, Permission::getParentId, Permission::getPermissionKey, Permission::getName)
+                .orderBy(true, true, Permission::getSort));
+
         String rootParentId = "";
         Map<String, List<Permission>> parentIdMap = permissionList.stream()
                 .collect(Collectors.groupingBy(
