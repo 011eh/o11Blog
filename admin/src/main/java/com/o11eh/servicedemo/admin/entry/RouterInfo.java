@@ -1,19 +1,25 @@
 package com.o11eh.servicedemo.admin.entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RouterInfo {
 
-    private String routerParentId;
+    private String id;
+    private String name;
+    private String parentId;
     private String path;
     private String component;
     private String redirect;
     private Boolean hidden;
     private Boolean alwaysShow;
     private Meta meta;
+    private List<RouterInfo> children;
 
     @Data
     @JsonInclude(JsonInclude.Include.NON_NULL)

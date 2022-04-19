@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Role;
+import com.o11eh.servicedemo.admin.entry.RouterInfo;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class AuthInfo {
     private String avatar;
     private String roleId;
     private List<String> permissionKeys;
-    private List<Permission> routers;
+    private List<RouterInfo> routers;
 
     public AuthInfo(Admin admin) {
         nickName = admin.getNickName();
@@ -48,9 +49,14 @@ public class AuthInfo {
                     .collect(Collectors.toList()));
         }
         String rootParentId = "";
-        Map<String, List<Permission>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
-                .collect(Collectors.groupingBy(permission ->
-                        permission.getParentId() != null ? permission.getParentId() : rootParentId));
+        Map<String, List<RouterInfo>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
+                .map(permission -> {
+                    RouterInfo routerInfo = permission.getRouterInfo();
+                    routerInfo.setId(permission.getId());
+                    routerInfo.setParentId(permission.getParentId());
+                    return routerInfo;
+                }).collect(Collectors.groupingBy(routerInfo -> routerInfo.getParentId() != null ?
+                        routerInfo.getParentId() : rootParentId));
         parentIdMap.values().stream().flatMap(Collection::stream).
                 forEach((router) -> router.setChildren(parentIdMap.get(router.getId())));
 

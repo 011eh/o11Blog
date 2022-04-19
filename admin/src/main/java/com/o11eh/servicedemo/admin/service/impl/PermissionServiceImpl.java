@@ -57,7 +57,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
 
     @Override
     public List<Permission> getPermissionIdsGranted(String roleId) {
-        List<Permission> permissionIds = permissionMapper.selectPermissionByRoleId(roleId);
+        List<Permission> permissionIds = permissionMapper.selectPermissionGranted(roleId);
         return permissionIds;
     }
 

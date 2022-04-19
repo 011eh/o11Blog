@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.o11eh.servicedemo.admin.config.AuthInfo;
 import com.o11eh.servicedemo.admin.config.BusinessException;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.enums.Status;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.AuthService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
@@ -25,18 +26,20 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(String username, String password) {
-        Admin admin = adminService.login(username,password);
+        Admin admin = adminService.login(username, password);
         if (ObjectUtil.isNull(admin) ||
                 !StrUtil.equals(SaSecureUtil.md5BySalt(password, username), admin.getPassword())) {
             throw BusinessException.e("帐号或密码错误");
         }
-        StpUtil.login(username);
+        if (admin.getStatus() == Status.Disable) {
+            throw BusinessException.e("账号被锁定");
+        }
 
+        StpUtil.login(username);
         AuthInfo authInfo = new AuthInfo(admin);
         authInfo.setPermission(permissionService.getAuthInfoByRoleId(admin.getRoleId()));
         SaSession session = StpUtil.getSession();
         session.set("authInfo", authInfo);
-
         return StpUtil.getTokenValue();
     }
 

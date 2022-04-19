@@ -6,14 +6,14 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum Status {
-    Enable("启用"),
-    Disable("禁用");
+
+    Disable(0, "禁用"),
+    Enable(1, "启用");
+
+    @EnumValue
+    private int value;
 
     @JsonValue
-    @EnumValue
     private final String status;
 
-    public String getStatus() {
-        return status;
-    }
 }

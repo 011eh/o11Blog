@@ -14,18 +14,20 @@
         <result property="routerInfo" column="router_info"
                 typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
     </resultMap>
-    <select id="selectPermissionByRoleId" resultMap="permission">
+    <select id="selectPermissionGranted" resultMap="permission">
         select p.*
         from back_permission p
              join back_role_permission rp on p.permission_key = rp.permission_key
         where role_id = #{roleId}
     </select>
 
-    <select id="selectPermissionByUserId" resultMap="permission">
+    <select id="selectPermissionByRoleId" resultMap="permission">
         select p.*
-        from back_permission p
-             join back_role_permission rp on p.permission_key = rp.permission_key
-             join back_admin a on rp.role_id = a.role_id
-        where a.id = #{userId}
+        from back_role r
+             left join back_role_permission rp on r.id = rp.role_id
+             left join back_permission p on rp.permission_key = p.permission_key
+        where r.id = #{roleid}
+          and r.status = 1
+          and p.status = 1
     </select>
 </mapper>

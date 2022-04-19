@@ -18,12 +18,6 @@ import javax.validation.Valid;
 public class AuthController {
 
     @Autowired
-    private AdminService adminService;
-
-    @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
     private AuthService authService;
 
     @ApiOperation("认证")
@@ -32,7 +26,6 @@ public class AuthController {
         String token = authService.login(username, password);
         return Result.success(token);
     }
-
 
     @ApiOperation("用户信息")
     @GetMapping("info")
