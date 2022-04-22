@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.admin.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +17,7 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface AdminMapper extends BaseMapperO<Admin> {
-    Page<Admin> selectPage(Page<Admin> page, @Param("ew") Wrapper<Admin> wrapper);
+    Page<Admin> selectPage(Page<Admin> page, @Param(Constants.WRAPPER) Wrapper<Admin> wrapper);
+
+    Admin selectToLogin(@Param(Constants.WRAPPER) Wrapper<Admin> eq);
 }

@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.Permission;
@@ -26,8 +27,9 @@ public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
 
-    @ApiOperation("授权列表")
     @GetMapping("list")
+    @SaCheckPermission("permission:list")
+    @ApiOperation("授权列表")
     public Result list() {
         List<Permission> permissions = permissionService.getPermissionList();
         return Result.success(permissions);

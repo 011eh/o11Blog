@@ -19,9 +19,7 @@
       <el-table-column align="center" prop="avatar" label="头像">
         <template slot-scope="{row,$index}">
           <el-avatar :size="65" :src="row.avatar" @error="true">
-            <img
-              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-            />
+            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"/>
           </el-avatar>
         </template>
       </el-table-column>

@@ -10,6 +10,11 @@
     <select id="selectPage" resultMap="admin">
         select a.id, a.username, a.nick_name, a.status, a.role_id roleId, a.avatar, r.name roleName
         from back_admin a
-                 left join back_role r on a.role_id = r.id
+             left join back_role r on a.role_id = r.id ${ew.customSqlSegment}
+    </select>
+    <select id="selectToLogin" resultType="com.o11eh.servicedemo.admin.entry.Admin">
+        select a.*, r.name roleName
+        from back_admin a
+             left join back_role r on a.role_id = r.id ${ew.customSqlSegment}
     </select>
 </mapper>

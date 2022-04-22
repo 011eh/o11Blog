@@ -63,9 +63,15 @@ const actions = {
         let {permissionKeys, routers, nickName, avatar} = data
 
         // roles must be a non-empty array
+        let msg = '该账号无权限进行访问';
+        let haveNoRouters = !routers || routers.length <= 0;
+        if (haveNoRouters) {
+          reject(msg)
+        }
         if (!permissionKeys || permissionKeys.length <= 0) {
           permissionKeys = [""]
         }
+
         commit('SET_ROLES', permissionKeys)
         commit('SET_NAME', nickName)
         commit('SET_AVATAR', avatar)

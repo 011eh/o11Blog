@@ -9,6 +9,7 @@ import com.o11eh.servicedemo.validation.ColumnsUnique;
 import com.o11eh.servicedemo.validation.RefId;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.hibernate.validator.constraints.br.TituloEleitoral;
 
 /**
  * <p>
@@ -32,6 +33,9 @@ public class Admin extends BaseEntry {
 
     @RefId("back_role")
     private String roleId;
+
+    @TableField(exist = false)
+    private String roleName;
     private String avatar;
     private Status status;
 

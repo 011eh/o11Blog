@@ -1,9 +1,7 @@
 package com.o11eh.servicedemo.admin.config;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.entry.RouterInfo;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import lombok.Data;
@@ -21,22 +19,20 @@ public class AuthInfo {
 
     private static final long serialVersionUID = 1L;
 
+    private String userId;
     private String nickName;
+    private String roleId;
     private String roleName;
     private String avatar;
-    private String roleId;
     private List<String> permissionKeys;
     private List<RouterInfo> routers;
 
     public AuthInfo(Admin admin) {
+        userId = admin.getId();
         nickName = admin.getNickName();
         avatar = admin.getAvatar();
         roleId = admin.getRoleId();
-
-        Role role = admin.getRole();
-        if (ObjectUtil.isNotNull(role)) {
-            roleName = role.getName();
-        }
+        roleName = admin.getRoleName();
     }
 
     public void setPermission(List<Permission> permissions) {

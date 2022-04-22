@@ -41,6 +41,16 @@ public class Result {
         return new Result(false, ResultCode.ERROR, message);
     }
 
+    public Result msg(String msg) {
+        this.msg = msg;
+        return this;
+    }
+
+    public Result code(int code) {
+        this.code = code;
+        return this;
+    }
+
     @Getter
     @Setter
     public static class ModelResult<T> extends Result {
