@@ -4,37 +4,34 @@ import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Configuration
 public class SaTokenConfig implements WebMvcConfigurer {
 
-    @AllArgsConstructor
-    static class InterceptRule {
-        private String path;
-        private SaHttpMethod method;
-        private String permissionKey;
-
-    }
-
-    public static final List<InterceptRule> INTERCEPT_RULES = new ArrayList<InterceptRule>() {{
-        add(new InterceptRule("/admin/page", SaHttpMethod.POST, "admin:list"));
-    }};
-
-    // 注册Sa-Token的注解拦截器，打开注解式鉴权功能
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SaRouteInterceptor((request, response, handler) -> {
+            SaRouter.match("/admin").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("admin:create"));
+            SaRouter.match("/admin").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("admin:update"));
+            SaRouter.match("/admin").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("admin:delete"));
+            SaRouter.match("/admin/page").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("admin:list"));
 
-            for (InterceptRule rule : INTERCEPT_RULES) {
-                SaRouter.match(rule.path).match(rule.method).check(() -> StpUtil.checkPermission(rule.permissionKey));
-            }
+            SaRouter.match("/role").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("role:create"));
+            SaRouter.match("/role").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("role:update"));
+            SaRouter.match("/role").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("role:delete"));
+            SaRouter.match("/role/page").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("role:list"));
+
+            SaRouter.match("/permission/{id}").notMatch("/permission/list").match(SaHttpMethod.GET).check(() -> StpUtil.checkPermission("permission:update"));
+            SaRouter.match("/permission/list").match(SaHttpMethod.GET).check(() -> StpUtil.checkPermission("permission:list"));
+            SaRouter.match("/permission").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("permission:create"));
+            SaRouter.match("/permission").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("permission:update"));
+            SaRouter.match("/permission").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("permission:delete"));
+
+            SaRouter.match("/sysConfig/permissionTree").check(() -> StpUtil.checkPermissionOr("role:create","role:update"));
+
         }));
     }
 }

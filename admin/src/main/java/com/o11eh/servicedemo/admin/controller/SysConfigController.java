@@ -42,8 +42,8 @@ public class SysConfigController {
     @ApiOperation("角色Dto列表")
     @GetMapping("roleDto")
     public Result roleDto() {
-        List<Role> treeVoList = roleService.dtoList();
-        return Result.success(treeVoList);
+        List<Role> dtoList = roleService.dtoList();
+        return Result.success(dtoList);
     }
 
 }

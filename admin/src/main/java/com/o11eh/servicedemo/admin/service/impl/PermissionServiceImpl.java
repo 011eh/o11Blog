@@ -102,9 +102,8 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
                 .collect(Collectors.groupingBy(
                         permission -> permission.getParentId() != null ? permission.getParentId() : rootParentId));
 
-        parentIdMap.values().stream().flatMap(Collection::stream).forEach(permission -> {
-            permission.setChildren(parentIdMap.get(permission.getId()));
-        });
+        parentIdMap.values().stream().flatMap(Collection::stream).forEach(permission ->
+                permission.setChildren(parentIdMap.get(permission.getId())));
 
         return parentIdMap.get(rootParentId);
     }
