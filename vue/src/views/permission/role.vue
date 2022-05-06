@@ -14,11 +14,11 @@
       <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
                 clearable class="filter-item"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 v-loading.fullscreen.lock="loading" :disabled="!checkPermission(['role:list'])">
+                  :disabled="!checkPermission(['role:list'])">
         查询
       </el-button>
     </div>
-    <el-table @selection-change="handleSelectionChange" :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
+    <el-table v-loading="this.loading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
       <el-table-column type="selection"/>
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="name" label="名称"/>

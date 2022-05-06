@@ -6,11 +6,11 @@
         添加
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
-                 v-loading.fullscreen.lock="loading" @click="list" :disabled="!checkPermission(['permission:list'])">
+                  @click="list" :disabled="!checkPermission(['permission:list'])">
         查询
       </el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%;" row-key="id" :expand-row-keys="expandRowIds" border
+    <el-table v-loading="this.loading" :data="tableData" style="width: 100%;" row-key="id" :expand-row-keys="expandRowIds" border
               :tree-props="{ children: 'children' }">
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="resourceType" label="资源类型">

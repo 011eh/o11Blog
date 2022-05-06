@@ -78,7 +78,7 @@
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
           <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                     :show-file-list="false" :on-success="uploadSuccess">
+                     :show-file-list="false" :on-success="uploadSuccess" :before-upload="beforeUpload">
             <img v-if="this.dataOperating.avatar" :src="this.dataOperating.avatar" class="avatar"/>
             <div v-else class="avatar-uploader-icon">
               <i class="el-icon-plus"/>
@@ -249,6 +249,14 @@ export default {
         nickName: '',
         roleId: null,
         status: '启用'
+      }
+    },
+
+    beforeUpload(file) {
+      console.log(file)
+      let type = file.type;
+      if (type === 'image/jpeg' || type === 'image/png') {
+        console.log('succ')
       }
     },
     uploadSuccess() {
