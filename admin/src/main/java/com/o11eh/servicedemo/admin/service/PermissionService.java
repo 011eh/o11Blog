@@ -17,7 +17,7 @@ public interface PermissionService extends BaseService<Permission> {
 
     void grantPermissions(String id, List<String> permissionIds, boolean doUpdate);
 
-    List<Permission> getPermissionIdsGranted(String roleId);
+    List<Permission> getPermissionGranted(String roleId);
 
     void revokePermissions(List<String> ids);
 

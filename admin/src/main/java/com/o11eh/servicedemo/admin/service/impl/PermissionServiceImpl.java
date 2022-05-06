@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
@@ -56,7 +57,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
     }
 
     @Override
-    public List<Permission> getPermissionIdsGranted(String roleId) {
+    public List<Permission> getPermissionGranted(String roleId) {
         List<Permission> permissionIds = permissionMapper.selectPermissionGranted(roleId);
         return permissionIds;
     }
@@ -69,7 +70,10 @@ public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Per
             if (doUpdate) {
                 mapper.deletePermissionGranted(roleId);
             }
-            permissionKeys.forEach(key -> mapper.grantPermission(roleId, key));
+            List<String> ids = this.list(Wrappers.<Permission>lambdaQuery().select(BaseEntry::getId)
+                            .in(CollUtil.isNotEmpty(permissionKeys), Permission::getPermissionKey, permissionKeys))
+                    .stream().map(BaseEntry::getId).collect(Collectors.toList());
+            ids.forEach(id -> mapper.grantPermission(roleId, id));
             session.commit();
         }
     }

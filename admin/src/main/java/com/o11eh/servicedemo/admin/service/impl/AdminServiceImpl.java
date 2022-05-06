@@ -48,7 +48,8 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
         Wrapper<Admin> wrapper = StrUtil.isBlank(param.getKeyword()) ?
                 Wrappers.emptyWrapper() : Wrappers.<Admin>lambdaQuery().like(Admin::getUsername, param.getKeyword())
                 .or(queryWrapper -> queryWrapper.like(Admin::getNickName, param.getKeyword()));
-        return super.page(param.getCurrent(), param.getSize(), wrapper);
+
+        return adminMapper.selectPage(new Page<>(param.getCurrent(), param.getSize()), wrapper);
     }
 
     @Override

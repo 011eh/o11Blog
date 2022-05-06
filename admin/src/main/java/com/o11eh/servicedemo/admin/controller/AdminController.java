@@ -45,21 +45,21 @@ public class AdminController extends BaseController {
     @ApiOperation(Constants.Doc.ADD)
     public Result create(@Valid @RequestBody AdminVo adminVo) {
         Admin admin = BeanUtil.copyProperties(adminVo, Admin.class);
-        String id = adminService.create(admin);
-        return Result.success(id);
+        adminService.create(admin);
+        return Result.successShowMsg();
     }
 
     @ApiOperation(Constants.Doc.UPDATE)
     @PutMapping
     public Result update(@Valid @RequestBody Admin admin) {
-        String id = adminService.update(admin);
-        return Result.success(id);
+        adminService.update(admin);
+        return Result.successShowMsg();
     }
 
     @DeleteMapping
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     public Result delete(@RequestBody List<Long> ids) {
         adminService.removeBatchByIds(ids);
-        return Result.success();
+        return Result.successShowMsg();
     }
 }

@@ -30,7 +30,9 @@ public class SaTokenConfig implements WebMvcConfigurer {
             SaRouter.match("/permission").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("permission:update"));
             SaRouter.match("/permission").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("permission:delete"));
 
+            SaRouter.match("/sysConfig/roleDto").check(() -> StpUtil.checkPermissionOr("admin:create","admin:update"));
             SaRouter.match("/sysConfig/permissionTree").check(() -> StpUtil.checkPermissionOr("role:create","role:update"));
+            SaRouter.match("/sysConfig/permissionDto").check(() -> StpUtil.checkPermissionOr("permission:create","permission:update"));
 
         }));
     }

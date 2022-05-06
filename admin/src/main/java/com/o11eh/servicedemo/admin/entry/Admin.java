@@ -38,9 +38,4 @@ public class Admin extends BaseEntry {
     private String roleName;
     private String avatar;
     private Status status;
-
-    @JsonUnwrapped(suffix = "Role")
-    @TableField(exist = false)
-    private Role role;
-
 }

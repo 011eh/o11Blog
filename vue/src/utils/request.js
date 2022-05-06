@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import {Notification, Message, MessageBox} from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
-
+import {showMsg, success} from "@/utils/msg";
 // create an axios instance
 const service = axios.create({
   baseURL: '/api', // url = base url + request url
@@ -46,12 +45,14 @@ service.interceptors.response.use(
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.success === false) {
-      Message({
-        message: res.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
+    if (!success(res.code)) {
+      if (showMsg(res.code)) {
+        Notification({
+          title: '错误',
+          message: res.msg || '未知错误',
+          type: 'error'
+        })
+      }
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
@@ -64,7 +65,7 @@ service.interceptors.response.use(
           store.dispatch('user/resetToken').then(() => {
             location.reload()
           })
-        })
+        });
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {

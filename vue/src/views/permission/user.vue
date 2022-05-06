@@ -1,18 +1,27 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="handleDeleteMulti">
+        <template #reference>
+          <el-button class="filter-item" type="danger" icon="el-icon-delete" plain circle
+                     :disabled="!checkPermission(['admin:update'])"/>
+        </template>
+      </el-popconfirm>
+
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
                  :disabled="!checkPermission(['admin:create'])">
         添加
       </el-button>
-      <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
+      <el-input v-model="pageReq.keyword" placeholder="用户名/昵称" style="width: 200px; margin-left: 10px"
                 clearable class="filter-item"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 v-loading.fullscreen.lock="loading" :disabled="!checkPermission(['admin:list'])">
+                 :disabled="!checkPermission(['admin:list'])">
         查询
       </el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
+    <el-table ref="table" v-loading="this.loading" :data="tableData" style="width: 100%;" row-key="id"
+              @selection-change="handleSelectionChange" :max-height="tableMaxHeight">
+      <el-table-column type="selection"/>
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="username" label="用户名"/>
       <el-table-column align="center" prop="nickName" label="昵称"/>
@@ -23,7 +32,13 @@
           </el-avatar>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="nameRole" label="角色">
+      <el-table-column align="center" prop="roleName" label="角色">
+        <template slot-scope="{row,$index}">
+          <div v-if="!row.roleName">无</div>
+          <div v-else>
+            {{ row.roleName }}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column align="center" prop="status" label="状态">
         <template slot-scope="{row}">
@@ -36,7 +51,7 @@
                      :disabled="!checkPermission(['admin:update'])">
             编辑
           </el-button>
-          <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
+          <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="doDelete(row.id)">
             <template #reference>
               <el-button type="danger" size="small" :disabled="!checkPermission(['admin:delete'])">
                 删除
@@ -56,7 +71,8 @@
           <el-input v-model="dataOperating.nickName"/>
         </el-form-item>
         <el-form-item label="角色" prop="roleId">
-          <el-select v-model="dataOperating.roleId" class="m-2" @change="roleChange" placeholder="无">
+          <el-select v-model="dataOperating.roleId" class="m-2" placeholder="无">
+            <el-option key="" label="无" value=""/>
             <el-option v-for="item in roleOptions" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
@@ -112,17 +128,22 @@
 import {
   dialogFormVisible,
   dialogStatus,
+  handlePageChange,
+  handleSizeChange,
   loading,
   operationMap,
   pageReq,
   pagination,
+  selected,
+  prevPageIfPageLastOne,
   tableData,
   tableMaxHeight,
-  tagFilter
+  tagFilter, handleDeleteMulti, deleteMulti, handleSelectionChange
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysConfig";
 import {create, doDelete, page, update} from "@/api/admin";
 import checkPermission from "@/utils/permission";
+import {successMsg} from "@/utils/msg";
 
 export default {
   created() {
@@ -137,12 +158,13 @@ export default {
       dialogFormVisible,
       dialogStatus,
       tableData,
+      selected:Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {
         username: '',
         nickName: '',
-        roleId: '',
+        roleId: null,
         status: '启用'
       },
       roleOptions: [],
@@ -183,8 +205,10 @@ export default {
     },
     doDelete(id) {
       return new Promise(() => {
-        doDelete([id]).then(() => {
+        doDelete([id]).then((res) => {
+          this.prevPageIfPageLastOne()
           this.page();
+          this.successMsg(res);
         });
       });
     },
@@ -195,25 +219,22 @@ export default {
     },
     createData() {
       return new Promise(() => {
-        create(this.dataOperating).then(() => {
+        create(this.dataOperating).then(res => {
           this.dialogFormVisible = false;
+          this.resetDataOperating();
           this.page();
+          this.successMsg(res);
         });
       });
     },
     updateData() {
       return new Promise(() => {
-        update(this.dataOperating).then(() => {
+        update(this.dataOperating).then((res) => {
           this.dialogFormVisible = false;
           this.page();
+          this.successMsg(res);
         });
       });
-    },
-    handlePageChange() {
-    },
-    handleSizeChange() {
-    },
-    roleChange(value) {
     },
     getRoleSelect() {
       return new Promise(() => {
@@ -226,14 +247,27 @@ export default {
       this.dataOperating = {
         username: '',
         nickName: '',
-        roleId: '',
+        roleId: null,
         status: '启用'
       }
     },
     uploadSuccess() {
       console.log('success');
     },
-    checkPermission
+    deleteMulti(ids) {
+      doDelete(ids).then((res) => {
+        this.prevPageIfPageLastOne()
+        this.page();
+        this.successMsg(res);
+      })
+    },
+    handleSelectionChange,
+    handleDeleteMulti,
+    checkPermission,
+    prevPageIfPageLastOne,
+    handlePageChange,
+    handleSizeChange,
+    successMsg
   },
   filters: {
     tagFilter,

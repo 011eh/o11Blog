@@ -245,9 +245,11 @@ export default {
     this.list()
     this.getParentSelect()
   },
-  computed: {
+  methods: {
     parentOptionFilter() {
+      debugger
       return this.parentOptions.filter(p => {
+        debugger
         if (this.dataOperating.id === p.id) {
           return false;
         }
@@ -257,8 +259,6 @@ export default {
         return p.resourceType !== '操作';
       })
     },
-  },
-  methods: {
     list() {
       if (!checkPermission(['permission:list'])) {
         return;

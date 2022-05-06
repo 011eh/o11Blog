@@ -29,6 +29,12 @@ public class Result {
         return new Result(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
     }
 
+    public static <T> Result successShowMsg() {
+        Result result = new Result(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
+        result.code += 1000;
+        return result;
+    }
+
     public static <T> Result success(T Data) {
         return new ModelResult<>(Data);
     }

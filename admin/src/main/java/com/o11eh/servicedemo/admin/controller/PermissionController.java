@@ -66,7 +66,7 @@ public class PermissionController extends BaseController {
 
     @GetMapping("granted/{roleId}")
     public Result getRolePermissions(@PathVariable String roleId) {
-        List<Permission> permissionIds = permissionService.getPermissionIdsGranted(roleId);
+        List<Permission> permissionIds = permissionService.getPermissionGranted(roleId);
         return Result.success(permissionIds);
     }
 }

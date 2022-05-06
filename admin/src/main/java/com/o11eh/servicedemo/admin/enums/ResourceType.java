@@ -9,14 +9,15 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ResourceType {
 
-    MENU("一级菜单", 0),
-    SUB_MENU("二级菜单", 1),
-    OPERATION("操作", 2);
+    MENU(0, "一级菜单", 0),
+    SUB_MENU(1, "二级菜单", 1),
+    OPERATION(2, "操作", 2);
+
+    @EnumValue
+    private final int value;
 
     @JsonValue
-    @EnumValue
     private final String type;
-
     private final int sort;
 
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.o11eh.servicedemo.admin.mapper.PermissionMapper">
     <insert id="grantPermission">
-        insert into back_role_permission(role_id, permission_key) value (#{roleId}, #{key});
+        insert into back_role_permission(role_id, permission_id) value (#{roleId}, #{permissionId});
     </insert>
     <delete id="deletePermissionGranted">
         delete
@@ -17,7 +17,7 @@
     <select id="selectPermissionGranted" resultMap="permission">
         select p.*
         from back_permission p
-             join back_role_permission rp on p.permission_key = rp.permission_key
+             join back_role_permission rp on p.id = rp.permission_id
         where role_id = #{roleId}
     </select>
 
@@ -25,7 +25,7 @@
         select p.*
         from back_role r
              left join back_role_permission rp on r.id = rp.role_id
-             left join back_permission p on rp.permission_key = p.permission_key
+             left join back_permission p on rp.permission_id = p.id
         where r.id = #{roleid}
           and r.status = 1
           and p.status = 1

@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="handleDeleteMulti">
+        <template #reference>
+          <el-button class="filter-item" type="danger" icon="el-icon-delete" plain circle
+                     :disabled="!checkPermission(['role:update'])"/>
+        </template>
+      </el-popconfirm>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
                  :disabled="!checkPermission(['role:create'])">
         添加
@@ -12,7 +18,8 @@
         查询
       </el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
+    <el-table @selection-change="handleSelectionChange" :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
+      <el-table-column type="selection"/>
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="summary" label="简介"/>
@@ -111,20 +118,26 @@
 <script>
 
 import {
+  deleteMulti,
   dialogFormVisible,
-  dialogStatus,
+  dialogStatus, handleDeleteMulti,
+  handlePageChange,
+  handleSizeChange,
+  selected,
   loading,
   operationMap,
   pageReq,
   pagination,
+  prevPageIfPageLastOne,
   tableData,
   tableMaxHeight,
-  tagFilter
+  tagFilter, handleSelectionChange
 } from "@/utils/tableBase";
 import {permissionTree} from "@/api/sysConfig";
 import {create, doDelete, page, update} from "@/api/role";
 import {grantedTo} from "@/api/permission";
 import checkPermission from "@/utils/permission";
+import {successMsg} from "@/utils/msg";
 
 export default {
   created() {
@@ -139,6 +152,7 @@ export default {
       dialogStatus,
       loading,
       operationMap,
+      selected:Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {
@@ -197,6 +211,7 @@ export default {
           this.dialogFormVisible = false;
           this.resetDataOperating();
           this.page();
+          this.successMsg()
         });
       });
     },
@@ -205,13 +220,16 @@ export default {
         update(this.dataOperating).then(() => {
           this.dialogFormVisible = false;
           this.page();
+          this.successMsg()
         })
       });
     },
     doDelete(id) {
       new Promise(() => {
         doDelete([id]).finally(() => {
+          this.prevPageIfPageLastOne()
           this.page();
+          this.successMsg()
         });
       });
     },
@@ -281,21 +299,19 @@ export default {
         });
       });
     },
-    handlePageChange(currentPage) {
-      this.pagination.current = currentPage;
-      let {current, size} = this.pagination;
-      this.pageReq.current = current
-      this.pageReq.size = size
-      this.page();
+    deleteMulti(ids) {
+      doDelete(ids).then((res) => {
+        this.prevPageIfPageLastOne()
+        this.page();
+        this.successMsg(res);
+      })
     },
-    handleSizeChange(currentSize) {
-      this.pagination.size = currentSize;
-      let {current, size} = this.pagination;
-      this.pageReq.current = current;
-      this.pageReq.size = size;
-      this.page();
-    },
-    checkPermission
+    handlePageChange,
+    handleSizeChange,
+    checkPermission,
+    prevPageIfPageLastOne,
+    handleDeleteMulti,
+    handleSelectionChange,
   },
   filters: {
     tagFilter
