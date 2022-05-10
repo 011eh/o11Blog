@@ -48,6 +48,7 @@ public class AuthInfo {
         Map<String, List<RouterInfo>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
                 .map(permission -> {
                     RouterInfo routerInfo = permission.getRouterInfo();
+                    routerInfo.setName(permission.getName());
                     routerInfo.setId(permission.getId());
                     routerInfo.setParentId(permission.getParentId());
                     return routerInfo;
