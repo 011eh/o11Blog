@@ -22,12 +22,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotPermissionException.class)
     public Result handle2(NotPermissionException e) {
         e.printStackTrace();
-        return Result.error("无权限进行访问").code(1401);
+        return Result.error("无权限进行访问").code(401);
     }
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handle3(MethodArgumentNotValidException e) {
         e.printStackTrace();
-        return Result.error(e.getMessage()).code(1402);
+        return Result.error(e.getMessage()).code(402);
     }
 }

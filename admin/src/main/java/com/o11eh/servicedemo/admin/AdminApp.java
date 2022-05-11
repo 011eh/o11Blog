@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin;
 
+import com.o11eh.servicedemo.admin.util.UploadUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

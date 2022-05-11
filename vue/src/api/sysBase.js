@@ -2,21 +2,21 @@ import request from "@/utils/request";
 
 export function permissionSelect() {
   return request({
-    url: `/sysConfig/permissionDto`,
+    url: `/sysBase/permissionDto`,
     method: 'get',
   });
 }
 
 export function permissionTree() {
   return request({
-    url: `/sysConfig/permissionTree`,
+    url: `/sysBase/permissionTree`,
     method: 'get',
   });
 }
 
 export function roleSelect() {
   return request({
-    url: `/sysConfig/roleDto`,
+    url: `/sysBase/roleDto`,
     method: 'get',
   });
 }

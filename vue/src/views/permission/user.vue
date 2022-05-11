@@ -77,7 +77,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
-          <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+          <el-upload class="avatar-uploader" action="http://localhost:9527/api/sysBase/uploadAvatar"
                      :show-file-list="false" :on-success="uploadSuccess" :before-upload="beforeUpload">
             <img v-if="this.dataOperating.avatar" :src="this.dataOperating.avatar" class="avatar"/>
             <div v-else class="avatar-uploader-icon">
@@ -140,7 +140,7 @@ import {
   tableMaxHeight,
   tagFilter, handleDeleteMulti, deleteMulti, handleSelectionChange
 } from "@/utils/tableBase";
-import {roleSelect} from "@/api/sysConfig";
+import {roleSelect} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/admin";
 import checkPermission from "@/utils/permission";
 import {successMsg} from "@/utils/msg";

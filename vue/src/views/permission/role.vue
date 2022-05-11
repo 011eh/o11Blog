@@ -133,7 +133,7 @@ import {
   tableMaxHeight,
   tagFilter, handleSelectionChange
 } from "@/utils/tableBase";
-import {permissionTree} from "@/api/sysConfig";
+import {permissionTree} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/role";
 import {grantedTo} from "@/api/permission";
 import checkPermission from "@/utils/permission";

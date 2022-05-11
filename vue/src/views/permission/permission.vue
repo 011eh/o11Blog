@@ -198,7 +198,7 @@ import {routerMap} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
 import {dialogFormVisible, dialogStatus, loading, operationMap, tableData, tagFilter} from '@/utils/tableBase'
-import {permissionSelect} from "@/api/sysConfig";
+import {permissionSelect} from "@/api/sysBase";
 import checkPermission from '@/utils/permission.js'
 
 export default {
