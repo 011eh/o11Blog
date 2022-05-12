@@ -116,7 +116,7 @@
       </div>
     </el-footer>
     <my-upload field="file" v-model="toggle" :width="200" :height="200"
-               url="http://localhost:9527/api/sysBase/uploadAvatar" img-format="jpg" @cropUploadSuccess="uploadSuccess"/>
+               url="http://localhost:9527/api/sysBase/uploadAvatar" img-format="jpg" @crop-upload-success="uploadSuccess"/>
   </div>
 </template>
 
@@ -255,8 +255,8 @@ export default {
         status: '启用'
       }
     },
-    uploadSuccess(jsonData, field) {
-      console.log(jsonData, field)
+    uploadSuccess(result) {
+      this.dataOperating.avatar = result.data;
     },
     deleteMulti(ids) {
       doDelete(ids).then((res) => {

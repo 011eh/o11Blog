@@ -1,13 +1,11 @@
 package com.o11eh.servicedemo.admin.controller;
 
-import cn.hutool.core.img.ImgUtil;
-import cn.hutool.core.io.FileUtil;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
-import com.o11eh.servicedemo.admin.service.UploadService;
+import com.o11eh.servicedemo.admin.service.OsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,7 @@ public class SysBaseController {
     private RoleService roleService;
 
     @Autowired
-    private UploadService uploadService;
+    private OsService osService;
 
     @ApiOperation("权限Dto列表")
     @GetMapping("permissionDto")
@@ -57,8 +55,8 @@ public class SysBaseController {
     @ApiOperation("头像上传")
     @PostMapping("uploadAvatar")
     public Result uploadAvatar(MultipartFile file) {
-        uploadService.uploadFile(file);
-        return Result.success();
+        String url = osService.uploadFile(file);
+        return Result.success(url);
     }
 
 }
