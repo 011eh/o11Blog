@@ -24,11 +24,11 @@ export default {
     },
     width: {
       type: String,
-      default: '150px'
+      default: '120px'
     },
     height: {
       type: String,
-      default: '150px'
+      default: '120px'
     }
   }
 }
@@ -131,9 +131,9 @@ export default {
   background: rgba(255, 255, 255, 0.5);
 }
 
-.pan-item:hover .pan-thumb {
-  transform: rotate(-110deg);
-}
+/*.pan-item:hover .pan-thumb {*/
+/*  transform: rotate(-110deg);*/
+/*}*/
 
 .pan-item:hover .pan-info p a {
   opacity: 1;

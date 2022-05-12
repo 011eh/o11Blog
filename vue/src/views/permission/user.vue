@@ -77,13 +77,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
-          <el-upload class="avatar-uploader" action="http://localhost:9527/api/sysBase/uploadAvatar"
-                     :show-file-list="false" :on-success="uploadSuccess" :before-upload="beforeUpload">
-            <img v-if="this.dataOperating.avatar" :src="this.dataOperating.avatar" class="avatar"/>
-            <div v-else class="avatar-uploader-icon">
-              <i class="el-icon-plus"/>
-            </div>
-          </el-upload>
+          <pan-thumb v-if="this.dataOperating.avatar" :image="this.dataOperating.avatar"/>
+          <pan-thumb v-else image="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"/>
+          <el-button @click="uploaderToggle">设置头像</el-button>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-switch
@@ -119,31 +115,37 @@
         />
       </div>
     </el-footer>
+    <my-upload field="file" v-model="toggle" :width="200" :height="200"
+               url="http://localhost:9527/api/sysBase/uploadAvatar" img-format="jpg" @cropUploadSuccess="uploadSuccess"/>
   </div>
 </template>
 
 
 <script>
 
+import PanThumb from '@/components/PanThumb'
 import {
   dialogFormVisible,
   dialogStatus,
+  handleDeleteMulti,
   handlePageChange,
+  handleSelectionChange,
   handleSizeChange,
   loading,
   operationMap,
   pageReq,
   pagination,
-  selected,
   prevPageIfPageLastOne,
+  selected,
   tableData,
   tableMaxHeight,
-  tagFilter, handleDeleteMulti, deleteMulti, handleSelectionChange
+  tagFilter
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/admin";
 import checkPermission from "@/utils/permission";
 import {successMsg} from "@/utils/msg";
+import myUpload from 'vue-image-crop-upload/upload-2.vue'
 
 export default {
   created() {
@@ -158,7 +160,7 @@ export default {
       dialogFormVisible,
       dialogStatus,
       tableData,
-      selected:Object.assign({}, selected),
+      selected: Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {
@@ -168,6 +170,8 @@ export default {
         status: '启用'
       },
       roleOptions: [],
+      toggle: false,
+
     }
   },
   methods: {
@@ -251,16 +255,8 @@ export default {
         status: '启用'
       }
     },
-
-    beforeUpload(file) {
-      console.log(file)
-      let type = file.type;
-      if (type === 'image/jpeg' || type === 'image/png') {
-        console.log('succ')
-      }
-    },
-    uploadSuccess() {
-      console.log('success');
+    uploadSuccess(jsonData, field) {
+      console.log(jsonData, field)
     },
     deleteMulti(ids) {
       doDelete(ids).then((res) => {
@@ -268,6 +264,9 @@ export default {
         this.page();
         this.successMsg(res);
       })
+    },
+    uploaderToggle() {
+      this.toggle = !this.toggle;
     },
     handleSelectionChange,
     handleDeleteMulti,
@@ -279,7 +278,8 @@ export default {
   },
   filters: {
     tagFilter,
-  }
+  },
+  components: {myUpload, PanThumb}
 }
 </script>
 
