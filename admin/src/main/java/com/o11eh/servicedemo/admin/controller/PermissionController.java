@@ -7,7 +7,7 @@ import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
 import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.validation.StringId;
+import com.o11eh.servicedemo.admin.config.validation.StringId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

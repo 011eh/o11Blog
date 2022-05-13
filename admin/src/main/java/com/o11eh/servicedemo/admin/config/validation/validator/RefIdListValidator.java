@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.validation.validator;
+package com.o11eh.servicedemo.admin.config.validation.validator;
 
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;

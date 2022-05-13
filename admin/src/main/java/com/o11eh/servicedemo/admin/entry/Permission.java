@@ -5,23 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.BeanDeserializer;
-import com.fasterxml.jackson.databind.deser.std.ThrowableDeserializer;
-import com.fasterxml.jackson.databind.ser.BeanSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.enums.Status;
-import com.o11eh.servicedemo.validation.ColumnsUnique;
-import com.o11eh.servicedemo.validation.RefId;
+import com.o11eh.servicedemo.admin.config.validation.ColumnsUnique;
+import com.o11eh.servicedemo.admin.config.validation.RefId;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.xml.validation.TypeInfoProvider;
 import java.util.List;
 
 /**

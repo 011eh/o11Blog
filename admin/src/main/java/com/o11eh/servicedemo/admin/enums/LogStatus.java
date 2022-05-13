@@ -7,17 +7,15 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ResourceType {
+public enum LogStatus {
 
-    MENU(0, "一级菜单", 0),
-    SUB_MENU(1, "二级菜单", 1),
-    OPERATION(2, "操作", 2);
+    SUCCESS(0, "成功"),
+    FAIL(1, "失败");
 
     @EnumValue
     private final int DBValue;
 
     @JsonValue
-    private final String type;
-    private final int sort;
+    private final String logStatus;
 
 }

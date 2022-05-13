@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.o11eh.servicedemo.validation.StringId;
+import com.o11eh.servicedemo.admin.config.validation.StringId;
 import lombok.Getter;
 import lombok.Setter;
 

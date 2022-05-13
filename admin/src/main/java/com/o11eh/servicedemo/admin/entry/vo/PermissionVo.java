@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.entry.RouterInfo;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import com.o11eh.servicedemo.admin.enums.Status;
-import com.o11eh.servicedemo.validation.RefId;
+import com.o11eh.servicedemo.admin.config.validation.RefId;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

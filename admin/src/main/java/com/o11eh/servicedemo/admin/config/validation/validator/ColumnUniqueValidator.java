@@ -1,9 +1,9 @@
-package com.o11eh.servicedemo.validation.validator;
+package com.o11eh.servicedemo.admin.config.validation.validator;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.o11eh.servicedemo.admin.mapper.BaseMapper;
-import com.o11eh.servicedemo.validation.ColumnsUnique;
+import com.o11eh.servicedemo.admin.config.validation.ColumnsUnique;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

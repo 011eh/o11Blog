@@ -1,7 +1,7 @@
-package com.o11eh.servicedemo.validation;
+package com.o11eh.servicedemo.admin.config.validation;
 
-import com.o11eh.servicedemo.validation.validator.RefIdListValidator;
-import com.o11eh.servicedemo.validation.validator.RefIdValidator;
+import com.o11eh.servicedemo.admin.config.validation.validator.RefIdListValidator;
+import com.o11eh.servicedemo.admin.config.validation.validator.RefIdValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

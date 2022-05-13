@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.o11eh.servicedemo.admin.enums.Status;
-import com.o11eh.servicedemo.validation.RefId;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

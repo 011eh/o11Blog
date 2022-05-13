@@ -1,6 +1,6 @@
-package com.o11eh.servicedemo.validation;
+package com.o11eh.servicedemo.admin.config.validation;
 
-import com.o11eh.servicedemo.validation.validator.ColumnUniqueValidator;
+import com.o11eh.servicedemo.admin.config.validation.validator.ColumnUniqueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,9 +1,8 @@
-package com.o11eh.servicedemo.validation.validator;
+package com.o11eh.servicedemo.admin.config.validation.validator;
 
-import com.o11eh.servicedemo.validation.StringId;
+import com.o11eh.servicedemo.admin.config.validation.StringId;
 
 import javax.validation.ConstraintValidatorContext;
-import java.util.regex.Pattern;
 
 public class StringIdValidator extends AbstractStringIdValidator<String> {
 

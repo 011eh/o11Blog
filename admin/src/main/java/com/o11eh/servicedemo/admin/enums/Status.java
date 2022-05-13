@@ -11,7 +11,7 @@ public enum Status {
     Enable(1, "启用");
 
     @EnumValue
-    private int dBValue;
+    private int DBValue;
 
     @JsonValue
     private final String status;
