@@ -38,8 +38,7 @@ public class SysLog implements Serializable {
                   String method,
                   Object params,
                   LogStatus logStatus,
-                  int timeCost,
-                  String exceptionMessage) {
+                  int timeCost) {
         this.userId = userId;
         this.ip = ip;
         this.operation = operation;
