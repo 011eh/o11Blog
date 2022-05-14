@@ -21,7 +21,7 @@
     </div>
     <el-table ref="table" v-loading="this.loading" :data="tableData" style="width: 100%;" row-key="id"
               @selection-change="handleSelectionChange" :max-height="tableMaxHeight">
-      <el-table-column type="selection"/>
+      <el-table-column align="center" type="selection"/>
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="username" label="用户名"/>
       <el-table-column align="center" prop="nickName" label="昵称"/>
@@ -144,7 +144,6 @@ import {
 import {roleSelect} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/admin";
 import checkPermission from "@/utils/permission";
-import {successMsg} from "@/utils/msg";
 import myUpload from 'vue-image-crop-upload/upload-2.vue'
 
 export default {
@@ -212,7 +211,6 @@ export default {
         doDelete([id]).then((res) => {
           this.prevPageIfPageLastOne()
           this.page();
-          this.successMsg(res);
         });
       });
     },
@@ -221,22 +219,27 @@ export default {
         this.resetDataOperating();
       }
     },
+    setRoleIdNullIfNoSet(data) {
+      if (data.roleId === "") {
+        data.roleId = null;
+      }
+    },
     createData() {
+      this.setRoleIdNullIfNoSet(this.dataOperating)
       return new Promise(() => {
         create(this.dataOperating).then(res => {
           this.dialogFormVisible = false;
           this.resetDataOperating();
           this.page();
-          this.successMsg(res);
         });
       });
     },
     updateData() {
+      this.setRoleIdNullIfNoSet(this.dataOperating)
       return new Promise(() => {
         update(this.dataOperating).then((res) => {
           this.dialogFormVisible = false;
           this.page();
-          this.successMsg(res);
         });
       });
     },
@@ -262,7 +265,6 @@ export default {
       doDelete(ids).then((res) => {
         this.prevPageIfPageLastOne()
         this.page();
-        this.successMsg(res);
       })
     },
     uploaderToggle() {
@@ -274,7 +276,6 @@ export default {
     prevPageIfPageLastOne,
     handlePageChange,
     handleSizeChange,
-    successMsg
   },
   filters: {
     tagFilter,

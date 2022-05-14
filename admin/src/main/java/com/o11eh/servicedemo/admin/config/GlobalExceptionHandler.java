@@ -28,6 +28,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handle3(MethodArgumentNotValidException e) {
         e.printStackTrace();
-        return Result.error(e.getMessage()).code(402);
+        return Result.error(e.getMessage()).code(1402);
     }
 }

@@ -14,12 +14,12 @@
       <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
                 clearable class="filter-item"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                  :disabled="!checkPermission(['role:list'])">
+                 :disabled="!checkPermission(['role:list'])">
         查询
       </el-button>
     </div>
     <el-table v-loading="this.loading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
-      <el-table-column type="selection"/>
+      <el-table-column align="center" type="selection"/>
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="summary" label="简介"/>
@@ -118,26 +118,26 @@
 <script>
 
 import {
-  deleteMulti,
   dialogFormVisible,
-  dialogStatus, handleDeleteMulti,
+  dialogStatus,
+  handleDeleteMulti,
   handlePageChange,
+  handleSelectionChange,
   handleSizeChange,
-  selected,
   loading,
   operationMap,
   pageReq,
   pagination,
   prevPageIfPageLastOne,
+  selected,
   tableData,
   tableMaxHeight,
-  tagFilter, handleSelectionChange
+  tagFilter
 } from "@/utils/tableBase";
 import {permissionTree} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/role";
 import {grantedTo} from "@/api/permission";
 import checkPermission from "@/utils/permission";
-import {successMsg} from "@/utils/msg";
 
 export default {
   created() {
@@ -152,7 +152,7 @@ export default {
       dialogStatus,
       loading,
       operationMap,
-      selected:Object.assign({}, selected),
+      selected: Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {
@@ -211,7 +211,6 @@ export default {
           this.dialogFormVisible = false;
           this.resetDataOperating();
           this.page();
-          this.successMsg()
         });
       });
     },
@@ -220,7 +219,6 @@ export default {
         update(this.dataOperating).then(() => {
           this.dialogFormVisible = false;
           this.page();
-          this.successMsg()
         })
       });
     },
@@ -229,7 +227,6 @@ export default {
         doDelete([id]).finally(() => {
           this.prevPageIfPageLastOne()
           this.page();
-          this.successMsg()
         });
       });
     },
@@ -300,10 +297,9 @@ export default {
       });
     },
     deleteMulti(ids) {
-      doDelete(ids).then((res) => {
+      doDelete(ids).then(() => {
         this.prevPageIfPageLastOne()
         this.page();
-        this.successMsg(res);
       })
     },
     handlePageChange,

@@ -1,9 +1,9 @@
 package com.o11eh.servicedemo.admin.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.PageReq;
@@ -34,6 +34,7 @@ public class AdminController extends BaseController {
     @Autowired
     private AdminService adminService;
 
+    @Log("管理员分页查询")
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq param) {
@@ -41,6 +42,7 @@ public class AdminController extends BaseController {
         return Result.success(page);
     }
 
+    @Log("管理员新建")
     @PostMapping
     @ApiOperation(Constants.Doc.ADD)
     public Result create(@Valid @RequestBody AdminVo adminVo) {
@@ -49,6 +51,7 @@ public class AdminController extends BaseController {
         return Result.successShowMsg();
     }
 
+    @Log("管理员更新")
     @ApiOperation(Constants.Doc.UPDATE)
     @PutMapping
     public Result update(@Valid @RequestBody Admin admin) {
@@ -56,6 +59,7 @@ public class AdminController extends BaseController {
         return Result.successShowMsg();
     }
 
+    @Log("管理员删除")
     @DeleteMapping
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     public Result delete(@RequestBody List<Long> ids) {

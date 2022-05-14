@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.AuthService;
@@ -22,7 +23,7 @@ public class AuthController {
 
     @ApiOperation("认证")
     @PostMapping("/login")
-    public Result login(@Valid @RequestParam String username, @Valid @RequestParam String password, boolean rememberMe) {
+    public Result login(@Valid @RequestParam String username, @Valid @RequestParam String password) {
         String token = authService.login(username, password);
         return Result.success(token);
     }

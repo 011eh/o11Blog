@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.o11eh.servicedemo.admin.enums.LogStatus;
 import lombok.Data;
 
@@ -19,8 +20,11 @@ public class SysLog implements Serializable {
     private String ip;
     private String operation;
     private String controller;
-    private String url;
     private String method;
+    private String uri;
+    private String httpMethod;
+
+    @TableField(typeHandler = JacksonTypeHandler.class)
     private Object params;
     private LogStatus logStatus;
     private int timeCost;
@@ -34,20 +38,24 @@ public class SysLog implements Serializable {
                   String ip,
                   String operation,
                   String controller,
-                  String url,
                   String method,
+                  String uri,
+                  String httpMethod,
                   Object params,
                   LogStatus logStatus,
-                  int timeCost) {
+                  int timeCost,
+                  String exception) {
         this.userId = userId;
         this.ip = ip;
         this.operation = operation;
         this.controller = controller;
-        this.url = url;
         this.method = method;
+        this.uri = uri;
+        this.httpMethod = httpMethod;
         this.params = params;
         this.logStatus = logStatus;
         this.timeCost = timeCost;
-        this.exceptionMessage = exceptionMessage;
+        this.exceptionMessage = exception;
     }
+
 }

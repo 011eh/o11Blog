@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {Notification, Message, MessageBox} from 'element-ui'
+import {Message, MessageBox, Notification} from 'element-ui'
 import store from '@/store'
-import {showMsg, success} from "@/utils/msg";
+import {showMsg, success, successMsg} from "@/utils/msg";
 // create an axios instance
 const service = axios.create({
   baseURL: '/api', // url = base url + request url
@@ -43,6 +43,9 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+
+    successMsg(res)
+
 
     // if the custom code is not 20000, it is judged as an error.
     if (!success(res.code)) {
