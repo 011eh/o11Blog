@@ -1,7 +1,6 @@
 package com.o11eh.servicedemo.admin.entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
 import java.util.List;

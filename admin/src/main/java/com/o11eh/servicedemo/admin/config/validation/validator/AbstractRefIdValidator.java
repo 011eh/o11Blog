@@ -1,7 +1,7 @@
 package com.o11eh.servicedemo.admin.config.validation.validator;
 
-import com.o11eh.servicedemo.admin.mapper.BaseMapper;
 import com.o11eh.servicedemo.admin.config.validation.RefId;
+import com.o11eh.servicedemo.admin.mapper.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

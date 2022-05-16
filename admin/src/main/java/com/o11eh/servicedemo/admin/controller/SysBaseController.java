@@ -1,18 +1,15 @@
 package com.o11eh.servicedemo.admin.controller;
 
-import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.entry.Result;
-import com.o11eh.servicedemo.admin.entry.Role;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.entry.*;
+import com.o11eh.servicedemo.admin.service.OsService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import com.o11eh.servicedemo.admin.service.RoleService;
-import com.o11eh.servicedemo.admin.service.OsService;
+import com.o11eh.servicedemo.admin.service.SysLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -30,6 +27,8 @@ public class SysBaseController {
 
     @Autowired
     private OsService osService;
+
+    private SysLogService sysLogService;
 
     @ApiOperation("权限Dto列表")
     @GetMapping("permissionDto")
@@ -59,4 +58,9 @@ public class SysBaseController {
         return Result.success(url);
     }
 
+    @PostMapping
+    public Result getSysLog(@RequestBody PageReq req) {
+        Page<SysLog> page = sysLogService.page(req.getCurrent(), req.getSize());
+        return Result.success(page);
+    }
 }

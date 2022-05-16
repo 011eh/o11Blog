@@ -24,6 +24,7 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.error("无权限进行访问").code(401);
     }
+
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handle3(MethodArgumentNotValidException e) {

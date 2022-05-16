@@ -3,9 +3,9 @@ package com.o11eh.servicedemo.admin.entry;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.o11eh.servicedemo.admin.enums.Status;
 import com.o11eh.servicedemo.admin.config.validation.ColumnsUnique;
 import com.o11eh.servicedemo.admin.config.validation.RefId;
+import com.o11eh.servicedemo.admin.enums.Status;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

@@ -1,11 +1,8 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.entry.Result;
-import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.AuthService;
-import com.o11eh.servicedemo.admin.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

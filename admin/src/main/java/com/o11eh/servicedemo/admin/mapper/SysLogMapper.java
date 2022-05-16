@@ -5,5 +5,5 @@ import com.o11eh.servicedemo.admin.entry.SysLog;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface SysLogMapper extends BaseMapper<SysLog> {
+public interface SysLogMapper extends BaseMapperO<SysLog> {
 }
