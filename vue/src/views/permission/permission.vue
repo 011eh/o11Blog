@@ -76,7 +76,7 @@
           <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
                      placeholder="无"
           >
-            <el-option v-for="item in parentOptionFilter" :key="item.id" :label="item.name" :value="item.id">
+            <el-option v-for="item in parentOptionFilter()" :key="item.id" :label="item.name" :value="item.id">
               <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
                                             :type="item.resourceType | tagFilter">{{ item.resourceType }}</el-tag>
               </span>
@@ -240,16 +240,12 @@ export default {
     }
   },
   created() {
-    this.notNull(undefined);
-    this.notNull(null);
     this.list()
     this.getParentSelect()
   },
   methods: {
     parentOptionFilter() {
-      debugger
       return this.parentOptions.filter(p => {
-        debugger
         if (this.dataOperating.id === p.id) {
           return false;
         }
@@ -347,7 +343,7 @@ export default {
         },
         hidden: null,
         redirect: null,
-        alwaysShow: null
+        alwaysShow: true
       }
     },
     isElIcon(icon) {

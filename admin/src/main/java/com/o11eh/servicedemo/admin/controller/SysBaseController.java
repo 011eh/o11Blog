@@ -28,6 +28,7 @@ public class SysBaseController {
     @Autowired
     private OsService osService;
 
+    @Autowired
     private SysLogService sysLogService;
 
     @ApiOperation("权限Dto列表")
@@ -58,7 +59,8 @@ public class SysBaseController {
         return Result.success(url);
     }
 
-    @PostMapping
+    @ApiOperation("操作日志")
+    @PostMapping("sysLogPage")
     public Result getSysLog(@RequestBody PageReq req) {
         Page<SysLog> page = sysLogService.page(req.getCurrent(), req.getSize());
         return Result.success(page);

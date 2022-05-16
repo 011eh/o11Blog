@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.o11eh.servicedemo.admin.enums.LogStatus;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @TableName("sys_log")
+@NoArgsConstructor
 public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 1L;

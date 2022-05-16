@@ -20,3 +20,11 @@ export function roleSelect() {
     method: 'get',
   });
 }
+
+export function sysLogPage(pageReq) {
+  return request({
+    url: `/sysBase/sysLogPage`,
+    method:'post',
+    data: pageReq
+  })
+}
