@@ -11,8 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessException extends RuntimeException {
-    public static class AuthenticationException extends BusinessException {
-    }
 
     private Integer code;
 

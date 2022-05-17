@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public abstract class BaseEntry implements Serializable {
+public abstract class DataAccess implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,14 +23,7 @@ public abstract class BaseEntry implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    @JsonFormat(pattern = "yyyy-mm-dd HH:MM:SS")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
-    @JsonFormat(pattern = "yyyy-mm-dd HH:MM:SS")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
 
 }

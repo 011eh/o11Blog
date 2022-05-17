@@ -18,7 +18,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @ApiOperation("认证")
+    @ApiOperation("登录")
     @PostMapping("/login")
     public Result login(@Valid @RequestParam String username, @Valid @RequestParam String password) {
         String token = authService.login(username, password);

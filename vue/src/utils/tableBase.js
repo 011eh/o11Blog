@@ -1,4 +1,13 @@
-function tagFilter(type) {
+function statusTagFilter(type) {
+  if (type === '启用') {
+    return
+  }
+  if (type === '禁用') {
+    return 'info'
+  }
+}
+
+function permissionTypeTagFilter(type) {
   if (type === '一级菜单') {
     return 'success'
   }
@@ -7,12 +16,6 @@ function tagFilter(type) {
   }
   if (type === '操作') {
     return 'danger'
-  }
-  if (type === '启用') {
-    return
-  }
-  if (type === '禁用') {
-    return 'info'
   }
 }
 
@@ -87,7 +90,8 @@ export {
   pageReq,
   pagination,
   selected,
-  tagFilter,
+  statusTagFilter,
+  permissionTypeTagFilter,
   prevPageIfPageLastOne,
   handleSizeChange,
   handlePageChange,

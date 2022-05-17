@@ -18,7 +18,8 @@
         查询
       </el-button>
     </div>
-    <el-table v-loading="this.loading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%;" row-key="id" :max-height="tableMaxHeight">
+    <el-table v-loading="this.loading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%;"
+              row-key="id" :max-height="tableMaxHeight">
       <el-table-column align="center" type="selection"/>
       <el-table-column align="center" label="序号" width="50" type="index"/>
       <el-table-column align="center" prop="name" label="名称"/>
@@ -98,7 +99,7 @@
       </template>
     </el-dialog>
 
-    <el-footer style="height: 0">
+    <el-footer>
       <div style="padding-top: 10px">
         <el-pagination
           v-model:currentPage="pagination.current"
@@ -132,7 +133,7 @@ import {
   selected,
   tableData,
   tableMaxHeight,
-  tagFilter
+  statusTagFilter
 } from "@/utils/tableBase";
 import {permissionTree} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/role";
@@ -310,14 +311,14 @@ export default {
     handleSelectionChange,
   },
   filters: {
-    tagFilter
+    tagFilter: statusTagFilter
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .app-container {
-  ::v-deep .permission-alert {
+  ::v-deep .apiInfo-class {
     width: 320px;
     margin-top: 15px;
     background-color: #f0f9eb;

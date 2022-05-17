@@ -2,22 +2,21 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.o11eh.servicedemo.admin.enums.LogStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @TableName("sys_log")
 @NoArgsConstructor
-public class SysLog implements Serializable {
+public class SysLog extends DataAccess {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private String id;
     private String userId;
     private String ip;
     private String operation;
@@ -32,9 +31,8 @@ public class SysLog implements Serializable {
     private int timeCost;
     private String exceptionMessage;
 
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
+    @TableField(exist = false)
+    private String username;
 
     public SysLog(String userId,
                   String ip,

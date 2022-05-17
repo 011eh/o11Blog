@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
             throw BusinessException.e("账号被锁定");
         }
 
-        StpUtil.login(username);
+        StpUtil.login(admin.getId());
         AuthInfo authInfo = new AuthInfo(admin);
         authInfo.setPermission(permissionService.getAuthInfoByRoleId(admin.getRoleId()));
         SaSession session = StpUtil.getSession();

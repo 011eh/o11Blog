@@ -15,7 +15,7 @@
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="resourceType" label="资源类型">
         <template slot-scope="{row}">
-          <el-tag :type="row.resourceType | tagFilter">{{ row.resourceType }}</el-tag>
+          <el-tag :type="row.resourceType | permissionTypeTagFilter">{{ row.resourceType }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="permissionKey" label="关键字"/>
@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column align="center" prop="status" label="状态">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | tagFilter">{{ row.status }}</el-tag>
+          <el-tag :type="row.status | statusTagFilter">{{ row.status }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="sort" label="排序"/>
@@ -78,7 +78,7 @@
           >
             <el-option v-for="item in parentOptionFilter()" :key="item.id" :label="item.name" :value="item.id">
               <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
-                                            :type="item.resourceType | tagFilter">{{ item.resourceType }}</el-tag>
+                                            :type="item.resourceType | permissionTypeTagFilter">{{ item.resourceType }}</el-tag>
               </span>
             </el-option>
           </el-select>
@@ -103,9 +103,9 @@
             <el-select v-model="dataOperating.component" class="m-2" placeholder="无">
               <el-option
                 v-for="item in componentOptions"
-                :key="item"
-                :label="item"
-                :value="item"
+                :key="item.component"
+                :label="item.name+'-'+item.component"
+                :value="item.component"
               />
             </el-select>
           </el-form-item>
@@ -194,10 +194,18 @@
 
 <script>
 import {create, detail, doDelete, list, update} from "@/api/permission";
-import {routerMap} from "@/utils/routers";
+import {routerSelect} from "@/utils/routers";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
-import {dialogFormVisible, dialogStatus, loading, operationMap, tableData, tagFilter} from '@/utils/tableBase'
+import {
+  dialogFormVisible,
+  dialogStatus,
+  loading,
+  operationMap,
+  tableData,
+  statusTagFilter,
+  permissionTypeTagFilter
+} from '@/utils/tableBase'
 import {permissionSelect} from "@/api/sysBase";
 import checkPermission from '@/utils/permission.js'
 
@@ -205,7 +213,7 @@ export default {
   data() {
     return {
       svgIcons, elementIcons,
-      componentOptions: Object.keys(routerMap),
+      componentOptions: routerSelect,
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
       tableData,
@@ -418,7 +426,8 @@ export default {
     checkPermission
   },
   filters: {
-    tagFilter
+    statusTagFilter: statusTagFilter,
+    permissionTypeTagFilter:permissionTypeTagFilter
   }
 }
 </script>

@@ -139,7 +139,7 @@ import {
   selected,
   tableData,
   tableMaxHeight,
-  tagFilter
+  statusTagFilter
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/admin";
@@ -278,7 +278,7 @@ export default {
     handleSizeChange,
   },
   filters: {
-    tagFilter,
+    tagFilter: statusTagFilter,
   },
   components: {myUpload, PanThumb}
 }
