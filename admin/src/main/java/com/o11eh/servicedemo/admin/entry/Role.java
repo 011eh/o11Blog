@@ -29,7 +29,6 @@ public class Role extends BaseEntry {
     private String summary;
     private Status status;
 
-
     @TableField(exist = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> permissionKeys;

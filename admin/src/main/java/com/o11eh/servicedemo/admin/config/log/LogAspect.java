@@ -44,7 +44,7 @@ public class LogAspect {
     }
 
     @Async
-    public void doSaveLog(Log annotation, ProceedingJoinPoint joinPoint, int timeCost, Exception e) {
+    public void doSaveLog(Log annotation, ProceedingJoinPoint joinPoint, int timeCost, Exception e) throws Exception {
         HttpServletRequest request = ((ServletRequestAttributes)
                 Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
