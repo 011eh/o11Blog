@@ -1,13 +1,11 @@
 package com.o11eh.servicedemo.admin.entry;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.o11eh.servicedemo.admin.enums.LogStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -24,8 +22,6 @@ public class SysLog extends DataAccess {
     private String method;
     private String uri;
     private String httpMethod;
-
-    @TableField(typeHandler = JacksonTypeHandler.class)
     private Object params;
     private LogStatus logStatus;
     private int timeCost;

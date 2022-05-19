@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Configuration
 @MapperScan("com.o11eh.servicedemo.*.mapper")
 public class MybatisPlusConfig {
+
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -39,4 +40,5 @@ public class MybatisPlusConfig {
             strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
         }
     }
+
 }
