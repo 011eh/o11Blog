@@ -45,7 +45,7 @@
           <el-tag :type="row.status | tagFilter">{{ row.status }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Actions" align="center" width="230">
+      <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
                      :disabled="!checkPermission(['admin:update'])">

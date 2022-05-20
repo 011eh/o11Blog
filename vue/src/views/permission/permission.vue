@@ -6,7 +6,7 @@
         添加
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
-                  @click="list" :disabled="!checkPermission(['permission:list'])">
+                 @click="list" :disabled="!checkPermission(['permission:list'])">
         查询
       </el-button>
     </div>
@@ -36,7 +36,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="sort" label="排序"/>
-      <el-table-column fixed="right" label="Actions" align="center" width="230">
+      <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
                      :disabled="!checkPermission(['permission:update'])">
@@ -78,7 +78,9 @@
           >
             <el-option v-for="item in parentOptionFilter()" :key="item.id" :label="item.name" :value="item.id">
               <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
-                                            :type="item.resourceType | permissionTypeTagFilter">{{ item.resourceType }}</el-tag>
+                                            :type="item.resourceType | permissionTypeTagFilter">{{
+                  item.resourceType
+                }}</el-tag>
               </span>
             </el-option>
           </el-select>
@@ -102,7 +104,7 @@
           <el-form-item label="Vue组件名" prop="component">
             <el-select v-model="dataOperating.component" class="m-2" placeholder="无">
               <el-option
-                v-for="item in componentOptions"
+                v-for="item in componentFilter()"
                 :key="item.component"
                 :label="item.name+'-'+item.component"
                 :value="item.component"
@@ -194,7 +196,7 @@
 
 <script>
 import {create, detail, doDelete, list, update} from "@/api/permission";
-import {routerSelect} from "@/utils/routers";
+import {routerOptions} from "@/utils/routersMap";
 import svgIcons from '@/icons/svg-icons'
 import elementIcons from '@/icons/element-icons'
 import {
@@ -202,9 +204,9 @@ import {
   dialogStatus,
   loading,
   operationMap,
-  tableData,
+  permissionTypeTagFilter,
   statusTagFilter,
-  permissionTypeTagFilter
+  tableData
 } from '@/utils/tableBase'
 import {permissionSelect} from "@/api/sysBase";
 import checkPermission from '@/utils/permission.js'
@@ -213,7 +215,7 @@ export default {
   data() {
     return {
       svgIcons, elementIcons,
-      componentOptions: routerSelect,
+      componentOptions: routerOptions,
       resourceTypeOptions: ['一级菜单', '二级菜单', '操作'],
 
       tableData,
@@ -240,7 +242,7 @@ export default {
         },
         hidden: null,
         redirect: null,
-        alwaysShow: null
+        alwaysShow: true
       },
       expandRowIds: [],
       iconDialogVisible: false,
@@ -262,6 +264,15 @@ export default {
         }
         return p.resourceType !== '操作';
       })
+    },
+    componentFilter() {
+      if (this.dataOperating.resourceType === '二级菜单') {
+        return routerOptions.filter(value => {
+          return !value.levelOneOnly;
+        });
+      } else {
+        return routerOptions;
+      }
     },
     list() {
       if (!checkPermission(['permission:list'])) {
@@ -427,7 +438,7 @@ export default {
   },
   filters: {
     statusTagFilter: statusTagFilter,
-    permissionTypeTagFilter:permissionTypeTagFilter
+    permissionTypeTagFilter: permissionTypeTagFilter
   }
 }
 </script>

@@ -23,8 +23,10 @@
     <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
       <el-table-column align="center" type="selection"/>
       <el-table-column align="center" type="index" label="序号"/>
-
       <el-table-column align="center" prop="name" label="名称"/>
+      <el-table-column align="center" prop="paramKey" label="参数键值"/>
+      <el-table-column align="center" prop="value" label="参数值"/>
+      <el-table-column align="center" prop="sort" label="排序"/>
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
@@ -79,7 +81,15 @@ export default {
   data() {
     return {
       tableMaxHeight,
-      tableData: [],
+      tableData: [{
+        id: "1",
+        createTime: "2022-05-19 02:25:57",
+        updateTime: "2022-05-19 02:25:57",
+        name: "管理员默认密码",
+        paramKey: "adminDefaultPassword",
+        value: "11111",
+        sort: 100,
+      }],
       dialogFormVisible,
       dialogStatus,
       loading,

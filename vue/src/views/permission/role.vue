@@ -29,7 +29,7 @@
           <el-tag :type="row.status | tagFilter">{{ row.status }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Actions" align="center" width="230">
+      <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
                      :disabled="!checkPermission(['role:update'])">
@@ -131,9 +131,9 @@ import {
   pagination,
   prevPageIfPageLastOne,
   selected,
+  statusTagFilter,
   tableData,
-  tableMaxHeight,
-  statusTagFilter
+  tableMaxHeight
 } from "@/utils/tableBase";
 import {permissionTree} from "@/api/sysBase";
 import {create, doDelete, page, update} from "@/api/role";
@@ -157,6 +157,8 @@ export default {
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {
+        name: '',
+        summary: '',
         status: '启用',
         permissionKeys: []
       },
@@ -184,7 +186,7 @@ export default {
     },
     handleUpdate(row) {
       this.dialogStatus = 'update'
-      this.dataOperating = Object.assign(this.dataOperating, row);
+      Object.assign(this.dataOperating, row);
       this.permissionGranted()
       this.dialogFormVisible = true
     },
@@ -238,6 +240,8 @@ export default {
     },
     resetDataOperating() {
       this.dataOperating = {
+        name: '',
+        summary: '',
         status: '启用',
         permissionKeys: []
       };

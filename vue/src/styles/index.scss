@@ -187,6 +187,7 @@ aside {
     vertical-align: middle;
     margin-bottom: 10px;
   }
+
   .filter-dateTime {
     width: 375px;
     margin-left: 10px;
@@ -203,4 +204,8 @@ aside {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+.table-width {
+  width: 100%
 }

@@ -1,7 +1,7 @@
 import {getInfo, login, logout} from '@/api/auth'
 import {getToken, removeToken, setToken} from '@/utils/auth'
 import router, {constantRoutes, resetRouter} from '@/router'
-import {setComponent} from "@/utils/routers";
+import {setComponent} from "@/utils/routersMap";
 
 const state = {
   token: getToken(),

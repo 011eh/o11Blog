@@ -8,13 +8,17 @@ import store from '@/store'
 export default function checkPermission(value) {
   if (value && value instanceof Array && value.length > 0) {
     const roles = store.getters && store.getters.roles
-    const permissionRoles = value
+    const permissionRequired = value
+
+    if (permissionRequired.length === 1 && permissionRequired[0] === "") {
+      return true;
+    }
 
     return roles.some(role => {
-      return permissionRoles.includes(role)
-    })
+      return permissionRequired.includes(role)
+    });
   } else {
-    console.error(`need roles! Like v-permission="['admin','editor']"`)
+    console.error(`无此权限`)
     return false
   }
 };

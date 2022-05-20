@@ -10,10 +10,10 @@
                       :default-time="['00:00:00', '23:59:59']" v-model="timeSelect" value-format="yyyy-MM-dd HH:mm:ss"/>
 
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 :disabled="!checkPermission(['role:list'])">查询
+                 :disabled="!checkPermission([''])">查询
       </el-button>
 
-      <el-table border v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
+      <el-table  v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
         <el-table-column align="center" type="index" width="50px" label="序号"/>
         <el-table-column align="center" width="100px" type="expand" prop="controller" label="接口信息">
           <template #default="props">
