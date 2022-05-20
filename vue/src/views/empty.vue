@@ -23,8 +23,6 @@
     <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
       <el-table-column align="center" type="selection"/>
       <el-table-column align="center" type="index" label="序号"/>
-
-      <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
@@ -41,6 +39,25 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClose">
+      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
+               style="width: 60%; margin-left: 35px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="dataOperating.name"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+          确定
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
 
     <el-footer style="height: 0">
       <div style="padding-top: 10px">
@@ -63,7 +80,9 @@
 
 import {
   dialogFormVisible,
-  dialogStatus, handlePageChange, handleSizeChange,
+  dialogStatus,
+  handlePageChange,
+  handleSizeChange,
   loading,
   operationMap,
   pageReq,
@@ -79,7 +98,7 @@ export default {
   data() {
     return {
       tableMaxHeight,
-      tableData: [],
+      tableData,
       dialogFormVisible,
       dialogStatus,
       loading,
@@ -87,6 +106,8 @@ export default {
       selected: Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign(pageReq),
+
+      dataOperating: {}
     }
   },
   methods: {
@@ -94,16 +115,27 @@ export default {
 
     },
     handleCreate() {
-
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true;
     },
-    handleUpdate() {
-
+    handleUpdate(row) {
+      this.dialogStatus = 'update'
+      Object.assign(this.dataOperating, row);
+      this.dialogFormVisible = true;
     },
     doDelete(id) {
 
     },
     handleDeleteMulti() {
 
+    },
+    dialogClose() {
+      if (this.dialogStatus === 'update') {
+        this.resetDataOperating();
+      }
+    },
+    resetDataOperating() {
+      this.dataOperating = {}
     },
     handlePageChange,
     handleSizeChange,

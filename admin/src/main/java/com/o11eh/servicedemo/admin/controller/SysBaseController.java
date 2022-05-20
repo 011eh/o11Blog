@@ -57,7 +57,7 @@ public class SysBaseController {
         return Result.success(dtoList);
     }
 
-    @ApiOperation("管理员Dto")
+    @ApiOperation("管理员Dto列表")
     @GetMapping("adminDto")
     public Result adminDto() {
         List<Admin> list = adminService.dtoList();

@@ -45,6 +45,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClose">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
                style="width: 60%; margin-left: 35px">

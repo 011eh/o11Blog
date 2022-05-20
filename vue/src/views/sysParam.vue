@@ -44,6 +44,37 @@
       </el-table-column>
     </el-table>
 
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClose">
+      <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
+               style="width: 60%; margin-left: 35px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="dataOperating.name"/>
+        </el-form-item>
+        <el-form-item label="参数键值" prop="summary">
+          <el-input v-model="dataOperating.paramKey"/>
+        </el-form-item>
+        <el-form-item label="参数值" prop="value">
+          <el-input v-model="dataOperating.value"/>
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input v-model="dataOperating.sort"/>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="dataOperating.remark"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+          确定
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
+
     <el-footer style="height: 0">
       <div style="padding-top: 10px">
         <el-pagination
@@ -65,7 +96,9 @@
 
 import {
   dialogFormVisible,
-  dialogStatus, handlePageChange, handleSizeChange,
+  dialogStatus,
+  handlePageChange,
+  handleSizeChange,
   loading,
   operationMap,
   pageReq,
@@ -82,13 +115,11 @@ export default {
     return {
       tableMaxHeight,
       tableData: [{
-        id: "1",
-        createTime: "2022-05-19 02:25:57",
-        updateTime: "2022-05-19 02:25:57",
         name: "管理员默认密码",
         paramKey: "adminDefaultPassword",
         value: "11111",
         sort: 100,
+        remark: ''
       }],
       dialogFormVisible,
       dialogStatus,
@@ -97,6 +128,14 @@ export default {
       selected: Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign(pageReq),
+
+      dataOperating: {
+        name: null,
+        paramKey: null,
+        value: null,
+        sort: 100,
+        remark: null
+      }
     }
   },
   methods: {
@@ -104,16 +143,33 @@ export default {
 
     },
     handleCreate() {
-
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true;
     },
-    handleUpdate() {
-
+    handleUpdate(row) {
+      this.dialogStatus = 'update'
+      Object.assign(this.dataOperating, row);
+      this.dialogFormVisible = true;
     },
     doDelete(id) {
 
     },
     handleDeleteMulti() {
 
+    },
+    dialogClose() {
+      if (this.dialogStatus === 'update') {
+        this.resetDataOperating();
+      }
+    },
+    resetDataOperating() {
+      this.dataOperating = {
+        name: null,
+        paramKey: null,
+        value: null,
+        sort: 100,
+        remark: null
+      }
     },
     handlePageChange,
     handleSizeChange,
