@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.admin.config;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import com.o11eh.servicedemo.admin.entry.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +16,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result handle1(Exception e) {
         e.printStackTrace();
-        return Result.error(e.getMessage());
+        return Result.error(e.getMessage()).code(1500);
     }
 
     @ResponseBody
     @ExceptionHandler(NotPermissionException.class)
     public Result handle2(NotPermissionException e) {
-        e.printStackTrace();
-        return Result.error("无权限进行访问").code(401);
+        log.info(e.getMessage());
+        return Result.error("无权限进行访问").code(1401);
     }
 
     @ResponseBody
@@ -30,5 +31,13 @@ public class GlobalExceptionHandler {
     public Result handle3(MethodArgumentNotValidException e) {
         e.printStackTrace();
         return Result.error(e.getMessage()).code(1402);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NotLoginException.class)
+    public Result handle3(NotLoginException e) {
+        log.info(e.getMessage());
+        e.printStackTrace();
+        return Result.error(e.getMessage()).code(1403);
     }
 }

@@ -1,7 +1,5 @@
 package com.o11eh.servicedemo.admin.entry;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.o11eh.servicedemo.admin.enums.LogStatus;
 import lombok.Data;
@@ -9,13 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@TableName("sys_log")
 @NoArgsConstructor
 public class SysLog extends DataAccess {
 
     private static final long serialVersionUID = 1L;
 
-    private String userId;
+    private String username;
     private String ip;
     private String operation;
     private String controller;
@@ -27,10 +24,7 @@ public class SysLog extends DataAccess {
     private int timeCost;
     private String exceptionMessage;
 
-    @TableField(exist = false)
-    private String username;
-
-    public SysLog(String userId,
+    public SysLog(String username,
                   String ip,
                   String operation,
                   String controller,
@@ -41,7 +35,7 @@ public class SysLog extends DataAccess {
                   LogStatus logStatus,
                   int timeCost,
                   String exception) {
-        this.userId = userId;
+        this.username = username;
         this.ip = ip;
         this.operation = operation;
         this.controller = controller;

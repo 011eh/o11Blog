@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.config.validation.ColumnsUnique;
 import com.o11eh.servicedemo.admin.config.validation.RefId;
@@ -22,7 +21,6 @@ import java.util.List;
  */
 @Data
 @TableName(value = "back_permission", autoResultMap = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @ColumnsUnique(tableName = "back_permission", properties = "name")
 public class Permission extends BaseEntry {
 

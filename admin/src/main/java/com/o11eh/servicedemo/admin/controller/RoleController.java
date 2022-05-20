@@ -34,7 +34,6 @@ public class RoleController extends BaseController {
     @Autowired
     RoleService roleService;
 
-    @Log("角色分页查询")
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq pageReq) {
@@ -47,7 +46,7 @@ public class RoleController extends BaseController {
     @PostMapping
     public Result create(@Valid @RequestBody RoleVo roleVo) {
         Role role = BeanUtil.copyProperties(roleVo, Role.class);
-        String id = roleService.create(role);
+        roleService.create(role);
         return Result.successShowMsg();
     }
 
@@ -55,7 +54,7 @@ public class RoleController extends BaseController {
     @PutMapping
     @ApiOperation(Constants.Doc.UPDATE)
     public Result update(@Valid @RequestBody Role role) {
-        String id = roleService.updateRole(role);
+        roleService.updateRole(role);
         return Result.successShowMsg();
     }
 

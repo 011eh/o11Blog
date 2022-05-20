@@ -8,8 +8,12 @@ function success(code) {
   return code % 1000 === 200;
 }
 
+function getCode(code) {
+  return code - 1000;
+}
+
 function successMsg(res) {
-  if (showMsg(res.code)) {
+  if (success(res.code) && showMsg(res.code)) {
     Notification({
       title: '成功',
       message: res.msg || '操作成功',
@@ -18,5 +22,5 @@ function successMsg(res) {
   }
 }
 
-export {success, showMsg, successMsg}
+export {getCode,success, showMsg, successMsg}
 

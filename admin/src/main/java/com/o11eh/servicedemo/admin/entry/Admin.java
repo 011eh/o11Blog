@@ -9,6 +9,8 @@ import com.o11eh.servicedemo.admin.enums.Status;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  * 管理员
@@ -36,4 +38,6 @@ public class Admin extends BaseEntry {
     private String roleName;
     private String avatar;
     private Status status;
+    private String lastLoginIp;
+    private LocalDateTime lastLoginTime;
 }

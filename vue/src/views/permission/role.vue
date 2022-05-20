@@ -11,8 +11,8 @@
                  :disabled="!checkPermission(['role:create'])">
         添加
       </el-button>
-      <el-input v-model="pageReq.keyword" placeholder="名称" style="width: 200px; margin-left: 10px"
-                clearable class="filter-item"/>
+      <el-input v-model="pageReq.keyword" placeholder="名称"
+                clearable class="filter-input"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
                  :disabled="!checkPermission(['role:list'])">
         查询

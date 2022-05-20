@@ -24,7 +24,14 @@ export function roleSelect() {
 export function sysLogPage(pageReq) {
   return request({
     url: `/sysBase/sysLogPage`,
-    method:'post',
+    method: 'post',
     data: pageReq
   })
+}
+
+export function adminSelect() {
+  return request({
+    url: `/sysBase/adminDto`,
+    method: 'get'
+  });
 }

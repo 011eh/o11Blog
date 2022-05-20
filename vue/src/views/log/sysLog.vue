@@ -1,9 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <el-select class="filter-item" multiple v-model="pageReq.operators" placeholder="Select">
+        <el-option v-for="item in adminOptions" :key="item.id" :label="item.username" :value="item.username"/>
+      </el-select>
+      <el-input class="filter-input" clearable v-model="pageReq.operation" placeholder="操作"/>
+      <el-input class="filter-input" clearable v-model="pageReq.ip" placeholder="IP"/>
+      <el-date-picker class="filter-dateTime" type="datetimerange" start-placeholder="开始时间" end-placeholder="结束时间"
+                      :default-time="['00:00:00', '23:59:59']" v-model="timeSelect" value-format="yyyy-MM-dd HH:mm:ss"/>
+
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 :disabled="!checkPermission(['role:list'])"
-      >查询
+                 :disabled="!checkPermission(['role:list'])">查询
       </el-button>
 
       <el-table border v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
@@ -25,7 +32,7 @@
         <el-table-column align="center" prop="uri" label="URI"/>
         <el-table-column align="center" width="140px" prop="httpMethod" label="请求方法"/>
         <el-table-column align="center" width="50px" prop="logStatus" label="状态"/>
-        <el-table-column align="center" width="80px" prop="timeCost" label="时间花费"/>
+        <el-table-column align="center" width="80px" prop="timeCost" label="耗时"/>
         <el-table-column align="center" prop="createTime" label="操作时间"/>
       </el-table>
     </div>
@@ -65,11 +72,12 @@ import {
   tableMaxHeight
 } from "@/utils/tableBase";
 import checkPermission from "@/utils/permission";
-import {sysLogPage} from "@/api/sysBase";
+import {adminSelect, sysLogPage} from "@/api/sysBase";
 
 export default {
   created() {
     this.page()
+    this.adminSelection();
   },
   data() {
     return {
@@ -81,11 +89,17 @@ export default {
       operationMap,
       selected: Object.assign({}, selected),
       pagination: Object.assign({}, pagination),
-      pageReq: Object.assign({}, pageReq),
+      pageReq: Object.assign({operators: [], ip: "", operation: "", startTime: null, endTime: null}, pageReq),
+
+      timeSelect: [],
+      adminOptions: []
     }
   },
   methods: {
     page() {
+      this.pageReq.startTime = this.timeSelect != null ? this.timeSelect[0] : null;
+      this.pageReq.endTime = this.timeSelect != null ? this.timeSelect[1] : null;
+
       this.loading = true;
       return new Promise(() => {
         sysLogPage(this.pageReq).then(res => {
@@ -97,6 +111,15 @@ export default {
         });
       });
     },
+
+    adminSelection() {
+      return new Promise(resolve => {
+        adminSelect().then(res => {
+          this.adminOptions = res.data;
+        })
+      })
+    },
+
     handleSizeChange,
     handlePageChange,
     checkPermission

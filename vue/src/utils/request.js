@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {Message, MessageBox, Notification} from 'element-ui'
+import {MessageBox, Notification} from 'element-ui'
 import store from '@/store'
-import {showMsg, success, successMsg} from "@/utils/msg";
+import {getCode, showMsg, success, successMsg} from "@/utils/codeUtil";
 // create an axios instance
 const service = axios.create({
   baseURL: '/api', // url = base url + request url
@@ -44,10 +44,20 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
+    if (getCode(res.code) === 403) {
+      MessageBox.confirm('登录信息已过期，请重新登录', '登录信息已过期', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
+      });
+      return;
+    }
+
     successMsg(res)
-
-
-    // if the custom code is not 20000, it is judged as an error.
     if (!success(res.code)) {
       if (showMsg(res.code)) {
         Notification({
@@ -57,19 +67,6 @@ service.interceptors.response.use(
         })
       }
 
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        });
-      }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
@@ -77,11 +74,6 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
     return Promise.reject(error)
   }
 )

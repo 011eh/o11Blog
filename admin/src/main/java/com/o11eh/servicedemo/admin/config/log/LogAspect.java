@@ -71,7 +71,7 @@ public class LogAspect {
         HttpServletRequest request = ((ServletRequestAttributes)
                 Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
-        String userId = (String) StpUtil.getLoginIdDefaultNull();
+        String username = (String) StpUtil.getSession().get("username");
         String ip = HttpUtil.getIPAddress(request);
         String operation = annotation.value().length() > 0 ? annotation.value() : null;
         String controller = joinPoint.getTarget().getClass().getName();
@@ -86,7 +86,7 @@ public class LogAspect {
             status = LogStatus.FAIL;
         }
 
-        sysLogService.saveLog(new SysLog(userId, ip, operation, controller, method, uri, httpMethod, params, status,
+        sysLogService.saveLog(new SysLog(username, ip, operation, controller, method, uri, httpMethod, params, status,
                 timeCost, exception));
 
     }

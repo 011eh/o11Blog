@@ -34,7 +34,6 @@ public class AdminController extends BaseController {
     @Autowired
     private AdminService adminService;
 
-    @Log("管理员分页查询")
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq param) {

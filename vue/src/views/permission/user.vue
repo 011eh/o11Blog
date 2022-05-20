@@ -13,7 +13,7 @@
         添加
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="用户名/昵称" style="width: 200px; margin-left: 10px"
-                clearable class="filter-item"/>
+                clearable class="filter-input"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
                  :disabled="!checkPermission(['admin:list'])">
         查询

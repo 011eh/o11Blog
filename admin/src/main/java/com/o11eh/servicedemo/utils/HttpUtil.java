@@ -1,9 +1,12 @@
 package com.o11eh.servicedemo.utils;
 
 import cn.hutool.core.util.StrUtil;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,4 +37,16 @@ public class HttpUtil {
         return request.getRemoteAddr();
     }
 
+    public static String getIPAddress() {
+        HttpServletRequest request = ((ServletRequestAttributes)
+                Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        for (String header : IP_HEADERS) {
+            String ipListString = request.getHeader(header);
+            if (StrUtil.isNotBlank(ipListString) && !"unknown".equalsIgnoreCase(ipListString)) {
+                return ipListString.split(",")[0];
+            }
+        }
+
+        return request.getRemoteAddr();
+    }
 }

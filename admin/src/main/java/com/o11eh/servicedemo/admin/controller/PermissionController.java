@@ -28,7 +28,6 @@ public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
 
-    @Log("权限列表查询")
     @GetMapping("list")
     @SaCheckPermission("permission:list")
     @ApiOperation("授权列表")
@@ -37,7 +36,6 @@ public class PermissionController extends BaseController {
         return Result.success(permissions);
     }
 
-    @Log("权限详情")
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@Valid @StringId @PathVariable String id) {
@@ -70,7 +68,6 @@ public class PermissionController extends BaseController {
         return Result.successShowMsg();
     }
 
-    @Log("授予权限")
     @GetMapping("granted/{roleId}")
     public Result getRolePermissions(@PathVariable String roleId) {
         List<Permission> permissionIds = permissionService.getPermissionGranted(roleId);

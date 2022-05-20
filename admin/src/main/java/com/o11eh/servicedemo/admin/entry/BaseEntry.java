@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.o11eh.servicedemo.admin.config.validation.StringId;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class BaseEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;

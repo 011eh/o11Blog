@@ -6,13 +6,15 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
-import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.admin.service.RoleService;
+import com.o11eh.servicedemo.admin.service.SysParamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -29,10 +31,7 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     private AdminMapper adminMapper;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private PermissionService permissionService;
+    private SysParamService sysParamService;
 
     @Override
     public Admin login(String username, String password) {
@@ -53,8 +52,13 @@ public class AdminServiceImpl extends BaseServiceImpl<AdminMapper, Admin> implem
     }
 
     @Override
+    public List<Admin> dtoList() {
+        return this.getDtoList(Wrappers.<Admin>lambdaQuery().select(BaseEntry::getId, Admin::getUsername));
+    }
+
+    @Override
     public String create(Admin admin) {
-        String password = "11111";
+        String password = sysParamService.getValueByKey(SysParamService.ADMIN_DEFAULT_PASSWORD);
         admin.setPassword(SaSecureUtil.md5BySalt(password, admin.getUsername()));
         this.save(admin);
         return admin.getId();

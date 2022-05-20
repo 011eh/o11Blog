@@ -9,8 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum LogStatus {
 
-    SUCCESS(0, "成功"),
-    FAIL(1, "失败");
+    SUCCESS(0, "正常"),
+    FAIL(1, "异常");
 
     @EnumValue
     private final int DBValue;

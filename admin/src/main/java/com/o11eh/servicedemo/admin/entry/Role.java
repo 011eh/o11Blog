@@ -2,7 +2,6 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.o11eh.servicedemo.admin.enums.Status;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -19,7 +18,6 @@ import java.util.List;
  */
 @Data
 @TableName("back_role")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "Role对象", description = "角色")
 public class Role extends BaseEntry {
 
@@ -30,6 +28,5 @@ public class Role extends BaseEntry {
     private Status status;
 
     @TableField(exist = false)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> permissionKeys;
 }

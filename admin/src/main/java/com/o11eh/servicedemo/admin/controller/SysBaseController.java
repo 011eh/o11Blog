@@ -1,11 +1,10 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.entry.*;
-import com.o11eh.servicedemo.admin.service.OsService;
-import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.admin.service.RoleService;
-import com.o11eh.servicedemo.admin.service.SysLogService;
+import com.o11eh.servicedemo.admin.entry.vo.SysLogPageReq;
+import com.o11eh.servicedemo.admin.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,12 @@ public class SysBaseController {
     @Autowired
     private SysLogService sysLogService;
 
+    @Autowired
+    private SysParamService sysParamService;
+
+    @Autowired
+    private AdminService adminService;
+
     @ApiOperation("权限Dto列表")
     @GetMapping("permissionDto")
     public Result permissionDto() {
@@ -52,6 +57,14 @@ public class SysBaseController {
         return Result.success(dtoList);
     }
 
+    @ApiOperation("管理员Dto")
+    @GetMapping("adminDto")
+    public Result adminDto() {
+        List<Admin> list = adminService.dtoList();
+        return Result.success(list);
+    }
+
+    @Log("头像上传")
     @ApiOperation("头像上传")
     @PostMapping("uploadAvatar")
     public Result uploadAvatar(MultipartFile file) {
@@ -59,10 +72,38 @@ public class SysBaseController {
         return Result.success(url);
     }
 
-    @ApiOperation("操作日志")
+    @ApiOperation("操作日志分页查询")
     @PostMapping("sysLogPage")
-    public Result getSysLog(@RequestBody PageReq req) {
-        Page<SysLog> page = sysLogService.page(req.getCurrent(), req.getSize());
+    public Result getSysLogPage(@RequestBody SysLogPageReq req) {
+        Page<SysLog> page = sysLogService.page(req);
         return Result.success(page);
+    }
+
+    @ApiOperation("系统参数分页")
+    @PostMapping("sysParam/page")
+    public Result getSysParamPage(@RequestBody PageReq req) {
+        Page<SysParam> page = sysParamService.page(req.getCurrent(), req.getSize());
+        return Result.success(page);
+    }
+
+    @ApiOperation("系统参数创建")
+    @PostMapping("sysParam")
+    public Result createParam(@RequestBody SysParam param) {
+        sysParamService.save(param);
+        return Result.successShowMsg();
+    }
+
+    @ApiOperation("系统参数更新")
+    @PutMapping("sysParam")
+    public Result updateParam(@RequestBody SysParam param) {
+        sysParamService.updateById(param);
+        return Result.successShowMsg();
+    }
+
+    @ApiOperation("系统参数删除")
+    @DeleteMapping("sysParam")
+    public Result deleteParam(@RequestBody List<Long> ids) {
+        sysParamService.removeBatchByIds(ids);
+        return Result.successShowMsg();
     }
 }

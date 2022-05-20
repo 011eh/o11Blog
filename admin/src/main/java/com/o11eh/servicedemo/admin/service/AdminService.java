@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.PageReq;
 
+import java.util.List;
+
 /**
  * <p>
  * 管理员 服务类
@@ -21,4 +23,6 @@ public interface AdminService extends BaseService<Admin> {
     String update(Admin admin);
 
     Page<Admin> page(PageReq param);
+
+    List<Admin> dtoList();
 }
