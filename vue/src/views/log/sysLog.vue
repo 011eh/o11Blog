@@ -67,7 +67,7 @@ import {
   operationMap,
   pageReq,
   pagination,
-  selected,
+  rowSelected,
   tableData,
   tableMaxHeight
 } from "@/utils/tableBase";
@@ -87,7 +87,7 @@ export default {
       dialogStatus,
       loading,
       operationMap,
-      selected: Object.assign({}, selected),
+      selected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({operators: [], ip: "", operation: "", startTime: null, endTime: null}, pageReq),
 

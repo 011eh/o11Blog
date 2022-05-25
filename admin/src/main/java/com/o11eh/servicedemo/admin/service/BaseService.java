@@ -7,8 +7,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 public interface BaseService<T> extends IService<T> {
-
-    default Page<T> page(long current, long size) {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -37,7 +37,7 @@ public class RoleController extends BaseController {
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq pageReq) {
-        Page<Role> page = roleService.page(pageReq);
+        Page<Role> page = roleService.getPage(pageReq);
         return Result.success(page);
     }
 

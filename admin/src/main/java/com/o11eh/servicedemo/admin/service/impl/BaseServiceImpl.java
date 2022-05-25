@@ -9,15 +9,8 @@ import com.o11eh.servicedemo.admin.service.BaseService;
 import java.util.List;
 
 public class BaseServiceImpl<M extends BaseMapperO<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
-
-    public Page<T> page(long current, long size) {
-        Page<T> page = new Page<>(current, size);
-        return this.page(page);
-    }
-
     public Page<T> page(long current, long size, Wrapper<T> wrapper) {
-        Page<T> page = new Page<>(current, size);
-        return this.page(page, wrapper);
+        return this.page(new Page<>(current, size), wrapper);
     }
 
     public List<T> getDtoList(Wrapper<T> wrapper) {

@@ -1,5 +1,7 @@
 package com.o11eh.servicedemo.admin.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.entry.*;
@@ -82,7 +84,7 @@ public class SysBaseController {
     @ApiOperation("系统参数分页")
     @PostMapping("sysParam/page")
     public Result getSysParamPage(@RequestBody PageReq req) {
-        Page<SysParam> page = sysParamService.page(req.getCurrent(), req.getSize());
+        Page<SysParam> page = sysParamService.getPage(req);
         return Result.success(page);
     }
 

@@ -29,8 +29,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Autowired
     private PermissionService permissionService;
 
-    public Page<Role> page(PageReq req) {
-        Page<Role> page = super.page(req.getCurrent(), req.getSize(),
+    public Page<Role> getPage(PageReq req) {
+        Page<Role> page = this.page(new Page<>(req.getCurrent(), req.getSize()),
                 Wrappers.<Role>lambdaQuery().like(StrUtil.isNotBlank(req.getKeyword()), Role::getName, req.getKeyword()));
         return page;
     }

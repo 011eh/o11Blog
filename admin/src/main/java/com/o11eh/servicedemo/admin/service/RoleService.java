@@ -21,7 +21,7 @@ public interface RoleService extends BaseService<Role> {
 
     void deleteRole(List<String> ids);
 
-    Page<Role> page(PageReq req);
+    Page<Role> getPage(PageReq req);
 
     List<Role> dtoList();
 }

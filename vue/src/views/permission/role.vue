@@ -131,7 +131,7 @@ import {
   pageReq,
   pagination,
   prevPageIfPageLastOne,
-  selected,
+  rowSelected,
   statusTagFilter,
   tableData,
   tableMaxHeight
@@ -154,7 +154,7 @@ export default {
       dialogStatus,
       loading,
       operationMap,
-      selected: Object.assign({}, selected),
+      selected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {

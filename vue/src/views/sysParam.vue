@@ -20,7 +20,8 @@
       </el-button>
     </div>
 
-    <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
+    <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id"
+              @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection"/>
       <el-table-column align="center" type="index" label="序号"/>
       <el-table-column align="center" prop="name" label="名称"/>
@@ -57,7 +58,7 @@
           <el-input v-model="dataOperating.value"/>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataOperating.sort"/>
+          <el-input-number v-model="dataOperating.sort" :min="1" :max="100"/>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="dataOperating.remark"/>
@@ -68,7 +69,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+        <el-button type="primary" @click="doCreateOrUpdate">
           确定
         </el-button>
       </span>
@@ -97,37 +98,38 @@
 import {
   dialogFormVisible,
   dialogStatus,
+  handleDeleteMulti,
   handlePageChange,
+  handleSelectionChange,
   handleSizeChange,
   loading,
   operationMap,
   pageReq,
   pagination,
-  selected,
+  prevPageIfPageLastOne,
+  rowSelected,
+  tableData,
   tableMaxHeight
 } from "@/utils/tableBase";
 import checkPermission from "@/utils/permission";
+import {createSysParam, deleteSysParam, sysParamPage, updateSysParam} from "@/api/sysBase";
 
 export default {
   created() {
+    this.page();
   },
   data() {
     return {
       tableMaxHeight,
-      tableData: [{
-        name: "管理员默认密码",
-        paramKey: "adminDefaultPassword",
-        value: "11111",
-        sort: 100,
-        remark: ''
-      }],
+      tableData,
       dialogFormVisible,
       dialogStatus,
       loading,
       operationMap,
-      selected: Object.assign({}, selected),
+      selected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign(pageReq),
+      rowSelected,
 
       dataOperating: {
         name: null,
@@ -140,27 +142,75 @@ export default {
   },
   methods: {
     page() {
+      if (!checkPermission([''])) {
+        return;
+      }
 
+      this.loading = true;
+      return new Promise(() => {
+        sysParamPage(this.pageReq).then(res => {
+          this.tableData = res.data;
+          this.pagination.current = res.pageCurrent
+          this.pagination.total = res.total
+        }).finally(() => {
+          this.loading = false;
+        });
+      });
     },
     handleCreate() {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true;
     },
     handleUpdate(row) {
-      this.dialogStatus = 'update'
       Object.assign(this.dataOperating, row);
+
+      this.dialogStatus = 'update'
       this.dialogFormVisible = true;
     },
-    doDelete(id) {
-
+    doCreateOrUpdate() {
+      if (this.dialogStatus === 'create') {
+        this.createData();
+      } else if (this.dialogStatus === 'update') {
+        this.updateData();
+      }
     },
-    handleDeleteMulti() {
-
+    createData() {
+      return new Promise(() => {
+        createSysParam(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+          this.resetDataOperating();
+        });
+      });
+    },
+    updateData() {
+      return new Promise(() => {
+        updateSysParam(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+        });
+      }).then();
     },
     dialogClose() {
       if (this.dialogStatus === 'update') {
         this.resetDataOperating();
       }
+    },
+    doDelete(id) {
+      return new Promise(() => {
+        deleteSysParam([id]).then(() => {
+          this.prevPageIfPageLastOne();
+          this.page();
+        });
+      });
+    },
+    deleteMulti(ids) {
+      return new Promise(() => {
+        deleteSysParam(ids).then(() => {
+          this.prevPageIfPageLastOne()
+          this.page();
+        })
+      });
     },
     resetDataOperating() {
       this.dataOperating = {
@@ -173,7 +223,10 @@ export default {
     },
     handlePageChange,
     handleSizeChange,
-    checkPermission
+    checkPermission,
+    prevPageIfPageLastOne,
+    handleDeleteMulti,
+    handleSelectionChange
   },
   filters: {}
 }

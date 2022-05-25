@@ -14,15 +14,20 @@
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="名称/参数键值" style="width: 200px; margin-left: 10px"
                 clearable class="filter-input"/>
-      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 :disabled="!checkPermission([''])">
+      <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
+                 @click="page" :disabled="!checkPermission([''])">
         查询
       </el-button>
     </div>
 
-    <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">
+    <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id"
+              @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection"/>
       <el-table-column align="center" type="index" label="序号"/>
+      <el-table-column align="center" prop="name" label="名称"/>
+      <el-table-column align="center" prop="paramKey" label="参数键值"/>
+      <el-table-column align="center" prop="value" label="参数值"/>
+      <el-table-column align="center" prop="sort" label="排序"/>
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
@@ -46,13 +51,25 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="dataOperating.name"/>
         </el-form-item>
+        <el-form-item label="参数键值" prop="summary">
+          <el-input v-model="dataOperating.paramKey"/>
+        </el-form-item>
+        <el-form-item label="参数值" prop="value">
+          <el-input v-model="dataOperating.value"/>
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="dataOperating.sort" :min="1" :max="100"/>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="dataOperating.remark"/>
+        </el-form-item>
       </el-form>
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="doCreateOrUpdate(dialogStatus)">
+        <el-button type="primary" @click="doCreateOrUpdate">
           确定
         </el-button>
       </span>
@@ -81,19 +98,25 @@
 import {
   dialogFormVisible,
   dialogStatus,
+  handleDeleteMulti,
   handlePageChange,
+  handleSelectionChange,
   handleSizeChange,
   loading,
   operationMap,
   pageReq,
   pagination,
-  selected,
+  prevPageIfPageLastOne,
+  rowSelected,
+  tableData,
   tableMaxHeight
 } from "@/utils/tableBase";
 import checkPermission from "@/utils/permission";
+import {createSysParam, deleteSysParam, sysParamPage, updateSysParam} from "@/api/sysBase";
 
 export default {
   created() {
+    this.page();
   },
   data() {
     return {
@@ -103,43 +126,100 @@ export default {
       dialogStatus,
       loading,
       operationMap,
-      selected: Object.assign({}, selected),
+      selected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign(pageReq),
+      rowSelected,
 
-      dataOperating: {}
+      dataOperating: {} // todo
     }
   },
   methods: {
     page() {
+      if (!checkPermission([''])) {
+        return;
+      }
 
+      this.loading = true;
+      return new Promise(() => {
+        // todo
+        sysParamPage(this.pageReq).then(res => {
+          this.tableData = res.data;
+          this.pagination.current = res.pageCurrent
+          this.pagination.total = res.total
+        }).finally(() => {
+          this.loading = false;
+        });
+      });
     },
     handleCreate() {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true;
     },
     handleUpdate(row) {
-      this.dialogStatus = 'update'
       Object.assign(this.dataOperating, row);
+
+      this.dialogStatus = 'update'
       this.dialogFormVisible = true;
     },
-    doDelete(id) {
-
+    doCreateOrUpdate() {
+      if (this.dialogStatus === 'create') {
+        this.createData();
+      } else if (this.dialogStatus === 'update') {
+        this.updateData();
+      }
     },
-    handleDeleteMulti() {
-
+    createData() {
+      return new Promise(() => {
+        // todo
+        createSysParam(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+          this.resetDataOperating();
+        });
+      });
+    },
+    updateData() {
+      return new Promise(() => {
+        // todo
+        updateSysParam(this.dataOperating).then(() => {
+          this.dialogFormVisible = false;
+          this.page();
+        });
+      }).then();
     },
     dialogClose() {
       if (this.dialogStatus === 'update') {
         this.resetDataOperating();
       }
     },
+    doDelete(id) {
+      return new Promise(() => {
+        // todo
+        deleteSysParam([id]).then(() => {
+          this.prevPageIfPageLastOne();
+          this.page();
+        });
+      });
+    },
+    deleteMulti(ids) {
+      return new Promise(() => {
+        // todo
+        deleteSysParam(ids).then(() => {
+          this.prevPageIfPageLastOne()
+          this.page();
+        })
+      });
+    },
     resetDataOperating() {
-      this.dataOperating = {}
+      this.dataOperating = {}// todo
     },
     handlePageChange,
     handleSizeChange,
-    checkPermission
+    checkPermission,
+    prevPageIfPageLastOne,
+    handleDeleteMulti,
+    handleSelectionChange
   },
   filters: {}
 }

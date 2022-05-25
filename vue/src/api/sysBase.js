@@ -43,31 +43,31 @@ export function sysLogPage(pageReq) {
 // 系统参数
 export function sysParamPage(data) {
   return request({
-    url: `sysParam/page`,
+    url: `/sysBase/sysParam/page`,
     method: 'post',
     data
   })
 }
 
-export function sysLogCreate(data) {
+export function createSysParam(data) {
   return request({
-    url: `sysParam/`,
+    url: `/sysBase/sysParam`,
     method: 'post',
     data
   })
 }
 
-export function sysParamUpdate(data) {
+export function updateSysParam(data) {
   return request({
-    url: `sysParam/`,
+    url: `/sysBase/sysParam`,
     method: 'put',
     data
   })
 }
 
-export function sysParamDelete(data) {
+export function deleteSysParam(data) {
   return request({
-    url: `sysParam/`,
+    url: `/sysBase/sysParam`,
     method: 'delete',
     data
   })

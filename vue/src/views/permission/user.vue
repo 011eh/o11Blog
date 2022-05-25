@@ -136,7 +136,7 @@ import {
   pageReq,
   pagination,
   prevPageIfPageLastOne,
-  selected,
+  rowSelected,
   tableData,
   tableMaxHeight,
   statusTagFilter
@@ -159,7 +159,7 @@ export default {
       dialogFormVisible,
       dialogStatus,
       tableData,
-      selected: Object.assign({}, selected),
+      rowSelected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
       pageReq: Object.assign({}, pageReq),
       dataOperating: {
@@ -262,7 +262,7 @@ export default {
       this.dataOperating.avatar = result.data;
     },
     deleteMulti(ids) {
-      doDelete(ids).then((res) => {
+      doDelete(ids).then(() => {
         this.prevPageIfPageLastOne()
         this.page();
       })

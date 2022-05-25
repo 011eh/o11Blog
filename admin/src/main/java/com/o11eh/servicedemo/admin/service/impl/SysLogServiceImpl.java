@@ -19,9 +19,6 @@ import org.springframework.stereotype.Service;
 public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
     @Autowired
-    private AdminService adminService;
-
-    @Autowired
     private SysLogMapper sysLogMapper;
 
     @Async

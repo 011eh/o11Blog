@@ -42,14 +42,14 @@ function prevPageIfPageLastOne() {
 }
 
 function handleSelectionChange(list) {
-  this.selected = list;
+  this.rowSelected = list;
 }
 
 function handleDeleteMulti() {
-  if (this.selected.length <= 0) {
+  if (this.rowSelected.length <= 0) {
     return;
   }
-  const ids = this.selected.map(item => {
+  const ids = this.rowSelected.map(item => {
     return item.id;
   });
   this.deleteMulti(ids);
@@ -78,7 +78,7 @@ let pageReq = {
   keyword: '',
 }
 
-let selected=[]
+let rowSelected=[]
 
 export {
   tableData,
@@ -89,7 +89,7 @@ export {
   loading,
   pageReq,
   pagination,
-  selected,
+  rowSelected,
   statusTagFilter,
   permissionTypeTagFilter,
   prevPageIfPageLastOne,
