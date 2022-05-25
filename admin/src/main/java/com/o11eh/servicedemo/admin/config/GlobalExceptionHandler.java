@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(NotPermissionException.class)
     public Result handle2(NotPermissionException e) {
-        log.info(e.getMessage());
+        log.error(e.getMessage());
         return Result.error("无权限进行访问").code(1401);
     }
 

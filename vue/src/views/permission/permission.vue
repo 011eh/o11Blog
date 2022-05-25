@@ -74,8 +74,7 @@
         </el-form-item>
         <el-form-item label="父级资源" prop="parentId">
           <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
-                     placeholder="无"
-          >
+                     placeholder="无">
             <el-option v-for="item in parentOptionFilter()" :key="item.id" :label="item.name" :value="item.id">
               <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
                                             :type="item.resourceType | permissionTypeTagFilter">{{
@@ -96,6 +95,34 @@
             inactive-value="禁用"
           />
         </el-form-item>
+
+        <div v-if="dataOperating.resourceType==='操作'">
+          <el-form-item label="关联接口" prop="path">
+            <el-button @click="addApiRef">增加</el-button>
+            <el-table :data="refApis">
+              <el-table-column align="center" prop="api" label="资源路径">
+                <template slot-scope="{row,$index}">
+                  <el-input v-model="row.api"/>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="httpMethod" label="HTTP方法">
+                <template slot-scope="{row,$index}">
+                  <el-select v-model="row.httpMethod" class="m-2">
+                    <el-option v-for="item in httpMethodOptions" :value="item"/>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="ref"  width="200" label="HTTP方法">
+                <template slot-scope="{row,$index}">
+                  <el-radio-group v-model="row.ref">
+                    <el-radio :label="true" border>关联</el-radio>
+                    <el-radio :label="false" border>排除</el-radio>
+                  </el-radio-group>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item>
+        </div>
 
         <div v-if="dataOperating.resourceType!=='操作'">
           <el-form-item label="路由路径" prop="path">
@@ -246,7 +273,9 @@ export default {
       },
       expandRowIds: [],
       iconDialogVisible: false,
-      parentOptions: []
+      parentOptions: [],
+      refApis: [{api: "/add", httpMethod: 'post', ref: true}],
+      httpMethodOptions: ['get', 'post', 'put', 'delete']
     }
   },
   created() {
@@ -433,6 +462,9 @@ export default {
           this.list();
         });
       });
+    },
+    addApiRef() {
+      this.refApis.push({api: "", httpMethod: "", ref: true});
     },
     checkPermission
   },
