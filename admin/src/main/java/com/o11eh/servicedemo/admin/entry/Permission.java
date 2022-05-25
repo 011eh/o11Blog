@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.config.validation.ColumnsUnique;
 import com.o11eh.servicedemo.admin.config.validation.RefId;
@@ -45,4 +46,37 @@ public class Permission extends BaseEntry {
     @JsonUnwrapped
     @TableField(typeHandler = JacksonTypeHandler.class, updateStrategy = FieldStrategy.IGNORED)
     private RouterInfo routerInfo;
+
+    @Data
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class RouterInfo {
+
+        private String id;
+        private String name;
+        private String parentId;
+        private String path;
+        private String component;
+        private String redirect;
+        private Boolean hidden;
+        private Boolean alwaysShow;
+        private Meta meta;
+        private List<RouterInfo> children;
+
+        @Data
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        static class Meta {
+            private String title;
+            private String icon;
+            private Boolean noCache;
+            private Boolean breadcrumb;
+            private Boolean affix;
+        }
+    }
+
+    @Data
+    public static class ApiRef {
+        private String api;
+        private String httpMethod;
+        private boolean match;
+    }
 }

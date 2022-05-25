@@ -2,7 +2,6 @@ package com.o11eh.servicedemo.admin.config;
 
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.entry.RouterInfo;
 import com.o11eh.servicedemo.admin.enums.ResourceType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,7 @@ public class AuthInfo {
     private String roleName;
     private String avatar;
     private List<String> permissionKeys;
-    private List<RouterInfo> routers;
+    private List<Permission.RouterInfo> routers;
 
     public AuthInfo(Admin admin) {
         userId = admin.getId();
@@ -45,9 +44,9 @@ public class AuthInfo {
                     .collect(Collectors.toList()));
         }
         String rootParentId = "";
-        Map<String, List<RouterInfo>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
+        Map<String, List<Permission.RouterInfo>> parentIdMap = typeMap.values().stream().flatMap(Collection::stream)
                 .map(permission -> {
-                    RouterInfo routerInfo = permission.getRouterInfo();
+                    Permission.RouterInfo routerInfo = permission.getRouterInfo();
                     routerInfo.setName(permission.getName());
                     routerInfo.setId(permission.getId());
                     routerInfo.setParentId(permission.getParentId());

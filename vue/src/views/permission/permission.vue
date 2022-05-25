@@ -10,6 +10,7 @@
         查询
       </el-button>
     </div>
+
     <el-table v-loading="this.loading" :data="tableData" style="width: 100%;" row-key="id" :expand-row-keys="expandRowIds" border
               :tree-props="{ children: 'children' }">
       <el-table-column align="center" prop="name" label="名称"/>
@@ -42,16 +43,21 @@
                      :disabled="!checkPermission(['permission:update'])">
             编辑
           </el-button>
-          <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
+          <el-popconfirm class="table-operation" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
               <el-button type="danger" size="small" :disabled="!checkPermission(['permission:delete'])">
                 删除
               </el-button>
             </template>
           </el-popconfirm>
+          <el-button v-if="row.resourceType==='操作'" class="table-operation" type="warning" size="small" @click="handleRefApi(row.id)"
+                     :disabled="!checkPermission([''])">
+            绑定接口
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+
     <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="23%"
                style="width: 60%; margin-left: 35px">
@@ -74,7 +80,8 @@
         </el-form-item>
         <el-form-item label="父级资源" prop="parentId">
           <el-select v-model="dataOperating.parentId" class="m-2" :disabled="dataOperating.resourceType==='一级菜单'"
-                     placeholder="无">
+                     placeholder="无"
+          >
             <el-option v-for="item in parentOptionFilter()" :key="item.id" :label="item.name" :value="item.id">
               <span>{{ item.name }} <el-tag style="margin-left: 10px" size="small"
                                             :type="item.resourceType | permissionTypeTagFilter">{{
@@ -95,34 +102,6 @@
             inactive-value="禁用"
           />
         </el-form-item>
-
-        <div v-if="dataOperating.resourceType==='操作'">
-          <el-form-item label="关联接口" prop="path">
-            <el-button @click="addApiRef">增加</el-button>
-            <el-table :data="refApis">
-              <el-table-column align="center" prop="api" label="资源路径">
-                <template slot-scope="{row,$index}">
-                  <el-input v-model="row.api"/>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="httpMethod" label="HTTP方法">
-                <template slot-scope="{row,$index}">
-                  <el-select v-model="row.httpMethod" class="m-2">
-                    <el-option v-for="item in httpMethodOptions" :value="item"/>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="ref"  width="200" label="HTTP方法">
-                <template slot-scope="{row,$index}">
-                  <el-radio-group v-model="row.ref">
-                    <el-radio :label="true" border>关联</el-radio>
-                    <el-radio :label="false" border>排除</el-radio>
-                  </el-radio-group>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-form-item>
-        </div>
 
         <div v-if="dataOperating.resourceType!=='操作'">
           <el-form-item label="路由路径" prop="path">
@@ -218,6 +197,52 @@
       </span>
       </template>
     </el-dialog>
+
+    <el-dialog :title="operationMap[dialogStatus]" :visible.sync="refApiDialog">
+      <el-button style="float: right" @click="addApiRef">增加</el-button>
+      <el-table :data="refApis">
+        <el-table-column align="center" prop="api" label="资源路径">
+          <template slot-scope="{row,$index}">
+            <el-input v-model="row.uri"/>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="httpMethod" label="HTTP方法">
+          <template slot-scope="{row,$index}">
+            <el-select v-model="row.method" class="m-2">
+              <el-option value="get"/>
+              <el-option value="post"/>
+              <el-option value="put"/>
+              <el-option value="delete"/>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="ref" label="是否匹配" :width="280">
+          <template slot-scope="{row,$index}">
+            <el-radio-group v-model="row.match">
+              <el-radio :label="true" border>匹配</el-radio>
+              <el-radio :label="false" border>排除</el-radio>
+            </el-radio-group>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" align="center">
+          <template slot-scope="{row,$index}">
+            <el-button type="danger" size="small" @click="deleteRefApi($index)">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="refApiDialog = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="updateApiRef">
+          确定
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -274,8 +299,8 @@ export default {
       expandRowIds: [],
       iconDialogVisible: false,
       parentOptions: [],
-      refApis: [{api: "/add", httpMethod: 'post', ref: true}],
-      httpMethodOptions: ['get', 'post', 'put', 'delete']
+      refApiDialog: false,
+      refApis: [{uri: '/add', method: 'get', match: true}]
     }
   },
   created() {
@@ -463,8 +488,18 @@ export default {
         });
       });
     },
+    handleRefApi(id) {
+      this.refApiDialog = true;
+      console.log(id)
+    },
     addApiRef() {
-      this.refApis.push({api: "", httpMethod: "", ref: true});
+      this.refApis.push({uri: '', method: '', match: true});
+    },
+    updateApiRef() {
+      console.log(this.refApis);
+    },
+    deleteRefApi(index) {
+      this.refApis.splice(index, 1);
     },
     checkPermission
   },

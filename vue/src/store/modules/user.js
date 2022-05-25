@@ -57,7 +57,7 @@ const actions = {
       getInfo(state.token).then(response => {
         const {data} = response
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录');
         }
 
         let {permissionKeys, routers, nickName, avatar} = data
