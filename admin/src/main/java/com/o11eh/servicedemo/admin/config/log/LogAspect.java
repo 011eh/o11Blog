@@ -66,12 +66,11 @@ public class LogAspect {
         return result;
     }
 
-    @Async
     public void doSaveLog(String params, Log annotation, ProceedingJoinPoint joinPoint, int timeCost, Exception e) {
         HttpServletRequest request = ((ServletRequestAttributes)
                 Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
-        String username = (String) StpUtil.getSession().get("username");
+        String username = (String) StpUtil.getLoginIdDefaultNull();
         String ip = HttpUtil.getIPAddress(request);
         String operation = annotation.value().length() > 0 ? annotation.value() : null;
         String controller = joinPoint.getTarget().getClass().getName();

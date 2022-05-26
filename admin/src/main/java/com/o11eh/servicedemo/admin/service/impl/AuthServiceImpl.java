@@ -34,18 +34,17 @@ public class AuthServiceImpl implements AuthService {
         if (admin.getStatus() == Status.Disable) {
             throw BusinessException.e("账号被锁定");
         }
-        
+
         adminService.update(Wrappers.<Admin>update()
                 .eq("id", admin.getId())
                 .set("last_login_time", LocalDateTime.now())
                 .set("last_login_ip", HttpUtil.getIPAddress()));
 
-        StpUtil.login(admin.getId());
+        StpUtil.login(admin.getUsername());
         AuthInfo authInfo = new AuthInfo(admin);
         authInfo.setPermission(permissionService.getAuthInfoByRoleId(admin.getRoleId()));
         SaSession session = StpUtil.getSession();
         session.set("authInfo", authInfo);
-        session.set("username", username);
         return StpUtil.getTokenValue();
     }
 
