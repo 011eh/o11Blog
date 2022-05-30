@@ -10,7 +10,7 @@
                       :default-time="['00:00:00', '23:59:59']" v-model="timeSelect" value-format="yyyy-MM-dd HH:mm:ss"/>
 
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 :disabled="!checkPermission([''])">查询
+                 >查询
       </el-button>
 
       <el-table  v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id">

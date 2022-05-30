@@ -4,17 +4,17 @@
       <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="handleDeleteMulti">
         <template #reference>
           <el-button class="filter-item" type="danger" icon="el-icon-delete" plain circle
-                     :disabled="!checkPermission(['role:update'])"/>
+                     />
         </template>
       </el-popconfirm>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
-                 :disabled="!checkPermission(['role:create'])">
+                 >
         添加
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="名称"
                 clearable class="filter-input"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 :disabled="!checkPermission(['role:list'])">
+                 >
         查询
       </el-button>
     </div>
@@ -32,12 +32,12 @@
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
-                     :disabled="!checkPermission(['role:update'])">
+                     >
             编辑
           </el-button>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small" :disabled="!checkPermission(['role:delete'])">
+              <el-button type="danger" size="small" >
                 删除
               </el-button>
             </template>
@@ -171,9 +171,6 @@ export default {
   },
   methods: {
     page() {
-      if (!checkPermission(['role:list'])) {
-        return;
-      }
       this.loading = true;
       new Promise(() => {
         page(this.pageReq).then(pageResult => {

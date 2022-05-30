@@ -2,11 +2,11 @@
   <div class="app-container">
     <div class="filter-container">
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
-                 :disabled="!checkPermission(['permission:create'])">
+                 >
         添加
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
-                 @click="list" :disabled="!checkPermission(['permission:list'])">
+                 @click="list" >
         查询
       </el-button>
     </div>
@@ -39,12 +39,12 @@
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
-                     :disabled="!checkPermission(['permission:update'])">
+                     >
             编辑
           </el-button>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small" :disabled="!checkPermission(['permission:delete'])">
+              <el-button type="danger" size="small" >
                 删除
               </el-button>
             </template>
@@ -275,9 +275,6 @@ export default {
       }
     },
     list() {
-      if (!checkPermission(['permission:list'])) {
-        return;
-      }
       this.loading = true;
       this.expandRowIds = []
       return new Promise(() => {

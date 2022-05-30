@@ -4,25 +4,26 @@
       <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="handleDeleteMulti">
         <template #reference>
           <el-button class="filter-item" type="danger" icon="el-icon-delete" plain circle
-                     :disabled="!checkPermission([''])"/>
+                     />
         </template>
       </el-popconfirm>
 
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
-                 :disabled="!checkPermission([''])">
+                 >
         添加
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="名称/参数键值" style="width: 200px; margin-left: 10px"
                 clearable class="filter-input"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search"
-                 @click="page" :disabled="!checkPermission([''])">
+                 @click="page" >
         查询
       </el-button>
     </div>
 
+
     <el-table v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData" row-key="id"
               @selection-change="handleSelectionChange">
-      <el-table-column align="center" type="selection"/>
+      <el-table-column align="center" type="selection"/><!--   todo 表格-->
       <el-table-column align="center" type="index" label="序号"/>
       <el-table-column align="center" prop="name" label="名称"/>
       <el-table-column align="center" prop="paramKey" label="参数键值"/>
@@ -31,12 +32,12 @@
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
-                     :disabled="!checkPermission([''])">
+                     >
             编辑
           </el-button>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small" :disabled="!checkPermission([''])">
+              <el-button type="danger" size="small" >
                 删除
               </el-button>
             </template>
@@ -48,6 +49,7 @@
     <el-dialog :title="operationMap[dialogStatus]" :visible.sync="dialogFormVisible" @closed="dialogClose">
       <el-form ref="dataForm" :model="dataOperating" label-position="left" label-width="33%"
                style="width: 60%; margin-left: 35px">
+        <!--        todo 表单-->
         <el-form-item label="名称" prop="name">
           <el-input v-model="dataOperating.name"/>
         </el-form-item>
@@ -131,18 +133,14 @@ export default {
       pageReq: Object.assign(pageReq),
       rowSelected,
 
-      dataOperating: {} // todo
+      dataOperating: {} // todo 表单数据
     }
   },
   methods: {
     page() {
-      if (!checkPermission([''])) {
-        return;
-      }
-
       this.loading = true;
       return new Promise(() => {
-        // todo
+        // todo 分页请求
         sysParamPage(this.pageReq).then(res => {
           this.tableData = res.data;
           this.pagination.current = res.pageCurrent
@@ -171,7 +169,7 @@ export default {
     },
     createData() {
       return new Promise(() => {
-        // todo
+        // todo 创建
         createSysParam(this.dataOperating).then(() => {
           this.dialogFormVisible = false;
           this.page();
@@ -181,7 +179,7 @@ export default {
     },
     updateData() {
       return new Promise(() => {
-        // todo
+        // todo 更新
         updateSysParam(this.dataOperating).then(() => {
           this.dialogFormVisible = false;
           this.page();
@@ -195,7 +193,7 @@ export default {
     },
     doDelete(id) {
       return new Promise(() => {
-        // todo
+        // todo 删除
         deleteSysParam([id]).then(() => {
           this.prevPageIfPageLastOne();
           this.page();
@@ -204,15 +202,15 @@ export default {
     },
     deleteMulti(ids) {
       return new Promise(() => {
-        // todo
+        // todo 多选删除
         deleteSysParam(ids).then(() => {
           this.prevPageIfPageLastOne()
           this.page();
         })
       });
     },
-    resetDataOperating() {
-      this.dataOperating = {}// todo
+    resetDataOperating() {// todo 重置数据
+      this.dataOperating = {}
     },
     handlePageChange,
     handleSizeChange,
