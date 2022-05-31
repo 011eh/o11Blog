@@ -3,37 +3,52 @@ package com.o11eh.servicedemo.admin.config;
 import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
+import cn.dev33.satoken.router.SaRouterStaff;
 import cn.dev33.satoken.stp.StpUtil;
+import com.o11eh.servicedemo.admin.entry.ApiMatcher;
+import com.o11eh.servicedemo.admin.entry.BaseEntry;
+import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.service.ApiMatcherService;
+import com.o11eh.servicedemo.admin.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Configuration
 public class SaTokenConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private ApiMatcherService apiMatcherService;
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SaRouteInterceptor((request, response, handler) -> {
-            SaRouter.match("/admin").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("admin:create"));
-            SaRouter.match("/admin").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("admin:update"));
-            SaRouter.match("/admin").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("admin:delete"));
-            SaRouter.match("/admin/page").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("admin:list"));
-
-            SaRouter.match("/role").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("role:create"));
-            SaRouter.match("/role").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("role:update"));
-            SaRouter.match("/role").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("role:delete"));
-            SaRouter.match("/role/page").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("role:list"));
-
-            SaRouter.match("/permission/{id}").notMatch("/permission/list").match(SaHttpMethod.GET).check(() -> StpUtil.checkPermission("permission:update"));
-            SaRouter.match("/permission/list").match(SaHttpMethod.GET).check(() -> StpUtil.checkPermission("permission:list"));
-            SaRouter.match("/permission").match(SaHttpMethod.POST).check(() -> StpUtil.checkPermission("permission:create"));
-            SaRouter.match("/permission").match(SaHttpMethod.PUT).check(() -> StpUtil.checkPermission("permission:update"));
-            SaRouter.match("/permission").match(SaHttpMethod.DELETE).check(() -> StpUtil.checkPermission("permission:delete"));
-
-            SaRouter.match("/sysBase/roleDto").check(() -> StpUtil.checkPermissionOr("admin:create", "admin:update"));
-            SaRouter.match("/sysBase/permissionTree").check(() -> StpUtil.checkPermissionOr("role:create", "role:update"));
-            SaRouter.match("/sysBase/permissionDto").check(() -> StpUtil.checkPermissionOr("permission:create", "permission:update"));
-
+            Map<String, String> idKeyMap = permissionService.dtoList().stream()
+                    .collect(Collectors.toMap(BaseEntry::getId, Permission::getPermissionKey));
+            List<ApiMatcher> list = apiMatcherService.list();
+            list.sort(Comparator.comparing(ApiMatcher::getSort));
+            for (ApiMatcher matcher : list) {
+//                String[] requiredAll = matcher.getRequiredAll().stream().map(idKeyMap::get).toArray(String[]::new);
+//                String[] requiredAny = matcher.getRequiredAny().stream().map(idKeyMap::get).toArray(String[]::new);
+//                SaRouterStaff check = SaRouter
+//                        .match(matcher.getMatches())
+//                        .notMatch(matcher.getNoMatches())
+//                        .match(SaHttpMethod.toEnumArray(matcher.getMethods().toArray(new String[0])))
+//                        .check(() -> StpUtil.checkPermissionAnd(requiredAll))
+//                        .check(() -> StpUtil.checkPermissionOr(requiredAny));
+//                if (matcher.isStopChain()) {
+//                    check.stop();
+//                }
+            }
         }));
     }
 }

@@ -35,6 +35,12 @@ public class Result {
         return result;
     }
 
+    public static <T> Result successShowMsg(T data) {
+        Result result = new ModelResult<T>(data);
+        result.code += 1000;
+        return result;
+    }
+
     public static <T> Result success(T Data) {
         return new ModelResult<>(Data);
     }

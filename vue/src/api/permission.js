@@ -44,3 +44,36 @@ export function grantedTo(roleId) {
     method: 'get',
   });
 }
+
+// 接口鉴权
+export function apiMatchPage(data) {
+  return request({
+    url: `/permission/apiMatcher/page`,
+    method: 'post',
+    data
+  });
+}
+
+export function apiMatchCreate(data) {
+  return request({
+    url: `/permission/apiMatcher`,
+    method: 'post',
+    data
+  });
+}
+
+export function apiMatchUpdate(data) {
+  return request({
+    url: `/permission/apiMatcher`,
+    method: 'put',
+    data
+  });
+}
+
+export function apiMatchDelete(data) {
+  return request({
+    url: `/permission/apiMatcher`,
+    method: 'delete',
+    data
+  });
+}

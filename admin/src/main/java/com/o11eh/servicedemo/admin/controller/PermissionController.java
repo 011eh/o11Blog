@@ -2,12 +2,16 @@ package com.o11eh.servicedemo.admin.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.config.validation.StringId;
 import com.o11eh.servicedemo.admin.constants.Constants;
+import com.o11eh.servicedemo.admin.entry.ApiMatcher;
+import com.o11eh.servicedemo.admin.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.entry.Result;
 import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
+import com.o11eh.servicedemo.admin.service.ApiMatcherService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +31,9 @@ import java.util.List;
 public class PermissionController extends BaseController {
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private ApiMatcherService apiMatcherService;
 
     @GetMapping("list")
     @SaCheckPermission("permission:list")
@@ -72,5 +79,37 @@ public class PermissionController extends BaseController {
     public Result getRolePermissions(@PathVariable String roleId) {
         List<Permission> permissionIds = permissionService.getPermissionGranted(roleId);
         return Result.success(permissionIds);
+    }
+
+    @ApiOperation("接口鉴权分页")
+    @PostMapping("/apiMatcher/page")
+    public Result apiMatcherPage(@RequestBody PageReq req) {
+        Page<ApiMatcher> page = apiMatcherService.page(new Page<>(req.getCurrent(), req.getSize()));
+        return Result.success(page);
+    }
+
+
+    @Log("接口鉴权创建")
+    @ApiOperation("接口鉴权创建")
+    @PostMapping("/apiMatcher")
+    public Result createApiMatcher(@RequestBody ApiMatcher matcher) {
+        apiMatcherService.save(matcher);
+        return Result.successShowMsg(matcher.getId());
+    }
+
+    @Log("接口鉴权更新")
+    @ApiOperation("接口鉴权更新")
+    @PutMapping("/apiMatcher")
+    public Result updateApiMatcher(@RequestBody ApiMatcher matcher) {
+        apiMatcherService.updateById(matcher);
+        return Result.successShowMsg();
+    }
+
+    @Log("接口鉴权删除")
+    @ApiOperation("接口鉴权删除")
+    @DeleteMapping("/apiMatcher")
+    public Result deleteApiMatcher(@RequestBody List<String> id) {
+        apiMatcherService.removeBatchByIds(id);
+        return Result.successShowMsg();
     }
 }
