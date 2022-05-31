@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2022-02-14
  */
 @RestController
-@RequestMapping("/role")
+@RequestMapping("role")
 @Api(tags = "角色")
 public class RoleController extends BaseController {
 

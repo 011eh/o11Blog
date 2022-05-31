@@ -130,7 +130,7 @@ export default {
       operationMap,
       selected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
-      pageReq: Object.assign(pageReq),
+      pageReq: Object.assign({},pageReq),
       rowSelected,
 
       dataOperating: {} // todo 表单数据

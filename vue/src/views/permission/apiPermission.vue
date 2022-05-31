@@ -17,86 +17,58 @@
       </el-button>
     </div>
 
-    <el-table v-loading="this.loading" style="width: 100%;" width="100%" :max-height="tableMaxHeight" :data="tableData" row-key="id"
-              @selection-change="handleSelectionChange">
+    <el-table border v-loading="this.loading" style="width: 100%;" :max-height="tableMaxHeight" :data="tableData"
+              row-key="id" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection"/>
       <el-table-column align="center" type="index" label="序号"/>
       <el-table-column align="center" prop="matches" label="匹配路径">
         <template slot-scope="{row,$index}">
-          <div v-for="(item,index) in row.matches">
-            <el-tag class="tag-margin" :closable="!row.editDisable" @close="handleClose(row.matches,index)" :disable-transitions="false"
-                    :key="item">{{ item }}
-            </el-tag>
-            <br>
-          </div>
-          <div v-if="!row.editDisable">
-            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                      @keyup.enter.native="handleInputConfirm(row.matches)" @blur="handleInputConfirm(row.matches)">
-            </el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加路径</el-button>
-          </div>
+          <el-select s size="small" :disabled="row.editDisable" v-model="row.matches" multiple>
+            <el-option v-for="item in urls" :key="item" :label="item" :value="item"/>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="noMatches" label="排除路径">
         <template slot-scope="{row,$index}">
-          <div v-for="(item,index) in row.noMatches">
-            <el-tag type="info" class="tag-margin" :closable="!row.editDisable" @close="handleClose(row.noMatches,index)" :disable-transitions="false"
-                    :key="item">{{ item }}
-            </el-tag>
-            <br>
-          </div>
-          <el-input
-            class="input-new-tag"
-            v-if="noMatchInputVisible"
-            v-model="noMatchInputValue"
-            ref="noMatchSaveTagInput"
-            size="small"
-            @keyup.enter.native="handleNoMatchInputConfirm(row.noMatches)"
-            @blur="handleNoMatchInputConfirm(row.noMatches)"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showNoMatchInput" :disabled="row.editDisable">+
-            添加路径
-          </el-button>
+          <el-select size="small" :disabled="row.editDisable" v-model="row.noMatches" multiple>
+            <el-option v-for="item in urls" :key="item" :label="item" :value="item"/>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="methods" label="HTTP方法">
         <template slot-scope="{row,$index}">
-          <el-select :disabled="row.editDisable" v-model="row.methods" multiple>
+          <el-select size="small" :disabled="row.editDisable" v-model="row.methods" multiple>
             <el-option v-for="item in httpMethods" :key="item" :label="item" :value="item"/>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="requiredAl" label="需要任一权限">
         <template slot-scope="{row,$index}">
-          <el-select :disabled="row.editDisable" v-model="row.requiredAny" multiple>
+          <el-select size="small" :disabled="row.editDisable" v-model="row.requiredAny" multiple>
             <el-option v-for="item in permissionOptions" :key="item.id" :label="item.permissionKey" :value="item.id"/>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="requiredAny" label="需要所有权限">
         <template slot-scope="{row,$index}">
-          <el-select :disabled="row.editDisable" v-model="row.requiredAll" multiple>
+          <el-select size="small" :disabled="row.editDisable" v-model="row.requiredAll" multiple>
             <el-option v-for="item in permissionOptions" :key="item.id" :label="item.permissionKey" :value="item.id"/>
           </el-select>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="stopChain" label="通过则结束匹配链">
         <template slot-scope="{row,$index}">
-          <el-switch :disabled="row.editDisable" v-model="row.stopChain"/>
+          <el-switch size="small" :disabled="row.editDisable" v-model="row.stopChain"/>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="sort" label="排序">
         <template slot-scope="{row,$index}">
-          <el-input-number :disabled="row.editDisable" v-model="row.sort" :min="1" :max="100"/>
+          <el-input-number size="small" :disabled="row.editDisable" v-model="row.sort" :min="1" :max="100"/>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.editDisable" type="primary" size="small" @click="handleUpdate(row)"
-          >
-            编辑
-          </el-button>
+          <el-button v-if="row.editDisable" type="primary" size="small" @click="handleUpdate(row)">编辑</el-button>
           <el-button v-else type="success" size="small" @click="doUpdateOrCreate(row,$index)">
             保存
           </el-button>
@@ -148,12 +120,13 @@ import {
   tableMaxHeight
 } from "@/utils/tableBase";
 import checkPermission from "@/utils/permission";
-import {createSysParam, deleteSysParam, permissionSelect, sysParamPage, updateSysParam} from "@/api/sysBase";
+import {createSysParam, deleteSysParam, getAllUrl, permissionSelect, sysParamPage, updateSysParam} from "@/api/sysBase";
 import {apiMatchCreate, apiMatchDelete, apiMatchPage, apiMatchUpdate} from "@/api/permission";
 
 export default {
   created() {
     this.getPermissionOptions();
+    this.getUrlOptions();
     this.page();
   },
   data() {
@@ -165,7 +138,7 @@ export default {
       operationMap,
       selected: Object.assign({}, rowSelected),
       pagination: Object.assign({}, pagination),
-      pageReq: Object.assign(pageReq),
+      pageReq: Object.assign({}, pageReq),
       rowSelected,
 
       dataOperating: {},// todo 表单数据
@@ -177,13 +150,14 @@ export default {
       httpMethods: ['get', 'post', 'put', 'delete'],
       createDisable: false,
       toCreateIndex: null,
+      urls: []
     }
   },
   methods: {
     page() {
       this.loading = true;
+      this.createDisable = false;
       return new Promise(() => {
-        // todo 分页请求
         apiMatchPage(this.pageReq).then(res => {
           this.tableData = res.data.map(item => {
             return Object.assign({editDisable: true}, item);
@@ -261,43 +235,23 @@ export default {
     resetDataOperating() {// todo 重置数据
       this.dataOperating = {}
     },
-    handleClose(list, index) {
-      list.splice(index, 1);
-    },
-    handleInputConfirm(list) {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        list.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = '';
-    },
-    handleNoMatchInputConfirm(list) {
-      let inputValue = this.noMatchInputValue;
-      if (inputValue) {
-        list.push(inputValue);
-      }
-      this.noMatchInputVisible = false;
-      this.noMatchInputValue = '';
-    },
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-    showNoMatchInput() {
-      this.noMatchInputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.noMatchSaveTagInput.$refs.input.focus();
-      });
-    },
     getPermissionOptions() {
       return new Promise(() => {
         permissionSelect().then(res => {
-          this.permissionOptions = res.data.filter(p => {
+          let options = res.data.filter(p => {
             return p.resourceType === '操作';
           });
+          options.sort((i1, i2) => {
+            return i1.permissionKey.localeCompare(i2.permissionKey);
+          });
+          this.permissionOptions = options;
+        });
+      });
+    },
+    getUrlOptions() {
+      return new Promise(() => {
+        getAllUrl().then(res => {
+          this.urls = res.data;
         });
       });
     },

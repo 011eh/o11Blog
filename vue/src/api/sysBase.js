@@ -29,6 +29,12 @@ export function adminSelect() {
   });
 }
 
+export function getAllUrl() {
+  return request({
+    url: `/sysBase/allUrl`,
+    method: 'get',
+  })
+}
 
 // 日志
 export function sysLogPage(pageReq) {

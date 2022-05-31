@@ -1,7 +1,5 @@
 package com.o11eh.servicedemo.admin.controller;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.config.log.Log;
 import com.o11eh.servicedemo.admin.entry.*;
@@ -9,34 +7,25 @@ import com.o11eh.servicedemo.admin.entry.vo.SysLogPageReq;
 import com.o11eh.servicedemo.admin.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.*;
 
 @Api(tags = "系统基础配置")
 @RestController
 @RequestMapping("sysBase")
+@AllArgsConstructor
 public class SysBaseController {
 
-    @Autowired
     private PermissionService permissionService;
-
-    @Autowired
     private RoleService roleService;
-
-    @Autowired
     private OsService osService;
-
-    @Autowired
     private SysLogService sysLogService;
-
-    @Autowired
     private SysParamService sysParamService;
-
-    @Autowired
     private AdminService adminService;
+    private ApiMatcherService apiMatcherService;
 
     @ApiOperation("权限Dto列表")
     @GetMapping("permissionDto")
@@ -107,5 +96,11 @@ public class SysBaseController {
     public Result deleteParam(@RequestBody List<Long> ids) {
         sysParamService.removeBatchByIds(ids);
         return Result.successShowMsg();
+    }
+
+    @ApiOperation("接口信息")
+    @GetMapping("allUrl")
+    public Result getAllUrls() {
+        return Result.success(apiMatcherService.getAllUrl());
     }
 }

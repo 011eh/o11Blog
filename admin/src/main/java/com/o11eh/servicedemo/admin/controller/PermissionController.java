@@ -15,7 +15,7 @@ import com.o11eh.servicedemo.admin.service.ApiMatcherService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,11 +28,10 @@ import java.util.List;
 @RestController
 @Api(tags = "权限")
 @RequestMapping("permission")
+@AllArgsConstructor
 public class PermissionController extends BaseController {
-    @Autowired
-    private PermissionService permissionService;
 
-    @Autowired
+    private PermissionService permissionService;
     private ApiMatcherService apiMatcherService;
 
     @GetMapping("list")
@@ -111,5 +110,11 @@ public class PermissionController extends BaseController {
     public Result deleteApiMatcher(@RequestBody List<String> id) {
         apiMatcherService.removeBatchByIds(id);
         return Result.successShowMsg();
+    }
+
+    @PostMapping("/apiMatcher/quickCreate")
+    public Result createMatcherByUrl() {
+        apiMatcherService.getAllUrl();
+        return Result.success();
     }
 }
