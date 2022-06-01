@@ -4,18 +4,18 @@
       <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="handleDeleteMulti">
         <template #reference>
           <el-button class="filter-item" type="danger" icon="el-icon-delete" plain circle
-                     />
+          />
         </template>
       </el-popconfirm>
 
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-edit" @click="handleCreate"
-                 >
+      >
         添加
       </el-button>
       <el-input v-model="pageReq.keyword" placeholder="用户名/昵称" style="width: 200px; margin-left: 10px"
                 clearable class="filter-input"/>
       <el-button class="filter-item" style="margin-left: 10px;" size="small" type="primary" icon="el-icon-search" @click="page"
-                 >
+      >
         查询
       </el-button>
     </div>
@@ -48,12 +48,19 @@
       <el-table-column fixed="right" label="操作" align="center" width="230">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)"
-                     >
+          >
             编辑
           </el-button>
+          <el-popconfirm style="margin-left: 5px" title="重置为默认密码？" @onConfirm="resetPassword(row.id)">
+            <template #reference>
+              <el-button type="warning" size="small">
+                重置密码
+              </el-button>
+            </template>
+          </el-popconfirm>
           <el-popconfirm style="margin-left: 5px" title="确定删除吗？" @onConfirm="doDelete(row.id)">
             <template #reference>
-              <el-button type="danger" size="small" >
+              <el-button type="danger" size="small">
                 删除
               </el-button>
             </template>
@@ -142,7 +149,7 @@ import {
   statusTagFilter
 } from "@/utils/tableBase";
 import {roleSelect} from "@/api/sysBase";
-import {create, doDelete, page, update} from "@/api/admin";
+import {create, doDelete, page, resetToDefaultPassword, update} from "@/api/admin";
 import checkPermission from "@/utils/permission";
 import myUpload from 'vue-image-crop-upload/upload-2.vue'
 
@@ -265,6 +272,11 @@ export default {
     },
     uploaderToggle() {
       this.toggle = !this.toggle;
+    },
+    resetPassword(id) {
+      return new Promise(() => {
+        resetToDefaultPassword(id);
+      });
     },
     handleSelectionChange,
     handleDeleteMulti,

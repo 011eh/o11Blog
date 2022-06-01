@@ -34,6 +34,7 @@ public class PermissionController extends BaseController {
     private PermissionService permissionService;
     private ApiMatcherService apiMatcherService;
 
+    @Log
     @GetMapping("list")
     @SaCheckPermission("permission:list")
     @ApiOperation("授权列表")
@@ -42,6 +43,7 @@ public class PermissionController extends BaseController {
         return Result.success(permissions);
     }
 
+    @Log
     @GetMapping(Constants.Api.PATH_ID)
     @ApiOperation(Constants.Doc.DETAIL)
     public Result detail(@Valid @StringId @PathVariable String id) {
@@ -74,12 +76,14 @@ public class PermissionController extends BaseController {
         return Result.successShowMsg();
     }
 
+    @Log
     @GetMapping("granted/{roleId}")
     public Result getRolePermissions(@PathVariable String roleId) {
         List<Permission> permissionIds = permissionService.getPermissionGranted(roleId);
         return Result.success(permissionIds);
     }
 
+    @Log
     @ApiOperation("接口鉴权分页")
     @PostMapping("/apiMatcher/page")
     public Result apiMatcherPage(@RequestBody PageReq req) {
@@ -110,10 +114,5 @@ public class PermissionController extends BaseController {
     public Result deleteApiMatcher(@RequestBody List<String> id) {
         apiMatcherService.removeBatchByIds(id);
         return Result.successShowMsg();
-    }
-
-    @PostMapping("/apiMatcher/quickCreate")
-    public Result createMatcherByUrl() {
-        return Result.success();
     }
 }

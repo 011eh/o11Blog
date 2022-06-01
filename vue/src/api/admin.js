@@ -31,3 +31,21 @@ export function doDelete(data) {
     data
   });
 }
+
+export function resetPassword(oldPassword, newPassword) {
+  let params = new URLSearchParams()
+  params.append('oldPassword', oldPassword)
+  params.append('newPassword', newPassword)
+  return request({
+    url: `/admin/resetPassword`,
+    method: 'post',
+    params
+  });
+}
+
+export function resetToDefaultPassword(userId) {
+  return request({
+    url: `/admin/resetPassword/${userId}`,
+    method: 'post',
+  });
+}

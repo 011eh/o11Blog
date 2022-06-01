@@ -30,6 +30,7 @@ public class SysBaseController {
     private AdminService adminService;
     private RequestMappingHandlerMapping handlerMapping;
 
+    @Log
     @ApiOperation("权限Dto列表")
     @GetMapping("permissionDto")
     public Result permissionDto() {
@@ -37,6 +38,7 @@ public class SysBaseController {
         return Result.success(permissionList);
     }
 
+    @Log
     @ApiOperation("权限授予列表")
     @GetMapping("permissionTree")
     public Result permissionDtoTree() {
@@ -44,6 +46,7 @@ public class SysBaseController {
         return Result.success(treeVoList);
     }
 
+    @Log
     @ApiOperation("角色Dto列表")
     @GetMapping("roleDto")
     public Result roleDto() {
@@ -51,6 +54,7 @@ public class SysBaseController {
         return Result.success(dtoList);
     }
 
+    @Log
     @ApiOperation("管理员Dto列表")
     @GetMapping("adminDto")
     public Result adminDto() {
@@ -66,6 +70,7 @@ public class SysBaseController {
         return Result.success(url);
     }
 
+    @Log
     @ApiOperation("操作日志分页查询")
     @PostMapping("sysLogPage")
     public Result getSysLogPage(@RequestBody SysLogPageReq req) {
@@ -73,6 +78,7 @@ public class SysBaseController {
         return Result.success(page);
     }
 
+    @Log
     @ApiOperation("系统参数分页")
     @PostMapping("sysParam/page")
     public Result getSysParamPage(@RequestBody PageReq req) {
@@ -80,6 +86,7 @@ public class SysBaseController {
         return Result.success(page);
     }
 
+    @Log
     @ApiOperation("系统参数创建")
     @PostMapping("sysParam")
     public Result createParam(@RequestBody SysParam param) {
@@ -87,6 +94,7 @@ public class SysBaseController {
         return Result.successShowMsg();
     }
 
+    @Log
     @ApiOperation("系统参数更新")
     @PutMapping("sysParam")
     public Result updateParam(@RequestBody SysParam param) {
@@ -94,6 +102,7 @@ public class SysBaseController {
         return Result.successShowMsg();
     }
 
+    @Log
     @ApiOperation("系统参数删除")
     @DeleteMapping("sysParam")
     public Result deleteParam(@RequestBody List<Long> ids) {
@@ -101,6 +110,7 @@ public class SysBaseController {
         return Result.successShowMsg();
     }
 
+    @Log
     @ApiOperation("接口信息")
     @GetMapping("allUrl")
     public Result getAllUrl() {

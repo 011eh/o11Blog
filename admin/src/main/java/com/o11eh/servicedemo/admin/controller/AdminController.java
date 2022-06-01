@@ -34,6 +34,7 @@ public class AdminController extends BaseController {
     @Autowired
     private AdminService adminService;
 
+    @Log
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq param) {
@@ -63,6 +64,22 @@ public class AdminController extends BaseController {
     @ApiOperation(Constants.Doc.BATCH_DELETE)
     public Result delete(@RequestBody List<Long> ids) {
         adminService.removeBatchByIds(ids);
+        return Result.successShowMsg();
+    }
+
+    @Log
+    @ApiOperation("重置密码")
+    @PostMapping("resetPassword")
+    public Result resetPassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        adminService.resetPassword(oldPassword, newPassword);
+        return Result.success();
+    }
+
+    @Log
+    @ApiOperation("重置密码为默认密码")
+    @PostMapping("resetPassword/{userId}")
+    public Result resetToDefaultPassword(@PathVariable String userId) {
+        adminService.resetToDefaultPassword(userId);
         return Result.successShowMsg();
     }
 }

@@ -56,7 +56,7 @@ function handleDeleteMulti() {
 }
 
 let tableData = [];
-let tableMaxHeight = window.innerHeight - 210
+let tableMaxHeight = window.innerHeight - 240
 let dialogStatus = '';
 let operationMap = {
   create: '添加',

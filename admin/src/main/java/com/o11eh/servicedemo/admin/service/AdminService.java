@@ -25,4 +25,8 @@ public interface AdminService extends BaseService<Admin> {
     Page<Admin> page(PageReq param);
 
     List<Admin> dtoList();
+
+    void resetPassword(String oldPassword, String newPassword);
+
+    void resetToDefaultPassword(String userId);
 }

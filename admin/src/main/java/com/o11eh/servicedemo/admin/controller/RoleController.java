@@ -12,6 +12,7 @@ import com.o11eh.servicedemo.admin.entry.vo.RoleVo;
 import com.o11eh.servicedemo.admin.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +27,15 @@ import java.util.List;
  * @author 011eh
  * @since 2022-02-14
  */
+@Api(tags = "角色")
 @RestController
 @RequestMapping("role")
-@Api(tags = "角色")
+@AllArgsConstructor
 public class RoleController extends BaseController {
 
-    @Autowired
     RoleService roleService;
 
+    @Log
     @ApiOperation(Constants.Doc.PAGE)
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq pageReq) {

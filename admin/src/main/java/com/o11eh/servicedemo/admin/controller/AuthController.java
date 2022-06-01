@@ -20,7 +20,7 @@ public class AuthController {
 
     @ApiOperation("登录")
     @PostMapping("/login")
-    public Result login(@Valid @RequestParam String username, @Valid @RequestParam String password) {
+    public Result login(@RequestParam String username, @RequestParam String password) {
         String token = authService.login(username, password);
         return Result.success(token);
     }
