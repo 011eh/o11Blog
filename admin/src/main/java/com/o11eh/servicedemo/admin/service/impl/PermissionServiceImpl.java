@@ -7,13 +7,16 @@ import com.o11eh.servicedemo.admin.entry.BaseEntry;
 import com.o11eh.servicedemo.admin.entry.Permission;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -22,9 +25,9 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
+@AllArgsConstructor
 public class PermissionServiceImpl extends BaseServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
-    @Autowired
     private PermissionMapper permissionMapper;
 
     @Override

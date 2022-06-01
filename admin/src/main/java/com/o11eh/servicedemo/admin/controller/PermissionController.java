@@ -114,7 +114,6 @@ public class PermissionController extends BaseController {
 
     @PostMapping("/apiMatcher/quickCreate")
     public Result createMatcherByUrl() {
-        apiMatcherService.getAllUrl();
         return Result.success();
     }
 }

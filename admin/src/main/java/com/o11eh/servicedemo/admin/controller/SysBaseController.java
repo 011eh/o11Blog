@@ -10,8 +10,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Api(tags = "系统基础配置")
 @RestController
@@ -25,7 +28,7 @@ public class SysBaseController {
     private SysLogService sysLogService;
     private SysParamService sysParamService;
     private AdminService adminService;
-    private ApiMatcherService apiMatcherService;
+    private RequestMappingHandlerMapping handlerMapping;
 
     @ApiOperation("权限Dto列表")
     @GetMapping("permissionDto")
@@ -100,7 +103,12 @@ public class SysBaseController {
 
     @ApiOperation("接口信息")
     @GetMapping("allUrl")
-    public Result getAllUrls() {
-        return Result.success(apiMatcherService.getAllUrl());
+    public Result getAllUrl() {
+        Set<String> urls = handlerMapping.getHandlerMethods().entrySet().stream()
+                .filter(entry -> Pattern.matches("com\\.o11eh\\..*", entry.getValue().toString()))
+                .map(entry -> entry.getKey().getPatternsCondition().getPatterns())
+                .flatMap(Collection::stream)
+                .sorted(Comparator.comparing(s -> s)).collect(Collectors.toCollection(LinkedHashSet::new));
+        return Result.success(urls);
     }
 }

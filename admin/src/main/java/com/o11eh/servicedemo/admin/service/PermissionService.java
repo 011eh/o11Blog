@@ -3,6 +3,7 @@ package com.o11eh.servicedemo.admin.service;
 import com.o11eh.servicedemo.admin.entry.Permission;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author 011eh
@@ -24,4 +25,5 @@ public interface PermissionService extends BaseService<Permission> {
     List<Permission> dtoList();
 
     List<Permission> treeDtoList();
+
 }
