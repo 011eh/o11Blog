@@ -3,16 +3,17 @@ package com.o11eh.servicedemo.admin.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.servicebase.config.log.Log;
 import com.o11eh.servicedemo.admin.config.validation.StringId;
-import com.o11eh.servicedemo.servicebase.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.ApiMatcher;
-import com.o11eh.servicedemo.servicebase.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.servicebase.entry.Result;
+import com.o11eh.servicedemo.admin.entry.vo.ApiMatcherVo;
 import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
 import com.o11eh.servicedemo.admin.service.ApiMatcherService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
+import com.o11eh.servicedemo.servicebase.config.log.Log;
+import com.o11eh.servicedemo.servicebase.constants.Constants;
+import com.o11eh.servicedemo.servicebase.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entry.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -95,7 +96,8 @@ public class PermissionController {
     @Log("接口鉴权创建")
     @ApiOperation("接口鉴权创建")
     @PostMapping("/apiMatcher")
-    public Result createApiMatcher(@RequestBody ApiMatcher matcher) {
+    public Result createApiMatcher(@Valid @RequestBody ApiMatcherVo matcherVo) {
+        ApiMatcher matcher = BeanUtil.copyProperties(matcherVo, ApiMatcher.class);
         apiMatcherService.save(matcher);
         return Result.successShowMsg(matcher.getId());
     }
@@ -103,7 +105,7 @@ public class PermissionController {
     @Log("接口鉴权更新")
     @ApiOperation("接口鉴权更新")
     @PutMapping("/apiMatcher")
-    public Result updateApiMatcher(@RequestBody ApiMatcher matcher) {
+    public Result updateApiMatcher(@Valid @RequestBody ApiMatcher matcher) {
         apiMatcherService.updateById(matcher);
         return Result.successShowMsg();
     }
