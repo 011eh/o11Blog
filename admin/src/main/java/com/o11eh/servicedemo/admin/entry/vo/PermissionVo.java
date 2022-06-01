@@ -3,8 +3,8 @@ package com.o11eh.servicedemo.admin.entry.vo;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.config.validation.RefId;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.enums.ResourceType;
-import com.o11eh.servicedemo.admin.enums.Status;
+import com.o11eh.servicedemo.servicebase.enums.ResourceType;
+import com.o11eh.servicedemo.servicebase.enums.Status;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

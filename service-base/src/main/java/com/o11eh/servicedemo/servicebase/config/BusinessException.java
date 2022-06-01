@@ -1,6 +1,6 @@
-package com.o11eh.servicedemo.admin.config;
+package com.o11eh.servicedemo.servicebase.config;
 
-import com.o11eh.servicedemo.admin.constants.ResultCode;
+import com.o11eh.servicedemo.servicebase.constants.ResultCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

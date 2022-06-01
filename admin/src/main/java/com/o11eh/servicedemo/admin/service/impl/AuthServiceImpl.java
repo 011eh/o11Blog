@@ -4,13 +4,13 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.o11eh.servicedemo.admin.config.AuthInfo;
-import com.o11eh.servicedemo.admin.config.BusinessException;
+import com.o11eh.servicedemo.servicebase.config.BusinessException;
 import com.o11eh.servicedemo.admin.entry.Admin;
-import com.o11eh.servicedemo.admin.enums.Status;
+import com.o11eh.servicedemo.servicebase.enums.Status;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.AuthService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
-import com.o11eh.servicedemo.utils.HttpUtil;
+import com.o11eh.servicedemo.servicebase.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

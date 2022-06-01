@@ -1,21 +1,20 @@
 package com.o11eh.servicedemo.admin.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.servicebase.entry.Result;
 import com.o11eh.servicedemo.admin.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("auth")
 @Api(tags = "登录")
+@AllArgsConstructor
 public class AuthController {
 
-    @Autowired
     private AuthService authService;
 
     @ApiOperation("登录")

@@ -3,13 +3,13 @@ package com.o11eh.servicedemo.admin.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.config.log.Log;
+import com.o11eh.servicedemo.servicebase.config.log.Log;
 import com.o11eh.servicedemo.admin.config.validation.StringId;
-import com.o11eh.servicedemo.admin.constants.Constants;
+import com.o11eh.servicedemo.servicebase.constants.Constants;
 import com.o11eh.servicedemo.admin.entry.ApiMatcher;
-import com.o11eh.servicedemo.admin.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entry.PageReq;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.servicebase.entry.Result;
 import com.o11eh.servicedemo.admin.entry.vo.PermissionVo;
 import com.o11eh.servicedemo.admin.service.ApiMatcherService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
@@ -29,7 +29,7 @@ import java.util.List;
 @Api(tags = "权限")
 @RequestMapping("permission")
 @AllArgsConstructor
-public class PermissionController extends BaseController {
+public class PermissionController {
 
     private PermissionService permissionService;
     private ApiMatcherService apiMatcherService;

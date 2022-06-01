@@ -1,8 +1,8 @@
-package com.o11eh.servicedemo.admin.entry;
+package com.o11eh.servicedemo.servicebase.entry;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.constants.ResultCode;
-import com.o11eh.servicedemo.admin.constants.ResultMessage;
+import com.o11eh.servicedemo.servicebase.constants.ResultCode;
+import com.o11eh.servicedemo.servicebase.constants.ResultMessage;
 import lombok.Getter;
 import lombok.Setter;
 

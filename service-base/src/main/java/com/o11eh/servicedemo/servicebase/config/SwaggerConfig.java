@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.config;
+package com.o11eh.servicedemo.servicebase.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;

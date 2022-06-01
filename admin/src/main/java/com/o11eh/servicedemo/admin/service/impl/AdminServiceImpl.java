@@ -6,15 +6,14 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.config.BusinessException;
+import com.o11eh.servicedemo.servicebase.config.BusinessException;
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.BaseEntry;
-import com.o11eh.servicedemo.admin.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entry.PageReq;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.SysParamService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

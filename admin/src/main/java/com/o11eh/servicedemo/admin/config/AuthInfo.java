@@ -2,7 +2,7 @@ package com.o11eh.servicedemo.admin.config;
 
 import com.o11eh.servicedemo.admin.entry.Admin;
 import com.o11eh.servicedemo.admin.entry.Permission;
-import com.o11eh.servicedemo.admin.enums.ResourceType;
+import com.o11eh.servicedemo.servicebase.enums.ResourceType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.config;
+package com.o11eh.servicedemo.servicebase.config;
 
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;

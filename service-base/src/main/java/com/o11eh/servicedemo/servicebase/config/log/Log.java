@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.config.log;
+package com.o11eh.servicedemo.servicebase.config.log;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

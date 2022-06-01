@@ -2,7 +2,7 @@ package com.o11eh.servicedemo.admin.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.o11eh.servicedemo.admin.enums.Status;
+import com.o11eh.servicedemo.servicebase.enums.Status;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

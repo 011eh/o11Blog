@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.utils;
+package com.o11eh.servicedemo.servicebase.utils;
 
 import cn.hutool.core.util.StrUtil;
 import org.springframework.web.context.request.RequestContextHolder;

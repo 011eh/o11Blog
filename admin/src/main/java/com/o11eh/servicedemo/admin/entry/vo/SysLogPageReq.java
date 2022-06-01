@@ -1,6 +1,6 @@
 package com.o11eh.servicedemo.admin.entry.vo;
 
-import com.o11eh.servicedemo.admin.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entry.PageReq;
 import lombok.Data;
 
 import java.time.LocalDateTime;

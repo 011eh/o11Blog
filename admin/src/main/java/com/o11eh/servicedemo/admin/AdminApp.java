@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @since 2022/02/14 19:45
  */
 @EnableAsync
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.o11eh.servicedemo.admin", "com.o11eh.servicedemo.servicebase.config"})
 public class AdminApp {
     public static void main(String[] args) {
         SpringApplication.run(AdminApp.class, args);

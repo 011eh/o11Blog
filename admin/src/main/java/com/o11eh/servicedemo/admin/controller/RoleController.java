@@ -3,17 +3,16 @@ package com.o11eh.servicedemo.admin.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.config.log.Log;
-import com.o11eh.servicedemo.admin.constants.Constants;
-import com.o11eh.servicedemo.admin.entry.PageReq;
-import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.servicebase.config.log.Log;
+import com.o11eh.servicedemo.servicebase.constants.Constants;
+import com.o11eh.servicedemo.servicebase.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entry.Result;
 import com.o11eh.servicedemo.admin.entry.Role;
 import com.o11eh.servicedemo.admin.entry.vo.RoleVo;
 import com.o11eh.servicedemo.admin.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,7 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("role")
 @AllArgsConstructor
-public class RoleController extends BaseController {
+public class RoleController {
 
     RoleService roleService;
 

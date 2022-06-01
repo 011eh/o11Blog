@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.config;
+package com.o11eh.servicedemo.servicebase.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

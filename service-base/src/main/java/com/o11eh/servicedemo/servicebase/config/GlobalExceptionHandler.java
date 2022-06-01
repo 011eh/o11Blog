@@ -1,8 +1,8 @@
-package com.o11eh.servicedemo.admin.config;
+package com.o11eh.servicedemo.servicebase.config;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
-import com.o11eh.servicedemo.admin.entry.Result;
+import com.o11eh.servicedemo.servicebase.entry.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

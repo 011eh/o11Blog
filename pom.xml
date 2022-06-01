@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>admin</module>
+        <module>service-base</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

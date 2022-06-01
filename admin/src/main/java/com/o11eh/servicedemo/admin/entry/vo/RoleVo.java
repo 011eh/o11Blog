@@ -1,6 +1,6 @@
 package com.o11eh.servicedemo.admin.entry.vo;
 
-import com.o11eh.servicedemo.admin.enums.Status;
+import com.o11eh.servicedemo.servicebase.enums.Status;
 import lombok.Data;
 
 import java.util.List;

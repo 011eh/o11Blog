@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.entry;
+package com.o11eh.servicedemo.servicebase.entry;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;

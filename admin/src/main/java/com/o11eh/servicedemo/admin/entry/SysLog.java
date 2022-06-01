@@ -1,7 +1,7 @@
 package com.o11eh.servicedemo.admin.entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.o11eh.servicedemo.admin.enums.LogStatus;
+import com.o11eh.servicedemo.servicebase.enums.LogStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
