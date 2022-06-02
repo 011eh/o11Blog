@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.entry;
+package com.o11eh.servicedemo.admin.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.o11eh.servicedemo.servicebase.enums.LogStatus;

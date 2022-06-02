@@ -5,21 +5,14 @@ import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.router.SaRouterStaff;
 import cn.dev33.satoken.stp.StpUtil;
-import com.o11eh.servicedemo.admin.entry.ApiMatcher;
-import com.o11eh.servicedemo.admin.entry.BaseEntry;
-import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entity.ApiMatcher;
 import com.o11eh.servicedemo.admin.service.ApiMatcherService;
-import com.o11eh.servicedemo.admin.service.PermissionService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Configuration
 @AllArgsConstructor

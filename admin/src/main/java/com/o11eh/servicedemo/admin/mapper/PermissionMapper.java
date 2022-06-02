@@ -1,6 +1,6 @@
 package com.o11eh.servicedemo.admin.mapper;
 
-import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entity.Permission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

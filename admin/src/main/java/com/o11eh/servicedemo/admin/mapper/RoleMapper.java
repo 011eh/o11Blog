@@ -1,7 +1,7 @@
 package com.o11eh.servicedemo.admin.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.entry.Role;
+import com.o11eh.servicedemo.admin.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

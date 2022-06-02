@@ -1,11 +1,7 @@
 package com.o11eh.servicedemo.admin.config;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.o11eh.servicedemo.admin.entry.SysLog;
+import com.o11eh.servicedemo.admin.entity.SysLog;
 import com.o11eh.servicedemo.servicebase.config.log.AbstractLogAspect;
 import com.o11eh.servicedemo.servicebase.config.log.Log;
 import com.o11eh.servicedemo.servicebase.enums.LogStatus;
@@ -14,16 +10,12 @@ import com.o11eh.servicedemo.servicebase.utils.HttpUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Slf4j

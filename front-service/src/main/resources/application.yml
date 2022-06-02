@@ -1,0 +1,36 @@
+server:
+  port: 8002
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  mvc:
+    pathmatch:
+      # SpringBoot2.6整合Swagger3
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    url: jdbc:mysql://mysql:3306/service_demo?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 9zHu2:HGqqB_G7s
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  redis:
+    host: redis
+    port: 6379
+    password: 9zHu2:HGqqB_G7s
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+sa-token:
+  token-style: simple-uuid
+  activity-timeout: 1800
+  is-share: false

@@ -1,10 +1,7 @@
 package com.o11eh.servicedemo.admin.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.servicedemo.admin.entry.SysLog;
-import com.o11eh.servicedemo.admin.entry.vo.SysLogPageReq;
+import com.o11eh.servicedemo.admin.entity.SysLog;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface SysLogMapper extends BaseMapperO<SysLog> {

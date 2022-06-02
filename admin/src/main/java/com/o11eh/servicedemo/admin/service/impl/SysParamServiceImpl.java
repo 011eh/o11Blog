@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.servicebase.config.BusinessException;
 import com.o11eh.servicedemo.servicebase.entry.PageReq;
-import com.o11eh.servicedemo.admin.entry.SysParam;
+import com.o11eh.servicedemo.admin.entity.SysParam;
 import com.o11eh.servicedemo.admin.mapper.SysParamMapper;
 import com.o11eh.servicedemo.admin.service.SysParamService;
 import org.springframework.stereotype.Service;

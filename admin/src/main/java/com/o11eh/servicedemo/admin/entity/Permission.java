@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.entry;
+package com.o11eh.servicedemo.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;

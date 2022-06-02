@@ -2,8 +2,8 @@ package com.o11eh.servicedemo.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.servicebase.config.log.Log;
-import com.o11eh.servicedemo.admin.entry.*;
-import com.o11eh.servicedemo.admin.entry.vo.SysLogPageReq;
+import com.o11eh.servicedemo.admin.entity.*;
+import com.o11eh.servicedemo.admin.entity.vo.SysLogPageReq;
 import com.o11eh.servicedemo.admin.service.*;
 import com.o11eh.servicedemo.servicebase.entry.PageReq;
 import com.o11eh.servicedemo.servicebase.entry.Result;

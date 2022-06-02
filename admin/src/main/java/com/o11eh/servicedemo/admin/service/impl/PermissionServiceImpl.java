@@ -3,20 +3,17 @@ package com.o11eh.servicedemo.admin.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.o11eh.servicedemo.admin.entry.BaseEntry;
-import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entity.BaseEntry;
+import com.o11eh.servicedemo.admin.entity.Permission;
 import com.o11eh.servicedemo.admin.mapper.PermissionMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**

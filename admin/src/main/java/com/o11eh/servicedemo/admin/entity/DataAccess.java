@@ -1,11 +1,9 @@
-package com.o11eh.servicedemo.admin.entry;
+package com.o11eh.servicedemo.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.o11eh.servicedemo.admin.config.validation.StringId;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.admin.entry.vo;
+package com.o11eh.servicedemo.admin.entity.vo;
 
 import com.o11eh.servicedemo.admin.config.validation.RefId;
 import lombok.Data;

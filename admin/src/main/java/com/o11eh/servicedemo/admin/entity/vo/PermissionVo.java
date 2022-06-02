@@ -1,8 +1,8 @@
-package com.o11eh.servicedemo.admin.entry.vo;
+package com.o11eh.servicedemo.admin.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.o11eh.servicedemo.admin.config.validation.RefId;
-import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entity.Permission;
 import com.o11eh.servicedemo.servicebase.enums.ResourceType;
 import com.o11eh.servicedemo.servicebase.enums.Status;
 import lombok.Data;

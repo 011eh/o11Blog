@@ -7,11 +7,11 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
+import com.o11eh.servicedemo.admin.service.OsService;
 import com.o11eh.servicedemo.servicebase.config.BusinessException;
 import com.o11eh.servicedemo.servicebase.config.MyProperties;
-import com.o11eh.servicedemo.admin.service.OsService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +19,10 @@ import java.io.IOException;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class AliyunOsService implements OsService {
 
     private static final String ADMIN_AVATAR_DIR = "admin/avatar/";
-
-    @Autowired
     private MyProperties properties;
 
     @Override

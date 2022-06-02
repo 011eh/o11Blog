@@ -1,6 +1,6 @@
 package com.o11eh.servicedemo.admin.mapper;
 
-import com.o11eh.servicedemo.admin.entry.SysParam;
+import com.o11eh.servicedemo.admin.entity.SysParam;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

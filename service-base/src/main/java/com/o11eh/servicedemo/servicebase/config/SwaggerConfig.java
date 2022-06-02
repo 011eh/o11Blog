@@ -57,8 +57,8 @@ class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Admin接口")
-                .description("Admin接口描述")
+                .title("前台")
+                .description("前台接口描述")
                 .version("1.0")
                 .build();
     }

@@ -5,7 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.o11eh.servicedemo.admin.config.AuthInfo;
 import com.o11eh.servicedemo.servicebase.config.BusinessException;
-import com.o11eh.servicedemo.admin.entry.Admin;
+import com.o11eh.servicedemo.admin.entity.Admin;
 import com.o11eh.servicedemo.servicebase.enums.Status;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.AuthService;

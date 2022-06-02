@@ -1,21 +1,15 @@
 package com.o11eh.servicedemo.admin.service.impl;
 
-import cn.dev33.satoken.router.SaHttpMethod;
-import cn.dev33.satoken.router.SaRouter;
-import cn.dev33.satoken.router.SaRouterStaff;
-import cn.dev33.satoken.stp.StpUtil;
-import com.o11eh.servicedemo.admin.entry.ApiMatcher;
-import com.o11eh.servicedemo.admin.entry.BaseEntry;
-import com.o11eh.servicedemo.admin.entry.Permission;
+import com.o11eh.servicedemo.admin.entity.ApiMatcher;
+import com.o11eh.servicedemo.admin.entity.BaseEntry;
+import com.o11eh.servicedemo.admin.entity.Permission;
 import com.o11eh.servicedemo.admin.mapper.ApiMatcherMapper;
 import com.o11eh.servicedemo.admin.service.ApiMatcherService;
 import com.o11eh.servicedemo.admin.service.PermissionService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
