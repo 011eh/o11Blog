@@ -8,7 +8,8 @@ import lombok.AllArgsConstructor;
 public enum Status {
 
     Disable(0, "禁用"),
-    Enable(1, "启用");
+    Enable(1, "启用"),
+    FROZEN(2, "冻结");
 
     @EnumValue
     private int DBValue;
