@@ -33,7 +33,7 @@ public abstract class BaseEntry implements Serializable {
     @Id
     @Length(max = 19)
     @GeneratedValue(generator = "snowFlake")
-    @GenericGenerator(name = "snowFlake", strategy = "com.o11eh.servicedemo.frontservice.config.SnowFlakeIDGenerator")
+    @GenericGenerator(name = "snowFlake", strategy = "com.o11eh.servicedemo.frontservice.config.SnowFlakeIdGenerator")
     private String id;
 
     @CreatedBy

@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.frontservice.config;
 
 import cn.hutool.core.util.IdUtil;
+import com.o11eh.servicedemo.frontservice.entity.BaseEntry;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.boot.model.relational.Database;
@@ -13,7 +14,7 @@ import org.hibernate.type.Type;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class SnowFlakeIDGenerator implements IdentifierGenerator {
+public class SnowFlakeIdGenerator implements IdentifierGenerator {
     @Override
     public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
         IdentifierGenerator.super.configure(type, params, serviceRegistry);
@@ -31,6 +32,7 @@ public class SnowFlakeIDGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
+        ((BaseEntry) object).getId();
         return IdUtil.getSnowflakeNextIdStr();
     }
 
