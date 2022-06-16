@@ -32,7 +32,6 @@ public class SnowFlakeIdGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
-        ((BaseEntry) object).getId();
         return IdUtil.getSnowflakeNextIdStr();
     }
 

@@ -34,3 +34,7 @@ sa-token:
   token-style: simple-uuid
   activity-timeout: 1800
   is-share: false
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

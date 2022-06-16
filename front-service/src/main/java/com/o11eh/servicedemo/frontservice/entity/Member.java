@@ -2,6 +2,9 @@ package com.o11eh.servicedemo.frontservice.entity;
 
 import com.o11eh.servicedemo.servicebase.enums.Status;
 import lombok.Data;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -10,20 +13,20 @@ import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Data
+@Accessors(chain = true)
+@DynamicInsert
+@DynamicUpdate
 @Entity(name = "front_member")
 public class Member extends BaseEntry {
 
-    @Length(min = 2, max = 32)
-    private String username;
+    @Email
+    private String email;
 
-    @Length(min = 8, max = 16)
     private String password;
 
     @Length(min = 2, max = 16)
     private String nickName;
 
-    @Email
-    private String email;
     private String avatar;
     private String summary;
 
@@ -32,6 +35,12 @@ public class Member extends BaseEntry {
 
     @Enumerated
     private Status commentStatus;
-    private LocalDateTime lastLoginIp;
+    private String lastLoginIp;
     private LocalDateTime lastLoginTime;
+
+    public Member login(String ip) {
+        lastLoginIp = ip;
+        lastLoginTime = LocalDateTime.now();
+        return this;
+    }
 }

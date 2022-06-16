@@ -1,17 +1,13 @@
 package com.o11eh.servicedemo.frontservice.controller;
 
-import com.o11eh.servicedemo.frontservice.entity.Member;
-import com.o11eh.servicedemo.frontservice.service.MemberService;
+import com.o11eh.servicedemo.frontservice.service.AuthService;
 import com.o11eh.servicedemo.servicebase.entry.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @Api(tags = "登录注册")
 @RestController
@@ -19,12 +15,19 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class AuthController {
 
-    private MemberService memberService;
+    private AuthService authService;
 
     @ApiOperation("注册")
     @PostMapping("/register")
-    public Result register(@Valid @RequestBody Member member) {
-        memberService.register(member);
+    public Result register(String email, String password) {
+        authService.register(email, password);
         return Result.success();
+    }
+
+    @ApiOperation("登录")
+    @PostMapping("/login")
+    public Result login(String email, String password) {
+        String token = authService.login(email, password);
+        return Result.success(token);
     }
 }
