@@ -6,10 +6,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class MailListener {
+public class MailSender {
 
     @RabbitListener(queues = RabbitConstants.EMAIL_QUEUE)
-    public void sendEmail(String msg) {
-        System.out.println(msg);
+    public void sendEmail(String token) {
     }
 }

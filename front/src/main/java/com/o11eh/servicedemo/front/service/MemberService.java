@@ -18,7 +18,7 @@ public class MemberService {
 
     private MemberRepository memberRepository;
 
-    public void register(String nickName, String email, String password) {
+    public String register(String nickName, String email, String password) {
         Projection account = memberRepository.existsValidAccount(email);
 
         if (account != null) {
@@ -30,6 +30,7 @@ public class MemberService {
         member.setEmail(email);
         member.setPassword(SaSecureUtil.md5BySalt(password, email));
         memberRepository.save(member);
+        return member.getId();
     }
 
     public Member login(String email, String password) {
