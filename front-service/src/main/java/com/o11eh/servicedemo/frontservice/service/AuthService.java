@@ -11,8 +11,8 @@ public class AuthService {
 
     private MemberService memberService;
 
-    public void register(String email, String password) {
-        memberService.register(email, password);
+    public void register(String nickName, String email, String password) {
+        memberService.register(nickName, email, password);
 
         //todo 发送邮件
     }

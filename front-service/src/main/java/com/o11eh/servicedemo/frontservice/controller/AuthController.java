@@ -19,8 +19,8 @@ public class AuthController {
 
     @ApiOperation("注册")
     @PostMapping("/register")
-    public Result register(String email, String password) {
-        authService.register(email, password);
+    public Result register(String nickName, String email, String password) {
+        authService.register(nickName, email, password);
         return Result.success();
     }
 

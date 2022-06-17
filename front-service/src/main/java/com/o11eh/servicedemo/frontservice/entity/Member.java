@@ -21,7 +21,6 @@ public class Member extends BaseEntry {
 
     @Email
     private String email;
-
     private String password;
 
     @Length(min = 2, max = 16)
