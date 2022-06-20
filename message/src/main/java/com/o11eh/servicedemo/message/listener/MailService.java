@@ -1,7 +1,7 @@
 package com.o11eh.servicedemo.message.listener;
 
 import com.o11eh.servicedemo.servicebase.constants.RabbitConstants;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +15,12 @@ import java.util.Map;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MailService {
 
     public static final String SUBJECT = "011eh注册";
-    public static final String WEB_URL = "localhost:8001";
-    private JavaMailSenderImpl mailSender;
+    public static final String WEB_URL = "http://localhost:8002";
+    private final JavaMailSenderImpl mailSender;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -34,7 +34,7 @@ public class MailService {
                     "  <title>011eh</title>\n" +
                     "</head>\n" +
                     "<body>\n" +
-                    "<a href=\"" + WEB_URL + "/auth/activate/" + token + "\"> 点击这里</a>完成账户激活\n" +
+                    "<a href=\"" + WEB_URL + "/auth/activate/" + token + "\"> 点击这里</a>完成账号激活\n" +
                     "</body>\n" +
                     "</html>\n";
 

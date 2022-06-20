@@ -39,6 +39,8 @@ public class MemberService {
         Member member = new Member();
         member.setEmail(email);
         member.setPassword(SaSecureUtil.md5BySalt(password, email));
+        memberRepository.save(member);
+        member.clearAuditInfo();
         redis.opsForValue().set(RedisConfig.UNACTIVATED_USER + token, member, 1, TimeUnit.HOURS);
 
         Map<String, String> map = new HashMap<>();
@@ -79,5 +81,6 @@ public class MemberService {
         redis.delete(RedisConfig.UNACTIVATED_USER + token);
         member.setStatus(Status.Enable);
         memberRepository.save(member);
+        memberRepository.deleteByEmailAndStatus(member.getEmail(), Status.FROZEN);
     }
 }

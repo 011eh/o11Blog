@@ -15,7 +15,12 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -52,4 +57,10 @@ public abstract class BaseEntry implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime updateTime;
 
+    public void clearAuditInfo() {
+        createdBy = null;
+        createTime = null;
+        updatedBy = null;
+        updateTime = null;
+    }
 }

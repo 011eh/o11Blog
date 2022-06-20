@@ -1,5 +1,6 @@
 package com.o11eh.servicedemo.front.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.o11eh.servicedemo.servicebase.enums.Status;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -21,6 +22,8 @@ public class Member extends BaseEntry {
 
     @Email
     private String email;
+
+    @JsonIgnore
     private String password;
 
     @Length(min = 2, max = 16)

@@ -5,6 +5,7 @@ import com.o11eh.servicedemo.servicebase.entity.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @ApiOperation("激活")
-    @PostMapping("/activate/{token}")
+    @GetMapping("/activate/{token}")
     public Result activate(@PathVariable String token) {
         memberService.activate(token);
         return Result.success();
