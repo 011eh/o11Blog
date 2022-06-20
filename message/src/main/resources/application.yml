@@ -16,3 +16,20 @@ spring:
     port: 5672
     username: admin
     password: 9zHu2:HGqqB_G7s
+
+  mail:
+    host:
+    username:
+    password:
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+          auth: true
+          starttls:
+            enable: false

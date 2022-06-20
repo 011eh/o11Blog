@@ -32,3 +32,10 @@ sa-token:
   token-style: simple-uuid
   activity-timeout: 1800
   is-share: false
+
+my-properties:
+  aliyun:
+    endpoint:
+    bucket-name:
+    access-key-id:
+    access-key-secret:

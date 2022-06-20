@@ -16,6 +16,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +40,11 @@ public class MemberService {
         member.setEmail(email);
         member.setPassword(SaSecureUtil.md5BySalt(password, email));
         redis.opsForValue().set(RedisConfig.UNACTIVATED_USER + token, member, 1, TimeUnit.HOURS);
-        rabbit.convertAndSend(RabbitConstants.EXCHANGE, RabbitConstants.EMAIL_ROUTING_KEY, token);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("receiver", email);
+        map.put("token", token);
+        rabbit.convertAndSend(RabbitConstants.EXCHANGE, RabbitConstants.EMAIL_ROUTING_KEY, map);
     }
 
     public String login(String email, String password) {
