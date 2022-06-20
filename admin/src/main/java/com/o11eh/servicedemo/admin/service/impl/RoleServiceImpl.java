@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entity.BaseEntry;
-import com.o11eh.servicedemo.servicebase.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entity.PageReq;
 import com.o11eh.servicedemo.admin.entity.Role;
 import com.o11eh.servicedemo.admin.mapper.RoleMapper;
 import com.o11eh.servicedemo.admin.service.PermissionService;

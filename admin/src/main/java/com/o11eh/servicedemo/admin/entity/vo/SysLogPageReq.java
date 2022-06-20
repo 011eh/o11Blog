@@ -1,6 +1,6 @@
 package com.o11eh.servicedemo.admin.entity.vo;
 
-import com.o11eh.servicedemo.servicebase.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entity.PageReq;
 import lombok.Data;
 
 import java.time.LocalDateTime;

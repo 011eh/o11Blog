@@ -2,7 +2,7 @@ package com.o11eh.servicedemo.admin.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.admin.entity.Admin;
-import com.o11eh.servicedemo.servicebase.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entity.PageReq;
 
 import java.util.List;
 
