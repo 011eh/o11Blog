@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.servicebase.config.BusinessException;
 import com.o11eh.servicedemo.admin.entity.Admin;
 import com.o11eh.servicedemo.admin.entity.BaseEntry;
-import com.o11eh.servicedemo.servicebase.entry.PageReq;
+import com.o11eh.servicedemo.servicebase.entity.PageReq;
 import com.o11eh.servicedemo.admin.mapper.AdminMapper;
 import com.o11eh.servicedemo.admin.service.AdminService;
 import com.o11eh.servicedemo.admin.service.SysParamService;

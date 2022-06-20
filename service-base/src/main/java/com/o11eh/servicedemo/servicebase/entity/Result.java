@@ -1,4 +1,4 @@
-package com.o11eh.servicedemo.servicebase.entry;
+package com.o11eh.servicedemo.servicebase.entity;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.servicedemo.servicebase.constants.ResultCode;
