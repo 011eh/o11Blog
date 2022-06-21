@@ -29,7 +29,6 @@ spring:
     password: 9zHu2:HGqqB_G7s
 
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
@@ -43,4 +42,5 @@ sa-token:
 
 logging:
   level:
+    org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace

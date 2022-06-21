@@ -15,6 +15,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -43,9 +44,11 @@ public abstract class BaseEntry implements Serializable {
 
     @CreatedBy
     @JsonIgnore
+    @Column(updatable = false)
     private String createdBy;
 
     @CreatedDate
+    @Column(updatable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createTime;
 

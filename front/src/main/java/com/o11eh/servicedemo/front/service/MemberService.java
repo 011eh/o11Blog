@@ -4,7 +4,6 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import com.o11eh.servicedemo.front.entity.Member;
-import com.o11eh.servicedemo.front.projection.Projection;
 import com.o11eh.servicedemo.front.repository.MemberRepository;
 import com.o11eh.servicedemo.servicebase.config.BusinessException;
 import com.o11eh.servicedemo.servicebase.config.RedisConfig;
@@ -16,6 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Predicate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -30,8 +30,12 @@ public class MemberService {
     private RabbitTemplate rabbit;
 
     public void register(String email, String password) {
-        Projection account = memberRepository.existsValidAccount(email);
-        if (account != null) {
+        Optional<Member> memberActivated = memberRepository.findOne((root, query, criteriaBuilder) -> {
+            Predicate eqEmail = criteriaBuilder.equal(root.get("email"), email);
+            Predicate neStatus = criteriaBuilder.notEqual(root.get("status"), Status.FROZEN);
+            return criteriaBuilder.and(eqEmail, neStatus);
+        });
+        if (memberActivated.isPresent()) {
             throw BusinessException.e("账号已存在");
         }
 
