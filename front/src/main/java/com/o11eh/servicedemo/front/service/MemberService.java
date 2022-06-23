@@ -10,10 +10,10 @@ import com.o11eh.servicedemo.servicebase.config.RedisConfig;
 import com.o11eh.servicedemo.servicebase.constants.RabbitConstants;
 import com.o11eh.servicedemo.servicebase.enums.Status;
 import com.o11eh.servicedemo.servicebase.utils.HttpUtil;
-import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.criteria.Predicate;
 import java.util.HashMap;
@@ -22,12 +22,21 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@AllArgsConstructor
-public class MemberService {
+public class MemberService extends BaseService {
 
-    private RedisTemplate<String, Object> redis;
-    private MemberRepository memberRepository;
-    private RabbitTemplate rabbit;
+    private final RedisTemplate<String, Object> redis;
+    private final MemberRepository memberRepository;
+    private final RabbitTemplate rabbit;
+
+    public MemberService(TransactionTemplate transactionTemplate,
+                         RedisTemplate<String, Object> redis,
+                         MemberRepository memberRepository,
+                         RabbitTemplate rabbit) {
+        super(transactionTemplate);
+        this.redis = redis;
+        this.memberRepository = memberRepository;
+        this.rabbit = rabbit;
+    }
 
     public void register(String email, String password) {
         Optional<Member> memberActivated = memberRepository.findOne((root, query, criteriaBuilder) -> {
@@ -44,7 +53,6 @@ public class MemberService {
         member.setEmail(email);
         member.setPassword(SaSecureUtil.md5BySalt(password, email));
         memberRepository.save(member);
-        member.clearAuditInfo();
         redis.opsForValue().set(RedisConfig.UNACTIVATED_USER + token, member, 1, TimeUnit.HOURS);
 
         Map<String, String> map = new HashMap<>();
@@ -63,11 +71,11 @@ public class MemberService {
             throw BusinessException.e("账户或密码错误");
         }
         Member member = result.get();
-        Status memberStatus = member.getStatus();
-        if (memberStatus.equals(Status.FROZEN)) {
+        Status status = member.getStatus();
+        if (status.equals(Status.FROZEN)) {
             throw BusinessException.e("账户未激活");
         }
-        if (memberStatus.equals(Status.Disable)) {
+        if (status.equals(Status.Disable)) {
             throw BusinessException.e("账户已被禁用");
         }
 
@@ -78,13 +86,17 @@ public class MemberService {
     }
 
     public void activate(String token) {
-        Member member = (Member) redis.opsForValue().get(RedisConfig.UNACTIVATED_USER + token);
-        if (member == null) {
+        Member memberInfo = (Member) redis.opsForValue().get(RedisConfig.UNACTIVATED_USER + token);
+        if (memberInfo == null) {
             throw BusinessException.e("无效验证码");
         }
+
+        transactionTemplate.executeWithoutResult(status -> {
+            Member member = memberRepository.getById(memberInfo.getId());
+            member.setStatus(Status.Enable);
+            memberRepository.save(member);
+            memberRepository.deleteByEmailAndStatus(memberInfo.getEmail(), Status.FROZEN);
+        });
         redis.delete(RedisConfig.UNACTIVATED_USER + token);
-        member.setStatus(Status.Enable);
-        memberRepository.save(member);
-        memberRepository.deleteByEmailAndStatus(member.getEmail(), Status.FROZEN);
     }
 }

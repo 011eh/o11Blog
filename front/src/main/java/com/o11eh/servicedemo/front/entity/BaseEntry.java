@@ -1,7 +1,6 @@
 package com.o11eh.servicedemo.front.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -43,8 +42,8 @@ public abstract class BaseEntry implements Serializable {
     private String id;
 
     @CreatedBy
-    @JsonIgnore
     @Column(updatable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String createdBy;
 
     @CreatedDate
@@ -52,18 +51,13 @@ public abstract class BaseEntry implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createTime;
 
-    @JsonIgnore
+
     @LastModifiedBy
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String updatedBy;
 
     @LastModifiedDate
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime updateTime;
 
-    public void clearAuditInfo() {
-        createdBy = null;
-        createTime = null;
-        updatedBy = null;
-        updateTime = null;
-    }
 }

@@ -32,7 +32,6 @@ public class RedisConfig {
 
         //
         mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-
         GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer(mapper);
         StringRedisSerializer stringSerializer = new StringRedisSerializer();
 

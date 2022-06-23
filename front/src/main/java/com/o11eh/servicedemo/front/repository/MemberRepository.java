@@ -9,7 +9,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MemberRepository extends JpaRepository<Member, String>, JpaSpecificationExecutor<Member> {
 
-    @Modifying
-    @Transactional
     void deleteByEmailAndStatus(String email, Status status);
 }
