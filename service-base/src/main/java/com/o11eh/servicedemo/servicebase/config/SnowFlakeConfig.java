@@ -1,27 +1,25 @@
 package com.o11eh.servicedemo.servicebase.config;
 
 import cn.hutool.core.lang.Snowflake;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+@Data
 @Configuration
+@ConfigurationProperties(prefix = "my-properties.snow-flake")
 public class SnowFlakeConfig {
 
-    @Value("${my-properties.snow-flake.date}")
-    String date;
-
-    @Value("${my-properties.snow-flake.dataCenterId}")
+    String epochDate;
     long dataCenterId;
-
-    @Value("${my-properties.snow-flake.workerId}")
     long workerId;
 
     @Bean
     public Snowflake snowflakeIdGenerator() throws ParseException {
-        return new Snowflake(new SimpleDateFormat("yyyy-MM-dd").parse(date), dataCenterId, workerId, true);
+        return new Snowflake(new SimpleDateFormat("yyyy-MM-dd").parse(epochDate), dataCenterId, workerId, true);
     }
 }
