@@ -1,10 +1,13 @@
 package com.o11eh.servicedemo.admin.config;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.lang.Snowflake;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import lombok.AllArgsConstructor;
 import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +18,10 @@ import java.time.LocalDateTime;
 
 @Configuration
 @MapperScan("com.o11eh.servicedemo.*.mapper")
+@AllArgsConstructor
 public class MybatisPlusConfig {
+
+    private Snowflake snowflake;
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -41,4 +47,11 @@ public class MybatisPlusConfig {
         }
     }
 
+    @Component
+    public class CustomIdGenerator implements IdentifierGenerator {
+        @Override
+        public Long nextId(Object entity) {
+            return snowflake.nextId();
+        }
+    }
 }

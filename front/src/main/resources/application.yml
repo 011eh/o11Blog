@@ -45,3 +45,9 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
     org.springframework.transaction.interceptor: trace
+
+my-properties:
+  snow-flake:
+    date: 2000-01-01
+    dataCenterId: 0
+    workerId: 0

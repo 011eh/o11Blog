@@ -39,3 +39,8 @@ my-properties:
     bucket-name:
     access-key-id:
     access-key-secret:
+
+  snow-flake:
+    date: 2000-01-01
+    dataCenterId: 0
+    workerId: 0

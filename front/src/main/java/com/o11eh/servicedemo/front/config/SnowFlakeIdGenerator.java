@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.front.config;
 
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.lang.Snowflake;
+import lombok.AllArgsConstructor;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.boot.model.relational.Database;
@@ -9,11 +10,17 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Properties;
 
+@Component
+@AllArgsConstructor
 public class SnowFlakeIdGenerator implements IdentifierGenerator {
+
+    private Snowflake snowflake;
+
     @Override
     public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
         IdentifierGenerator.super.configure(type, params, serviceRegistry);
@@ -31,7 +38,7 @@ public class SnowFlakeIdGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
-        return IdUtil.getSnowflakeNextIdStr();
+        return snowflake.nextIdStr();
     }
 
     @Override
