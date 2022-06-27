@@ -15,6 +15,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.o11eh.servicedemo.servicebase.constants.Constants.DATE_FORMAT;
+
 @Configuration
 public class RedisConfig {
 
@@ -23,8 +25,8 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         ObjectMapper mapper = new ObjectMapper();
 
         // 对LocalDateTime序列化、反序列化的支持

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.util.Assert;
 
-public interface BaseRepository<T extends BaseEntry> extends JpaRepository<T, String>, JpaSpecificationExecutor<T> {
+public interface BaseRepository<T extends BaseEntry> extends JpaRepository<T, String> {
 
     String ID_MUST_NOT_BE_NULL = "ID不能为空";
     String ENTITY_NULL = "实体数据不存在";

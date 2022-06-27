@@ -1,6 +1,7 @@
 package com.o11eh.servicedemo.front.controller;
 
 import com.o11eh.servicedemo.front.service.MemberService;
+import com.o11eh.servicedemo.servicebase.config.log.Log;
 import com.o11eh.servicedemo.servicebase.entity.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ public class AuthController {
 
     private MemberService memberService;
 
+    @Log
     @ApiOperation("注册")
     @PostMapping("/register")
     public Result register(String email, String password) {
@@ -26,6 +28,7 @@ public class AuthController {
         return Result.success();
     }
 
+    @Log
     @ApiOperation("登录")
     @PostMapping("/login")
     public Result login(String email, String password) {
@@ -33,6 +36,7 @@ public class AuthController {
         return Result.success(token);
     }
 
+    @Log
     @ApiOperation("激活")
     @GetMapping("/activate/{token}")
     public Result activate(@PathVariable String token) {

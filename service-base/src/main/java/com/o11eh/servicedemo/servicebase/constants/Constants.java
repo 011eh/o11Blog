@@ -5,6 +5,8 @@ package com.o11eh.servicedemo.servicebase.constants;
  * @since 2022/02/27 14:31
  */
 public class Constants {
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     public static class Doc {
 
         public static final String ADD = "增加";

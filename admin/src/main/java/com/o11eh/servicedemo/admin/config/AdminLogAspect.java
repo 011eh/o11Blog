@@ -18,11 +18,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-@Slf4j
 @Aspect
 @Component
 @AllArgsConstructor
-public class LogAspect extends AbstractLogAspect {
+public class AdminLogAspect extends AbstractLogAspect {
 
     private SysLogService sysLogService;
 

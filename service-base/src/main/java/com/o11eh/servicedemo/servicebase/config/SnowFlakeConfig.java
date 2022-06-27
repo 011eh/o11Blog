@@ -2,6 +2,7 @@ package com.o11eh.servicedemo.servicebase.config;
 
 import cn.hutool.core.lang.Snowflake;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-@Data
+@Setter
 @Configuration
 @ConfigurationProperties(prefix = "my-properties.snow-flake")
 public class SnowFlakeConfig {

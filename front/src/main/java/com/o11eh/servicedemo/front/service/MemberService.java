@@ -90,9 +90,12 @@ public class MemberService extends BaseService {
         if (memberInfo == null) {
             throw BusinessException.e("无效验证码");
         }
-
         transactionTemplate.executeWithoutResult(status -> {
             Member member = memberRepository.getById(memberInfo.getId());
+            if (!member.getStatus().equals(Status.FROZEN)) {
+                redis.delete(RedisConfig.UNACTIVATED_USER + token);
+                throw BusinessException.e("账号已被激活");
+            }
             member.setStatus(Status.Enable);
             memberRepository.save(member);
             memberRepository.deleteByEmailAndStatus(memberInfo.getEmail(), Status.FROZEN);
