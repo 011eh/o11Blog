@@ -16,10 +16,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.o11eh</groupId>
-    <artifactId>service-demo</artifactId>
+    <artifactId>o11-blog</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>service-demo</name>
-    <description>service-demo</description>
+    <name>o11-blog</name>
+    <description>o11-blog</description>
 
     <properties>
         <java.version>1.8</java.version>
