@@ -41,6 +41,6 @@ my-properties:
     access-key-secret:
 
   snow-flake:
-    date: 2000-01-01
+    epochDate: 2000-01-01
     dataCenterId: 0
-    workerId: 0
+    workerId: 1

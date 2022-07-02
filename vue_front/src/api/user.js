@@ -94,11 +94,14 @@ export function localLogin(params) {
  * 本地注册
  * @param params
  */
-export function localRegister(params) {
+export function localRegister(email, password) {
+  let params = new URLSearchParams()
+  params.append('email', email);
+  params.append('password', password);
   return request({
     url: process.env.WEB_API + '/login/register',
     method: 'post',
-    data: params
+    params
   })
 }
 

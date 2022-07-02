@@ -283,7 +283,7 @@ export default {
           params.passWord = this.registerForm.password;
           params.email = this.registerForm.email;
           params.nickName = this.registerForm.nickName
-          localRegister(params).then(response => {
+          localRegister(this.registerForm.email, this.registerForm.password).then(response => {
             if (response.code == this.$ECode.SUCCESS) {
               this.$message({
                 type: "success",
