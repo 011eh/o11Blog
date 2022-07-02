@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getTagList(params) {
   return request({
-    url: process.env.WEB_API + '/tag/getTagList',
+    url: '/tag/getTagList',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getTagList(params) {
 
 export function getArticleByTagUid(params) {
   return request({
-    url: process.env.WEB_API + '/tag/getArticleByTagUid',
+    url: '/tag/getArticleByTagUid',
     method: 'get',
     params
   })

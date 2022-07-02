@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getSubjectList(params) {
   return request({
-    url: process.env.WEB_API + '/subject/getList',
+    url: '/subject/getList',
     method: 'post',
     data: params
   })
@@ -10,7 +10,7 @@ export function getSubjectList(params) {
 
 export function getSubjectItemList(params) {
   return request({
-    url: process.env.WEB_API + '/subject/getItemList',
+    url: '/subject/getItemList',
     method: 'post',
     data: params
   })

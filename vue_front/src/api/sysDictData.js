@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getListByDictType(params) {
   return request({
-    url: process.env.WEB_API + '/sysDictData/getListByDictType',
+    url: '/sysDictData/getListByDictType',
     method: 'post',
     params
   })
@@ -10,7 +10,7 @@ export function getListByDictType(params) {
 
 export function getListByDictTypeList(params) {
   return request({
-    url: process.env.WEB_API + '/sysDictData/getListByDictTypeList',
+    url: '/sysDictData/getListByDictTypeList',
     method: 'post',
     data: params
   })

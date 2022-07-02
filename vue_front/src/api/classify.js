@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getBlogSortList(params) {
   return request({
-    url: process.env.WEB_API + '/classify/getBlogSortList',
+    url: '/classify/getBlogSortList',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getBlogSortList(params) {
 
 export function getArticleByBlogSortUid(params) {
   return request({
-    url: process.env.WEB_API + '/classify/getArticleByBlogSortUid',
+    url: '/classify/getArticleByBlogSortUid',
     method: 'get',
     params
   })

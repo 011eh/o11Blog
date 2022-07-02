@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.o11eh.servicedemo.frontservice</groupId>
+    <groupId>com.o11eh.o11blog.frontservice</groupId>
     <artifactId>front</artifactId>
 
     <properties>

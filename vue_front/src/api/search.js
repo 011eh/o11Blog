@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function getSearchModel (params) {
   return request({
-    url: process.env.WEB_API + '/search/getSearchModel',
+    url: '/search/getSearchModel',
     method: 'get',
     params
   })
@@ -19,7 +19,7 @@ export function getSearchModel (params) {
  */
 export function searchBlog (params) {
   return request({
-    url: process.env.WEB_API + '/search/sqlSearchBlog',
+    url: '/search/sqlSearchBlog',
     method: 'get',
     params
   })
@@ -51,7 +51,7 @@ export function searchBloBySolr (params) {
 
 export function searchBlogByTag (params) {
   return request({
-    url: process.env.WEB_API + '/search/searchBlogByTag',
+    url: '/search/searchBlogByTag',
     method: 'get',
     params
   })
@@ -59,7 +59,7 @@ export function searchBlogByTag (params) {
 
 export function searchBlogBySort (params) {
   return request({
-    url: process.env.WEB_API + '/search/searchBlogBySort',
+    url: '/search/searchBlogBySort',
     method: 'get',
     params
   })
@@ -67,7 +67,7 @@ export function searchBlogBySort (params) {
 
 export function searchBlogByAuthor (params) {
   return request({
-    url: process.env.WEB_API + '/search/searchBlogByAuthor',
+    url: '/search/searchBlogByAuthor',
     method: 'get',
     params
   })

@@ -24,7 +24,7 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath:mappers/*.xml
-  type-enums-package: com.o11eh.servicedemo.servicebase.enums
+  type-enums-package: com.o11eh.o11blog.servicebase.enums
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

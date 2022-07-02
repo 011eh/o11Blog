@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.o11eh.servicedemo.admin.mapper.PermissionMapper">
+<mapper namespace="com.o11eh.o11blog.admin.mapper.PermissionMapper">
     <insert id="grantPermission">
         insert into back_role_permission(role_id, permission_id) value (#{roleId}, #{permissionId});
     </insert>
@@ -10,7 +10,7 @@
         where role_id = #{roleId}
     </delete>
 
-    <resultMap id="permission" type="com.o11eh.servicedemo.admin.entity.Permission">
+    <resultMap id="permission" type="com.o11eh.o11blog.admin.entity.Permission">
         <result property="routerInfo" column="router_info"
                 typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
     </resultMap>
