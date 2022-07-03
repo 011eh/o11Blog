@@ -167,7 +167,7 @@ export default {
         ],
         password: [
           {required: true, message: "请输入密码", trigger: "blur"},
-          {min: 6, message: "密码长度需要大于等于 5 个字符", trigger: "blur"},
+          {min: 5, message: "密码长度需要大于等于 5 个字符", trigger: "blur"},
           {max: 20, message: "密码长度不能大于 20 个字符", trigger: "blur"}
         ]
       },
@@ -244,11 +244,7 @@ export default {
           console.log('校验失败')
           return;
         } else {
-          var params = {};
-          params.userName = this.loginForm.userName;
-          params.passWord = this.loginForm.password;
-          params.isRememberMe = 1;
-          localLogin(params).then(response => {
+          localLogin(this.loginForm.userName,this.loginForm.password).then(response => {
             if (response.code == this.$ECode.SUCCESS) {
               // 跳转到首页
               location.replace(this.vueMoguWebUrl + "/#/?token=" + response.data)

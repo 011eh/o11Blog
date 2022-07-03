@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import o11Request from '@/utils/o11Request'
 
 /**
  * 第三方登录
@@ -82,9 +83,12 @@ export function deleteUserAccessToken(params) {
  * 本地登录
  * @param params
  */
-export function localLogin(params) {
-  return request({
-    url: '/login/login',
+export function localLogin(email, password) {
+  let params = new URLSearchParams()
+  params.append('email', email);
+  params.append('password', password);
+  return o11Request({
+    url: '/auth/login',
     method: 'post',
     data: params
   })
@@ -98,8 +102,8 @@ export function localRegister(email, password) {
   let params = new URLSearchParams()
   params.append('email', email);
   params.append('password', password);
-  return request({
-    url: '/login/register',
+  return o11Request({
+    url: '/auth/register',
     method: 'post',
     params
   })

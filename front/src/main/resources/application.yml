@@ -16,6 +16,8 @@ spring:
     username: root
     password: 9zHu2:HGqqB_G7s
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 300000
 
   redis:
     host: redis
