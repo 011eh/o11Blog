@@ -10,8 +10,10 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -31,6 +33,9 @@ public class Member extends BaseEntry {
 
     private String avatar;
     private String summary;
+
+    @OneToMany(mappedBy = "member")
+    private List<Article> articles;
 
     @Enumerated
     private Status status;

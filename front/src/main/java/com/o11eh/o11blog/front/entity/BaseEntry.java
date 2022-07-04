@@ -51,7 +51,6 @@ public abstract class BaseEntry implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createTime;
 
-
     @LastModifiedBy
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String updatedBy;
