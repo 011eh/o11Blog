@@ -116,6 +116,7 @@ import {getUserLoginStatus, getWechatOrCodeTicket, localLogin, localRegister, lo
 import {Loading} from 'element-ui';
 import {setCookie} from "@/utils/cookieUtils";
 import {mapMutations} from "vuex";
+import {getCode} from "../../utils/codeUtil";
 
 export default {
   name: "share",
@@ -244,8 +245,9 @@ export default {
           console.log('校验失败')
           return;
         } else {
-          localLogin(this.loginForm.userName,this.loginForm.password).then(response => {
-            if (response.code == this.$ECode.SUCCESS) {
+          localLogin(this.loginForm.userName, this.loginForm.password).then(response => {
+            debugger
+            if (getCode(response.code) === 200) {
               // 跳转到首页
               location.replace(this.vueMoguWebUrl + "/#/?token=" + response.data)
               window.location.reload()

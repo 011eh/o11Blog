@@ -38,6 +38,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
 sa-token:
+  token-name: frtoken
   token-style: simple-uuid
   activity-timeout: 1800
   is-share: false
