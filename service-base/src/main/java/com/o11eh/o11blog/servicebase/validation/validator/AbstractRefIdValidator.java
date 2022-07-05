@@ -1,7 +1,7 @@
-package com.o11eh.o11blog.admin.config.validation.validator;
+package com.o11eh.o11blog.servicebase.validation.validator;
 
-import com.o11eh.o11blog.admin.config.validation.RefId;
-import com.o11eh.o11blog.admin.mapper.BaseMapper;
+import com.o11eh.o11blog.servicebase.validation.RefId;
+import com.o11eh.o11blog.servicebase.mapper.ValidatorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -11,7 +11,7 @@ public abstract class AbstractRefIdValidator<T> implements ConstraintValidator<R
     protected String tableName;
 
     @Autowired
-    protected BaseMapper baseMapper;
+    protected ValidatorMapper validatorMapper;
 
     @Override
     public void initialize(RefId annotation) {

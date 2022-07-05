@@ -3,7 +3,7 @@ package com.o11eh.o11blog.admin.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.o11blog.admin.config.validation.StringId;
+import com.o11eh.o11blog.servicebase.validation.StringId;
 import com.o11eh.o11blog.admin.entity.ApiMatcher;
 import com.o11eh.o11blog.admin.entity.Permission;
 import com.o11eh.o11blog.admin.entity.vo.ApiMatcherVo;

@@ -1,4 +1,4 @@
-package com.o11eh.o11blog.front.entity;
+package com.o11eh.o11blog.servicebase.entity.front;
 
 import com.o11eh.o11blog.servicebase.enums.LogStatus;
 import lombok.NoArgsConstructor;

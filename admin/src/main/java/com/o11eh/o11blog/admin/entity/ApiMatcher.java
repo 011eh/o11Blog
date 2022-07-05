@@ -3,7 +3,8 @@ package com.o11eh.o11blog.admin.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.o11eh.o11blog.admin.config.validation.RefId;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.validation.RefId;
 import lombok.Data;
 
 import java.util.List;

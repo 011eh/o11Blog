@@ -3,7 +3,7 @@ package com.o11eh.o11blog.front.service;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
-import com.o11eh.o11blog.front.entity.Member;
+import com.o11eh.o11blog.servicebase.entity.front.Member;
 import com.o11eh.o11blog.front.repository.MemberRepository;
 import com.o11eh.o11blog.servicebase.config.BusinessException;
 import com.o11eh.o11blog.servicebase.config.RedisConfig;

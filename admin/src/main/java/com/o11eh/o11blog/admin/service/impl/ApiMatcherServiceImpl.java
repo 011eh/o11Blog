@@ -1,7 +1,7 @@
 package com.o11eh.o11blog.admin.service.impl;
 
 import com.o11eh.o11blog.admin.entity.ApiMatcher;
-import com.o11eh.o11blog.admin.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.admin.entity.Permission;
 import com.o11eh.o11blog.admin.mapper.ApiMatcherMapper;
 import com.o11eh.o11blog.admin.service.ApiMatcherService;

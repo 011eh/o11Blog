@@ -1,6 +1,6 @@
-package com.o11eh.o11blog.admin.config.validation;
+package com.o11eh.o11blog.servicebase.validation;
 
-import com.o11eh.o11blog.admin.config.validation.validator.ColumnUniqueValidator;
+import com.o11eh.o11blog.servicebase.validation.validator.ColumnUniqueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -29,6 +29,8 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 sa-token:
+
+  # 需要修改前端
   token-name: adtoken
   token-style: simple-uuid
   activity-timeout: 1800

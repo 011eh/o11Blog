@@ -1,7 +1,7 @@
-package com.o11eh.o11blog.admin.config.validation;
+package com.o11eh.o11blog.servicebase.validation;
 
-import com.o11eh.o11blog.admin.config.validation.validator.StringIdListValidator;
-import com.o11eh.o11blog.admin.config.validation.validator.StringIdValidator;
+import com.o11eh.o11blog.servicebase.validation.validator.StringIdListValidator;
+import com.o11eh.o11blog.servicebase.validation.validator.StringIdValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

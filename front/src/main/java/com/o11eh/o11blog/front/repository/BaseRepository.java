@@ -2,7 +2,7 @@ package com.o11eh.o11blog.front.repository;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.o11eh.o11blog.front.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.Assert;
 

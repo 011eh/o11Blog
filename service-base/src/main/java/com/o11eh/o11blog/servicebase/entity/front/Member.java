@@ -1,6 +1,7 @@
-package com.o11eh.o11blog.front.entity;
+package com.o11eh.o11blog.servicebase.entity.front;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.Status;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -45,9 +46,8 @@ public class Member extends BaseEntry {
     private String lastLoginIp;
     private LocalDateTime lastLoginTime;
 
-    public Member login(String ip) {
+    public void login(String ip) {
         lastLoginIp = ip;
         lastLoginTime = LocalDateTime.now();
-        return this;
     }
 }

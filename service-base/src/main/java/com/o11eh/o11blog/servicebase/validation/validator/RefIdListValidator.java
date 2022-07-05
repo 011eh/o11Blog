@@ -1,4 +1,4 @@
-package com.o11eh.o11blog.admin.config.validation.validator;
+package com.o11eh.o11blog.servicebase.validation.validator;
 
 import cn.hutool.core.collection.CollUtil;
 
@@ -13,7 +13,7 @@ public class RefIdListValidator extends AbstractRefIdValidator<List<String>> {
         if (CollUtil.isEmpty(ids)) {
             return true;
         }
-        Set<String> idSet = baseMapper.selectIdIfExist(tableName, ids);
+        Set<String> idSet = validatorMapper.selectIdIfExist(tableName, ids);
 
         for (String id : ids) {
             if (!idSet.contains(id)) {

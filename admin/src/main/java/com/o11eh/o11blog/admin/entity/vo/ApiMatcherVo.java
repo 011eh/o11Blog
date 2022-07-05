@@ -1,6 +1,6 @@
 package com.o11eh.o11blog.admin.entity.vo;
 
-import com.o11eh.o11blog.admin.config.validation.RefId;
+import com.o11eh.o11blog.servicebase.validation.RefId;
 import lombok.Data;
 
 import java.util.List;

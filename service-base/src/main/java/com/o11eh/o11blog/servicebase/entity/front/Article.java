@@ -1,12 +1,12 @@
-package com.o11eh.o11blog.front.entity;
+package com.o11eh.o11blog.servicebase.entity.front;
 
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.util.List;

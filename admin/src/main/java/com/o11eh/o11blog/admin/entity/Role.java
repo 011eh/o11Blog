@@ -2,6 +2,7 @@ package com.o11eh.o11blog.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.Status;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

@@ -1,5 +1,6 @@
-package com.o11eh.o11blog.front.entity;
+package com.o11eh.o11blog.servicebase.entity.front;
 
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.Status;
 import lombok.Data;
 import lombok.experimental.Accessors;

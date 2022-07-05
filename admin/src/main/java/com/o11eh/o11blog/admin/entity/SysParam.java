@@ -1,5 +1,6 @@
 package com.o11eh.o11blog.admin.entity;
 
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import lombok.Data;
 
 @Data

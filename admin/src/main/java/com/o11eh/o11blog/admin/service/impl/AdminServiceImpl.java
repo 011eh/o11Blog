@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.o11blog.servicebase.config.BusinessException;
 import com.o11eh.o11blog.admin.entity.Admin;
-import com.o11eh.o11blog.admin.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.entity.PageReq;
 import com.o11eh.o11blog.admin.mapper.AdminMapper;
 import com.o11eh.o11blog.admin.service.AdminService;

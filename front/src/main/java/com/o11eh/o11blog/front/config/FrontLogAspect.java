@@ -1,6 +1,6 @@
 package com.o11eh.o11blog.front.config;
 
-import com.o11eh.o11blog.front.entity.SysLog;
+import com.o11eh.o11blog.servicebase.entity.front.SysLog;
 import com.o11eh.o11blog.front.repository.SysLogRepository;
 import com.o11eh.o11blog.servicebase.config.log.AbstractLogAspect;
 import com.o11eh.o11blog.servicebase.config.log.Log;

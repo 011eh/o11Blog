@@ -1,7 +1,7 @@
 package com.o11eh.o11blog.admin.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.o11eh.o11blog.admin.config.validation.RefId;
+import com.o11eh.o11blog.servicebase.validation.RefId;
 import com.o11eh.o11blog.admin.entity.Permission;
 import com.o11eh.o11blog.servicebase.enums.ResourceType;
 import com.o11eh.o11blog.servicebase.enums.Status;

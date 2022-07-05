@@ -3,7 +3,7 @@ package com.o11eh.o11blog.admin.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.o11eh.o11blog.admin.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.admin.entity.Permission;
 import com.o11eh.o11blog.admin.mapper.PermissionMapper;
 import com.o11eh.o11blog.admin.service.PermissionService;

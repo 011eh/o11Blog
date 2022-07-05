@@ -1,7 +1,7 @@
-package com.o11eh.o11blog.admin.config.validation;
+package com.o11eh.o11blog.servicebase.validation;
 
-import com.o11eh.o11blog.admin.config.validation.validator.RefIdListValidator;
-import com.o11eh.o11blog.admin.config.validation.validator.RefIdValidator;
+import com.o11eh.o11blog.servicebase.validation.validator.RefIdListValidator;
+import com.o11eh.o11blog.servicebase.validation.validator.RefIdValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

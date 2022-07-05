@@ -3,7 +3,7 @@ package com.o11eh.o11blog.admin.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.o11blog.admin.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.entity.PageReq;
 import com.o11eh.o11blog.admin.entity.Role;
 import com.o11eh.o11blog.admin.mapper.RoleMapper;
