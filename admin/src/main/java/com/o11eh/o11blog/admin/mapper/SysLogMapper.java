@@ -1,6 +1,6 @@
 package com.o11eh.o11blog.admin.mapper;
 
-import com.o11eh.o11blog.admin.entity.SysLog;
+import com.o11eh.o11blog.servicebase.entity.SysLog;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

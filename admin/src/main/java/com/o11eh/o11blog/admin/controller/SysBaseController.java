@@ -7,6 +7,7 @@ import com.o11eh.o11blog.admin.entity.vo.SysLogPageReq;
 import com.o11eh.o11blog.admin.service.*;
 import com.o11eh.o11blog.servicebase.entity.PageReq;
 import com.o11eh.o11blog.servicebase.entity.Result;
+import com.o11eh.o11blog.servicebase.entity.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;

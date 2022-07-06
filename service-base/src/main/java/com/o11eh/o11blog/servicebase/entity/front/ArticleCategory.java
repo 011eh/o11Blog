@@ -16,8 +16,8 @@ import java.util.List;
 @Accessors(chain = true)
 @DynamicInsert
 @DynamicUpdate
-@Entity(name = "front_article_sort")
-public class ArticleSort extends BaseEntry {
+@Entity(name = "front_article_category")
+public class ArticleCategory extends BaseEntry {
 
     private String name;
     private String summary;
@@ -27,7 +27,7 @@ public class ArticleSort extends BaseEntry {
     @Enumerated
     private Status status;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categories")
     private List<Article> articles;
 
 }

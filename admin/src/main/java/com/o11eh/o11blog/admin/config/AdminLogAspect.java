@@ -1,11 +1,11 @@
 package com.o11eh.o11blog.admin.config;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.o11eh.o11blog.admin.entity.SysLog;
+import com.o11eh.o11blog.admin.service.SysLogService;
 import com.o11eh.o11blog.servicebase.config.log.AbstractLogAspect;
 import com.o11eh.o11blog.servicebase.config.log.Log;
+import com.o11eh.o11blog.servicebase.entity.SysLog;
 import com.o11eh.o11blog.servicebase.enums.LogStatus;
-import com.o11eh.o11blog.admin.service.SysLogService;
 import com.o11eh.o11blog.servicebase.utils.HttpUtil;
 import lombok.AllArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;

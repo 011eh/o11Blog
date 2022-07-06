@@ -1,6 +1,7 @@
-package com.o11eh.o11blog.servicebase.entity.front;
+package com.o11eh.o11blog.servicebase.entity;
 
 import com.o11eh.o11blog.servicebase.enums.LogStatus;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,7 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
+@Data
+@Entity(name = "sys_log_front")
 @DynamicInsert
 @NoArgsConstructor
 public class SysLog {
@@ -63,4 +65,17 @@ public class SysLog {
         this.exceptionMessage = exceptionMessage;
     }
 
+    public SysLog(String username, String ip, String operation, String controller, String method, String uri, String httpMethod, String params, LogStatus logStatus, int timeCost, String exceptionMessage) {
+        this.username = username;
+        this.ip = ip;
+        this.operation = operation;
+        this.controller = controller;
+        this.method = method;
+        this.uri = uri;
+        this.httpMethod = httpMethod;
+        this.params = params;
+        this.logStatus = logStatus;
+        this.timeCost = timeCost;
+        this.exceptionMessage = exceptionMessage;
+    }
 }

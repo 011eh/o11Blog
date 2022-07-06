@@ -26,7 +26,7 @@ public class Tag extends BaseEntry {
     @Enumerated
     private Status status;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "tags")
     private List<Article> articles;
 }
 
