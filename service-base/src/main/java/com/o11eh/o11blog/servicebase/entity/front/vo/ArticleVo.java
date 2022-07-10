@@ -2,18 +2,29 @@ package com.o11eh.o11blog.servicebase.entity.front.vo;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
 public class ArticleVo {
 
+    private String id;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String summary;
+
+    @NotBlank
     private String content;
     private String imageUrl;
-    private Boolean original;
+    private boolean original;
     private String source;
-    private Boolean enableComment;
+    private boolean enableComment;
+
+    @NotEmpty
     private List<String> categories;
     private List<String> tags;
 

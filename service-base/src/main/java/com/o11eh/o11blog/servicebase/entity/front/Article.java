@@ -27,11 +27,11 @@ public class Article extends BaseEntry {
     private String content;
     private String imageUrl;
     private ArticleStatus status;
-    private Boolean original;
+    private boolean original;
     private String source;
     private Integer recommendLevel;
     private Integer sort;
-    private Boolean enableComment;
+    private boolean enableComment;
     private Integer viewCount;
     private Integer likeCount;
 
@@ -39,7 +39,7 @@ public class Article extends BaseEntry {
     private Member member;
 
     @ManyToMany
-    @JoinTable(name = "front_article_a_category", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JoinTable(name = "front_article_and_category", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<ArticleCategory> categories;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
