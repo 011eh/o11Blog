@@ -1,6 +1,7 @@
 package com.o11eh.o11blog.front.repository;
 
 import com.o11eh.o11blog.servicebase.entity.front.Article;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface ArticleRepository extends BaseRepository<Article> {
+public interface ArticleRepository extends BaseRepository<Article>, JpaSpecificationExecutor<Article> {
 }

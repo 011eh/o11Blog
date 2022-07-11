@@ -61,8 +61,8 @@ class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("前台")
-                .description("前台接口描述")
+                .title("Blog")
+                .description("接口描述")
                 .version("1.0")
                 .build();
     }

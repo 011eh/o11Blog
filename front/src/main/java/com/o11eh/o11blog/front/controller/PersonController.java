@@ -19,10 +19,17 @@ public class PersonController {
 
     private ArticleService articleService;
 
-    @ApiOperation("创建博客")
+    @ApiOperation("创建文章")
     @PostMapping("createArticle")
     public Result createArticle(@RequestBody ArticleVo articleVo) {
         articleService.create(articleVo);
+        return Result.success();
+    }
+
+    @ApiOperation("更新文章")
+    @PostMapping("updateArticle")
+    public Result updateArticle(@RequestBody ArticleVo articleVo) {
+        articleService.update(articleVo);
         return Result.success();
     }
 }

@@ -4,21 +4,24 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.util.Assert;
 
-public interface BaseRepository<T extends BaseEntry> extends JpaRepository<T, String> {
+@NoRepositoryBean
+public interface BaseRepository<T> extends JpaRepository<T, String> {
 
     String ID_MUST_NOT_BE_NULL = "ID不能为空";
     String ENTITY_NULL = "实体数据不存在";
 
     default void updateById(T entityUpdate) {
-        String id = entityUpdate.getId();
+        BaseEntry baseEntry = (BaseEntry) entityUpdate;
+        String id = baseEntry.getId();
         Assert.notNull(id, ID_MUST_NOT_BE_NULL);
 
         T entity = getById(id);
         Assert.notNull(entity, ENTITY_NULL);
 
-        BeanUtil.copyProperties(entityUpdate, entity, CopyOptions.create().ignoreNullValue().setIgnoreProperties("id"));
+        BeanUtil.copyProperties(entity, entity, CopyOptions.create().ignoreNullValue().setIgnoreProperties("id"));
         this.save(entity);
     }
 }

@@ -39,7 +39,11 @@ public class RoleController {
     @PostMapping(Constants.Api.PAGE)
     public Result page(@Valid @RequestBody PageReq pageReq) {
         Page<Role> page = roleService.getPage(pageReq);
-        return Result.success(page);
+        long pageCurrent = page.getCurrent();
+        long pageSize = page.getPages();
+        List<Role> data = page.getRecords();
+        long total = page.getTotal();
+        return Result.pageResult(pageCurrent, pageSize, total, data);
     }
 
     @Log("角色新建")

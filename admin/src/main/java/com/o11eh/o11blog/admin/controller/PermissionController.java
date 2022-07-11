@@ -3,6 +3,7 @@ package com.o11eh.o11blog.admin.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.o11eh.o11blog.admin.entity.Admin;
 import com.o11eh.o11blog.servicebase.validation.StringId;
 import com.o11eh.o11blog.admin.entity.ApiMatcher;
 import com.o11eh.o11blog.admin.entity.Permission;
@@ -89,7 +90,11 @@ public class PermissionController {
     @PostMapping("/apiMatcher/page")
     public Result apiMatcherPage(@RequestBody PageReq req) {
         Page<ApiMatcher> page = apiMatcherService.page(new Page<>(req.getCurrent(), req.getSize()));
-        return Result.success(page);
+        long pageCurrent = page.getCurrent();
+        long pageSize = page.getPages();
+        List<ApiMatcher> data = page.getRecords();
+        long total = page.getTotal();
+        return Result.pageResult(pageCurrent, pageSize, total, data);
     }
 
 

@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.o11blog.servicebase.constants.ResultCode;
 import com.o11eh.o11blog.servicebase.constants.ResultMessage;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -14,6 +16,8 @@ import java.util.List;
  */
 @Setter
 @Getter
+@NoArgsConstructor
+@Accessors(chain = true)
 public class Result {
     private boolean success;
     private int code;
@@ -29,6 +33,10 @@ public class Result {
         return new Result(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
     }
 
+    public static <T> Result success(T Data) {
+        return new ModelResult<>(Data);
+    }
+
     public static <T> Result successShowMsg() {
         Result result = new Result(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
         result.code += 1000;
@@ -41,26 +49,12 @@ public class Result {
         return result;
     }
 
-    public static <T> Result success(T Data) {
-        return new ModelResult<>(Data);
-    }
-
-    public static <T> Result success(Page<T> page) {
-        return new PageResult<>(page);
+    public static <T> Result pageResult(Long pageCurrent, Long pageSize, Long total, List<T> data) {
+        return new PageResult<>(pageCurrent, pageSize, total, data);
     }
 
     public static Result error(String message) {
         return new Result(false, ResultCode.ERROR, message);
-    }
-
-    public Result msg(String msg) {
-        this.msg = msg;
-        return this;
-    }
-
-    public Result code(int code) {
-        this.code = code;
-        return this;
     }
 
     @Getter
@@ -82,12 +76,12 @@ public class Result {
         private Long total;
         private List<T> data;
 
-        public PageResult(Page<T> page) {
+        public PageResult(Long pageCurrent, Long pageSize, Long total, List<T> data) {
             super(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
-            this.pageCurrent = page.getCurrent();
-            this.pageSize = page.getSize();
-            this.data = page.getRecords();
-            total = page.getTotal();
+            this.pageCurrent = pageCurrent;
+            this.pageSize = pageSize;
+            this.total = total;
+            this.data = data;
         }
     }
 }

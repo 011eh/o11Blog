@@ -42,7 +42,7 @@ sa-token:
   # 需要修改前端
   token-name: frtoken
   token-style: simple-uuid
-  activity-timeout: 1800
+  # activity-timeout: 1800
   is-share: false
 
 logging:

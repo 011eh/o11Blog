@@ -1,21 +1,39 @@
 package com.o11eh.o11blog.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.o11eh.o11blog.servicebase.config.log.Log;
-import com.o11eh.o11blog.admin.entity.*;
+import com.o11eh.o11blog.admin.entity.Admin;
+import com.o11eh.o11blog.admin.entity.Permission;
+import com.o11eh.o11blog.admin.entity.Role;
+import com.o11eh.o11blog.admin.entity.SysParam;
 import com.o11eh.o11blog.admin.entity.vo.SysLogPageReq;
-import com.o11eh.o11blog.admin.service.*;
+import com.o11eh.o11blog.admin.service.AdminService;
+import com.o11eh.o11blog.admin.service.OsService;
+import com.o11eh.o11blog.admin.service.PermissionService;
+import com.o11eh.o11blog.admin.service.RoleService;
+import com.o11eh.o11blog.admin.service.SysLogService;
+import com.o11eh.o11blog.admin.service.SysParamService;
+import com.o11eh.o11blog.servicebase.config.log.Log;
 import com.o11eh.o11blog.servicebase.entity.PageReq;
 import com.o11eh.o11blog.servicebase.entity.Result;
 import com.o11eh.o11blog.servicebase.entity.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -78,7 +96,11 @@ public class SysBaseController {
     @PostMapping("sysLogPage")
     public Result getSysLogPage(@RequestBody SysLogPageReq req) {
         Page<SysLog> page = sysLogService.page(req);
-        return Result.success(page);
+        long pageCurrent = page.getCurrent();
+        long pageSize = page.getPages();
+        List<SysLog> data = page.getRecords();
+        long total = page.getTotal();
+        return Result.pageResult(pageCurrent, pageSize, total, data);
     }
 
     @Log
@@ -86,7 +108,11 @@ public class SysBaseController {
     @PostMapping("sysParam/page")
     public Result getSysParamPage(@RequestBody PageReq req) {
         Page<SysParam> page = sysParamService.getPage(req);
-        return Result.success(page);
+        long pageCurrent = page.getCurrent();
+        long pageSize = page.getPages();
+        List<SysParam> data = page.getRecords();
+        long total = page.getTotal();
+        return Result.pageResult(pageCurrent, pageSize, total, data);
     }
 
     @Log
