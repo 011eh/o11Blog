@@ -11,8 +11,6 @@ import com.o11eh.o11blog.servicebase.entity.front.vo.ArticleVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class ArticleService {
@@ -42,17 +40,14 @@ public class ArticleService {
 
     public void update(ArticleVo articleVo) {
         String memberId = StpUtil.getLoginIdAsString();
-        Optional<Article> result = articleRepository.findOne((root, query, criteriaBuilder) ->
-                query.where(criteriaBuilder.equal(root.get("id"), articleVo.getId()),
-                        criteriaBuilder.equal(root.get("memberId"), new Member().setId(memberId))).getRestriction());
+        Article article = articleRepository.findByIdAndMemberId(articleVo.getId(), memberId);
 
-        if (!result.isPresent()) {
-            throw BusinessException.e("无法修改文章");
+        if (article == null) {
+            throw BusinessException.e("无法修改该文章");
         }
 
-        Article article = result.get();
         BeanUtil.copyProperties(articleVo, article, CopyOptions.create().ignoreError());
         article.setNotPublish();
-        articleRepository.updateById(article);
+        articleRepository.save(article);
     }
 }
