@@ -20,7 +20,7 @@ import java.util.Objects;
 @Aspect
 @Component
 @AllArgsConstructor
-public class AdminLogAspect extends AbstractLogAspect {
+public class MybatisLogAspect extends AbstractLogAspect {
 
     private SysLogService sysLogService;
 

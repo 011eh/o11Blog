@@ -1,5 +1,6 @@
 package com.o11eh.o11blog.servicebase.entity.front;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
 import lombok.Data;

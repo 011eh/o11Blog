@@ -3,6 +3,7 @@ package com.o11eh.o11blog.front.controller;
 import com.o11eh.o11blog.front.service.ArticleService;
 import com.o11eh.o11blog.servicebase.entity.Result;
 import com.o11eh.o11blog.servicebase.entity.front.vo.ArticleVo;
+import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "个人中心")
+@Api(tags = "博客")
 @RestController
-@RequestMapping("person")
+@RequestMapping("article/personal")
 @AllArgsConstructor
-public class PersonController {
+public class PersonalController {
 
     private ArticleService articleService;
 
@@ -27,9 +28,22 @@ public class PersonController {
     }
 
     @ApiOperation("更新文章")
-    @PostMapping("updateArticle")
+    @PostMapping("person/updateArticle")
     public Result updateArticle(@RequestBody ArticleVo articleVo) {
         articleService.update(articleVo);
+        return Result.success();
+    }
+
+    @ApiOperation("更新文章状态")
+    @PostMapping("updateArticleStatus")
+    public Result updateArticleStatus(String id, ArticleStatus status) {
+        articleService.updateArticleStatus(id, status);
+        return Result.successShowMsg();
+    }
+
+    @ApiOperation("获取个人热门文章")
+    @PostMapping("articleList")
+    public Result getPersonalHotArticlePage() {
         return Result.success();
     }
 }

@@ -19,7 +19,7 @@ import java.util.Objects;
 @Aspect
 @Component
 @AllArgsConstructor
-public class FrontLogAspect extends AbstractLogAspect {
+public class JpaLogAspect extends AbstractLogAspect {
 
     private SysLogRepository sysLogRepository;
 

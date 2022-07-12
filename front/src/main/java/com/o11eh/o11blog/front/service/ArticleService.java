@@ -8,6 +8,7 @@ import com.o11eh.o11blog.servicebase.config.BusinessException;
 import com.o11eh.o11blog.servicebase.entity.front.Article;
 import com.o11eh.o11blog.servicebase.entity.front.Member;
 import com.o11eh.o11blog.servicebase.entity.front.vo.ArticleVo;
+import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +50,12 @@ public class ArticleService {
         BeanUtil.copyProperties(articleVo, article, CopyOptions.create().ignoreError());
         article.setNotPublish();
         articleRepository.save(article);
+    }
+
+    public void updateArticleStatus(String id, ArticleStatus status) {
+        Article article = new Article();
+        article.setId(id);
+        article.setStatus(status);
+        articleRepository.updateById(article);
     }
 }
