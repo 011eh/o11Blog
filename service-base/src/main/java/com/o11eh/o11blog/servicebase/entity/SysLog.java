@@ -24,7 +24,7 @@ public class SysLog {
     @Id
     @Length(max = 19)
     @GeneratedValue(generator = "snowFlake")
-    @GenericGenerator(name = "snowFlake", strategy = "com.o11eh.o11blog.front.config.SnowFlakeIdGenerator")
+    @GenericGenerator(name = "snowFlake", strategy = "com.o11eh.o11blog.servicebase.config.jpaconfig.SnowFlakeIdGenerator")
     private String id;
 
     @CreatedBy

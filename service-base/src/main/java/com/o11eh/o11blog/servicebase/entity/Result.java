@@ -1,6 +1,5 @@
 package com.o11eh.o11blog.servicebase.entity;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.o11eh.o11blog.servicebase.constants.ResultCode;
 import com.o11eh.o11blog.servicebase.constants.ResultMessage;
 import lombok.Getter;
@@ -49,7 +48,7 @@ public class Result {
         return result;
     }
 
-    public static <T> Result pageResult(Long pageCurrent, Long pageSize, Long total, List<T> data) {
+    public static <T> Result pageResult(long pageCurrent, long pageSize, long total, List<T> data) {
         return new PageResult<>(pageCurrent, pageSize, total, data);
     }
 
@@ -76,7 +75,7 @@ public class Result {
         private Long total;
         private List<T> data;
 
-        public PageResult(Long pageCurrent, Long pageSize, Long total, List<T> data) {
+        public PageResult(long pageCurrent, long pageSize, long total, List<T> data) {
             super(true, ResultCode.SUCCESS, ResultMessage.SUCCESS);
             this.pageCurrent = pageCurrent;
             this.pageSize = pageSize;

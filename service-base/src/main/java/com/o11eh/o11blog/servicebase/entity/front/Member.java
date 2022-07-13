@@ -35,6 +35,7 @@ public class Member extends BaseEntry {
     private String avatar;
     private String summary;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Article> articles;
 

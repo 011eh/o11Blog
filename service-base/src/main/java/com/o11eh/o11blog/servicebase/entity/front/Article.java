@@ -1,6 +1,5 @@
 package com.o11eh.o11blog.servicebase.entity.front;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
 import lombok.Data;
@@ -9,8 +8,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -29,6 +28,8 @@ public class Article extends BaseEntry {
     private String summary;
     private String content;
     private String imageUrl;
+
+    @Enumerated
     private ArticleStatus status;
     private boolean original;
     private String source;

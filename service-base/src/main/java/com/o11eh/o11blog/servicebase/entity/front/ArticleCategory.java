@@ -1,5 +1,6 @@
 package com.o11eh.o11blog.servicebase.entity.front;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.Status;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class ArticleCategory extends BaseEntry {
     @Enumerated
     private Status status;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private List<Article> articles;
 

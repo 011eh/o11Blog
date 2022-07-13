@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@ConditionalOnBean(JacksonAutoConfiguration.class)
+@ConditionalOnClass(JacksonAutoConfiguration.class)
 @Configuration
 public class JacksonConfig {
 
