@@ -25,6 +25,8 @@ import static com.o11eh.o11blog.servicebase.constants.Constants.DATE_FORMAT;
 public class RedisConfig {
 
     public static final String UNACTIVATED_USER = "unactivatedUser:";
+    public static final String ARTICLE_VIEW = "article:view:";
+    public static final String ARTICLE_LIKE = "article:like:";
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -36,7 +38,6 @@ public class RedisConfig {
         // 对LocalDateTime序列化、反序列化的支持
         mapper.registerModule(javaTimeModule);
 
-        //
         mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer(mapper);
         StringRedisSerializer stringSerializer = new StringRedisSerializer();

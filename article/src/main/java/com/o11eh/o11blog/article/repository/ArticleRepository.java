@@ -17,8 +17,8 @@ public interface ArticleRepository extends BaseRepository<Article>, JpaSpecifica
 
     List<Article> findByMember(Member member);
 
-    @Query(value = "select a.id, title, a.create_time createTime, image_url imageUrl, c.name  category from front_article a join front_article_and_category ac on a.id = ac.article_id join front_article_category c on c.id = ac.category_id where a.status = 2 and a.recommend_level = :level limit :count", nativeQuery = true)
-    List<ArticleBrief> getRecommendArticle(int level, int count);
+    @Query(value = "select * from front_article where status = 2 and recommend_level = :level limit :count", nativeQuery = true)
+    List<Article> getRecommendArticle(int level, int count);
 
     @Query(value = "select a.id, title, a.create_time createTime, image_url imageUrl, c.name  categoryName from front_article a join front_article_and_category ac on a.id = ac.article_id join front_article_category c on c.id = ac.category_id where a.status = 2 order by view_count desc limit :count", nativeQuery = true)
     List<ArticleBrief> getTopByViewCount(int count);
@@ -32,4 +32,5 @@ public interface ArticleRepository extends BaseRepository<Article>, JpaSpecifica
             countQuery = "select count(*) from front_article a join front_article_and_category ac on ac.article_id = a.id where status = 2 and ac.category_id = :categoryId",
             nativeQuery = true)
     Page<ArticleBrief> getArticlePageByCategory(@Param("categoryId") String categoryId, Pageable pageRequest);
+
 }

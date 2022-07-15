@@ -1,20 +1,25 @@
 package com.o11eh.o11blog.servicebase.entity.front;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.data.annotation.Transient;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -36,36 +41,44 @@ public class Article extends BaseEntry {
     private Integer recommendLevel;
     private Integer sort;
     private boolean enableComment;
-    private Integer viewCount;
-    private Integer likeCount;
+    private Long viewCount;
+    private Long likeCount;
 
-    @ManyToOne
+    @Transient
+    private Boolean liked;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"articles"})  // 序列化递归问题
     private Member member;
 
-    @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
+    @JsonIgnoreProperties({"articles"})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "front_article_and_category", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<ArticleCategory> categories;
+    private Set<ArticleCategory> categories;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @Fetch(FetchMode.SUBSELECT)
+    @JsonIgnoreProperties({"articles"})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "front_article_tag", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
-    public Article idToTags(List<String> ids) {
-        List<Tag> tags = ids.stream().map(id -> {
+    public Article idToTags(Set<String> ids) {
+        Set<Tag> tags = ids.stream().map(id -> {
             Tag tag = new Tag();
             tag.setId(id);
             return tag;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toSet());
         this.setTags(tags);
         return this;
     }
 
-    public Article idToCategories(List<String> ids) {
-        List<ArticleCategory> tags = ids.stream().map(id -> {
+    public Article idToCategories(Set<String> ids) {
+        Set<ArticleCategory> tags = ids.stream().map(id -> {
             ArticleCategory category = new ArticleCategory();
             category.setId(id);
             return category;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toSet());
         this.setCategories(tags);
         return this;
     }

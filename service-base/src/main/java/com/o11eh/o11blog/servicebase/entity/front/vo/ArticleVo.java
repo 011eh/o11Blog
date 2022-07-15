@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class ArticleVo {
@@ -25,7 +25,7 @@ public class ArticleVo {
     private boolean enableComment;
 
     @NotEmpty
-    private List<String> categories;
-    private List<String> tags;
+    private Set<String> categories;
+    private Set<String> tags;
 
 }
