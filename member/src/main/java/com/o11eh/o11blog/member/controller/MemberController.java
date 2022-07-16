@@ -1,6 +1,6 @@
 package com.o11eh.o11blog.member.controller;
 
-import com.o11eh.o11blog.member.repository.MemberService;
+import com.o11eh.o11blog.member.service.MemberService;
 import com.o11eh.o11blog.servicebase.config.log.Log;
 import com.o11eh.o11blog.servicebase.entity.Result;
 import io.swagger.annotations.Api;

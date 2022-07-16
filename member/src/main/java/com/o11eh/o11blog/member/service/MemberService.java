@@ -1,8 +1,9 @@
-package com.o11eh.o11blog.member.repository;
+package com.o11eh.o11blog.member.service;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
+import com.o11eh.o11blog.member.repository.MemberRepository;
 import com.o11eh.o11blog.servicebase.config.BusinessException;
 import com.o11eh.o11blog.servicebase.config.RedisConfig;
 import com.o11eh.o11blog.servicebase.constants.RabbitConstants;

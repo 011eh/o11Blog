@@ -20,7 +20,7 @@ public class RabbitConfig {
 
     @Bean
     public Queue emailQueue() {
-        return QueueBuilder.durable(RabbitConstants.EMAIL_QUEUE).build();
+        return QueueBuilder.durable(RabbitConstants.EMAIL_QUEUE).ttl(60000).build();
     }
 
     @Bean
