@@ -98,8 +98,8 @@ public class ArticleService {
             articles.addAll(others.getContent());
         }
 
-        // todo JPA懒加载机制与缓存中类信息不一致，导致反序列化转换失败
-        redis.opsForValue().set(key, articles, 30, TimeUnit.MINUTES);
+        List<Article> toRedis = BeanUtil.copyToList(articles, Article.class);
+        redis.opsForValue().set(key, toRedis, 30, TimeUnit.MINUTES);
 
         return articles;
     }

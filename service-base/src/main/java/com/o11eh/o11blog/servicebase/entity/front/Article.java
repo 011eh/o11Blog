@@ -51,13 +51,11 @@ public class Article extends BaseEntry {
     @JsonIgnoreProperties({"articles"})  // 序列化递归问题
     private Member member;
 
-    @Fetch(FetchMode.SUBSELECT)
     @JsonIgnoreProperties({"articles"})
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "front_article_and_category", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<ArticleCategory> categories;
 
-    @Fetch(FetchMode.SUBSELECT)
     @JsonIgnoreProperties({"articles"})
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "front_article_tag", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
