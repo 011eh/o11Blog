@@ -26,7 +26,7 @@ public interface ArticleRepository extends BaseRepository<Article>, JpaSpecifica
     @Query(value = "select a.id,a.title,a.summary,a.view_count  viewCount,a.like_count  likeCount,a.image_url   imageUrl,a.create_time createTime,m.id          memberId,m.nick_name   nickName,m.avatar from front_article a join front_article_tag at on a.id = at.article_id join front_tag t on at.tag_id = t.id join front_member m on a.member_id = m.id where a.status = 2",
             countQuery = "select count(*) from front_article where status = 2",
             nativeQuery = true)
-    Page<ArticleBrief> getArticlePage(Pageable pageRequest);
+    Page<ArticleBrief> getArticleBriefPage(Pageable pageRequest);
 
     @Query(value = "select a.id, a.title, a.summary, a.view_count  viewCount, a.like_count  likeCount, a.image_url   imageUrl, a.create_time createTime, m.id          memberId, m.nick_name   nickName, m.avatar,t.id tagId,t.name tagName from front_article a join front_article_tag at on a.id = at.article_id join front_tag t on at.tag_id = t.id join front_member m on a.member_id = m.id join front_article_and_category ac on ac.article_id = a.id where a.status = 2 and ac.category_id = :categoryId",
             countQuery = "select count(*) from front_article a join front_article_and_category ac on ac.article_id = a.id where status = 2 and ac.category_id = :categoryId",

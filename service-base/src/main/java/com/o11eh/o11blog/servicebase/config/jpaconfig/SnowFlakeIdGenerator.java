@@ -10,14 +10,12 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 import java.io.Serializable;
 import java.util.Properties;
 
-@ConditionalOnClass(JpaRepositoriesAutoConfiguration.class)
+@ConditionalOnBean(Snowflake.class)
 @AllArgsConstructor
 public class SnowFlakeIdGenerator implements IdentifierGenerator {
 

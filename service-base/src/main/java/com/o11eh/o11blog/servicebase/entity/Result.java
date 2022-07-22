@@ -58,6 +58,7 @@ public class Result {
 
     @Getter
     @Setter
+    @NoArgsConstructor
     public static class ModelResult<T> extends Result {
         private T data;
 
@@ -69,6 +70,7 @@ public class Result {
 
     @Getter
     @Setter
+    @NoArgsConstructor
     public static class PageResult<T> extends Result {
         private Long pageSize;
         private Long pageCurrent;

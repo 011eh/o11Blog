@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.CascadeType;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 @DynamicInsert
 @DynamicUpdate
 @Entity(name = "front_article")
+@NoArgsConstructor
 public class Article extends BaseEntry {
 
     private String title;

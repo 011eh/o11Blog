@@ -4,15 +4,14 @@ import cn.dev33.satoken.exception.SaTokenException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Snowflake;
 import org.hibernate.id.IdentifierGenerator;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 
 import java.util.Optional;
 
-@ConditionalOnClass(JpaRepositoriesAutoConfiguration.class)
+@ConditionalOnBean(Snowflake.class)
 @Configuration
 public class JpaConfig {
 
@@ -33,7 +32,7 @@ public class JpaConfig {
             try {
                 id = (String) StpUtil.getLoginIdDefaultNull();
             } catch (SaTokenException e) {
-                
+
             }
             return Optional.ofNullable(id);
         }

@@ -35,3 +35,10 @@ spring:
             - Path=/member/**
           filters:
             - StripPrefix=1
+
+        - id: search
+          uri: lb://search
+          predicates:
+            - Path=/search/**
+          filters:
+            - StripPrefix=1

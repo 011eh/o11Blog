@@ -8,6 +8,7 @@ import com.o11eh.o11blog.article.repository.projection.ArticleBrief;
 import com.o11eh.o11blog.servicebase.config.BusinessException;
 import com.o11eh.o11blog.servicebase.config.RedisConfig;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
+import com.o11eh.o11blog.servicebase.entity.PageReq;
 import com.o11eh.o11blog.servicebase.entity.front.Article;
 import com.o11eh.o11blog.servicebase.entity.front.Member;
 import com.o11eh.o11blog.servicebase.entity.front.vo.ArticleReq;
@@ -110,17 +111,17 @@ public class ArticleService {
         return articleRepository.findByMember(member);
     }
 
-    public Page<ArticleBrief> getArticlePage(ArticleReq req) {
+    public Page<ArticleBrief> getArticleBriefPage(ArticleReq req) {
 
         Page<ArticleBrief> page = null;
         Sort sort = Sort.by(Sort.Direction.DESC, "view_count");
         switch (req.getType()) {
             case LATEST:
                 sort = Sort.by(Sort.Direction.DESC, "create_time");
-                page = articleRepository.getArticlePage(PageRequest.of(req.getPage(), req.getSize(), sort));
+                page = articleRepository.getArticleBriefPage(PageRequest.of(req.getPage(), req.getSize(), sort));
                 break;
             case HOT:
-                page = articleRepository.getArticlePage(PageRequest.of(req.getPage(), req.getSize(), sort));
+                page = articleRepository.getArticleBriefPage(PageRequest.of(req.getPage(), req.getSize(), sort));
             case CATEGORY:
                 page = articleRepository.getArticlePageByCategory(req.getCategoryId(), PageRequest.of(req.getPage(), req.getSize(), sort));
         }
@@ -178,5 +179,10 @@ public class ArticleService {
             redis.opsForSet().remove(key, mid);
             article.setLiked(false);
         }
+    }
+
+    public Page<Article> getArticlePage(PageReq pageReq) {
+        Page<Article> page = articleRepository.findAll(PageRequest.of(Math.toIntExact(pageReq.getCurrent()), Math.toIntExact(pageReq.getSize())));
+        return page;
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(tags = "首页")
 @RestController
@@ -38,8 +37,8 @@ public class HomeController {
     @ApiOperation("博客分页")
     @GetMapping("articlePage")
     public Result getArticlePage(ArticleReq req) {
-        Page<ArticleBrief> page = articleService.getArticlePage(req);
-        return Result.pageResult(page.getNumber(), page.getSize(), page.getTotalElements(), page.get().collect(Collectors.toList()));
+        Page<ArticleBrief> page = articleService.getArticleBriefPage(req);
+        return Result.pageResult(page.getNumber(), page.getSize(), page.getTotalElements(), page.getContent());
     }
 
     @ApiOperation("文章内容")
