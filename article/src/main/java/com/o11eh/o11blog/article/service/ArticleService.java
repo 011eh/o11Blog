@@ -122,6 +122,7 @@ public class ArticleService {
                 break;
             case HOT:
                 page = articleRepository.getArticleBriefPage(PageRequest.of(req.getPage(), req.getSize(), sort));
+                break;
             case CATEGORY:
                 page = articleRepository.getArticlePageByCategory(req.getCategoryId(), PageRequest.of(req.getPage(), req.getSize(), sort));
         }

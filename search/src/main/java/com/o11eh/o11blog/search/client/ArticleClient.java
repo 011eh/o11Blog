@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("article")
 public interface ArticleClient {
     @GetMapping("api/articlePage")
-    Article articlePage(@RequestParam("current") int current, @RequestParam("size") long size);
+    Result.PageResult<Article> articlePage(@RequestParam("current") int current, @RequestParam("size") long size);
 }

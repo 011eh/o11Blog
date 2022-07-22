@@ -21,12 +21,6 @@
             <groupId>com.o11eh</groupId>
             <artifactId>service-base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.data</groupId>
-                    <artifactId>spring-data-jpa</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

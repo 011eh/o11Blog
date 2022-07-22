@@ -3,6 +3,7 @@ package com.o11eh.o11blog.article.controller;
 
 import com.o11eh.o11blog.article.service.ArticleService;
 import com.o11eh.o11blog.servicebase.entity.PageReq;
+import com.o11eh.o11blog.servicebase.entity.Result;
 import com.o11eh.o11blog.servicebase.entity.front.Article;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,15 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api")
-public class ArticleAPI {
+public class ArticleApi {
 
     private final ArticleService articleService;
 
     @ApiOperation("分页")
     @GetMapping("articlePage")
-    public Article articlePage(PageReq pageReq) {
+    public Result articlePage(PageReq pageReq) {
         Page<Article> page = articleService.getArticlePage(pageReq);
-        return page.getContent().get(0);
+        return Result.pageResult(page.getNumber(), page.getSize(), page.getTotalElements(), page.getContent());
     }
 
 }
