@@ -7,6 +7,7 @@ import com.o11eh.o11blog.article.repository.ArticleRepository;
 import com.o11eh.o11blog.article.repository.projection.ArticleBrief;
 import com.o11eh.o11blog.servicebase.config.BusinessException;
 import com.o11eh.o11blog.servicebase.config.RedisConfig;
+import com.o11eh.o11blog.servicebase.constants.RabbitConstants;
 import com.o11eh.o11blog.servicebase.entity.BaseEntry;
 import com.o11eh.o11blog.servicebase.entity.PageReq;
 import com.o11eh.o11blog.servicebase.entity.front.Article;
@@ -14,14 +15,16 @@ import com.o11eh.o11blog.servicebase.entity.front.Member;
 import com.o11eh.o11blog.servicebase.entity.front.vo.ArticleReq;
 import com.o11eh.o11blog.servicebase.entity.front.vo.ArticleVo;
 import com.o11eh.o11blog.servicebase.enums.ArticleStatus;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -32,14 +35,15 @@ import java.util.stream.Collectors;
 
 @Data
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @ConfigurationProperties("article")
 public class ArticleService {
 
     private final RedisTemplate<String, Object> redis;
     static final String SOURCE = "原创";
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
     private List<Integer> recommendNumber;
+    private final RabbitTemplate rabbit;
 
     public void create(ArticleVo articleVo) {
         Article article = new Article();
@@ -73,11 +77,16 @@ public class ArticleService {
         articleRepository.save(article);
     }
 
-    public void updateArticleStatus(String id, ArticleStatus status) {
-        Article article = new Article();
-        article.setId(id);
-        article.setStatus(status);
-        articleRepository.updateById(article);
+    public void updateArticleStatus(List<String> ids, ArticleStatus status) {
+        List<Article> articles = ids.stream().map(id -> {
+            Article article = new Article();
+            article.setId(id);
+            article.setStatus(status);
+            return article;
+        }).collect(Collectors.toList());
+        for (Article article : articles) {
+            articleRepository.updateById(article);
+        }
     }
 
     public List<Article> getRecommendArticle(int level) {
@@ -185,5 +194,19 @@ public class ArticleService {
     public Page<Article> getArticlePage(PageReq pageReq) {
         Page<Article> page = articleRepository.findAll(PageRequest.of(Math.toIntExact(pageReq.getCurrent()), Math.toIntExact(pageReq.getSize())));
         return page;
+    }
+
+    public void audit(List<String> articleIds) {
+        updateArticleStatus(articleIds, ArticleStatus.PUBLISHED);
+        articleSync(articleIds);
+    }
+
+    @Async
+    void articleSync(List<String> articleIds) {
+        List<Article> articles = articleRepository.findAllById(articleIds);
+        List<Article> results = BeanUtil.copyToList(articles, Article.class);
+        for (Article article : results) {
+            rabbit.convertAndSend(RabbitConstants.EXCHANGE, RabbitConstants.ROUTING_KEY_ARTICLE, article);
+        }
     }
 }

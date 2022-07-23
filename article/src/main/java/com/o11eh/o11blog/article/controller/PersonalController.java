@@ -40,7 +40,7 @@ public class PersonalController {
 
     @ApiOperation("更新文章状态")
     @PostMapping("updateArticleStatus")
-    public Result updateArticleStatus(String id, ArticleStatus status) {
+    public Result updateArticleStatus(List<String> id, ArticleStatus status) {
         articleService.updateArticleStatus(id, status);
         return Result.successShowMsg();
     }

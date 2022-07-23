@@ -1,6 +1,7 @@
 package com.o11eh.o11blog.message.listener;
 
 import com.o11eh.o11blog.servicebase.constants.RabbitConstants;
+import com.o11eh.o11blog.servicebase.entity.front.Article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -25,7 +26,7 @@ public class MailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    @RabbitListener(queues = RabbitConstants.EMAIL_QUEUE)
+    @RabbitListener(queues = RabbitConstants.QUEUE_EMAIL)
     public void sendEmail(Map<String, String> mailInfo) {
         try {
             String token = mailInfo.get("token");

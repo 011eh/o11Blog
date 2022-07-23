@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,31 +53,31 @@ public class Article extends BaseEntry {
     private Member member;
 
     @JsonIgnoreProperties({"articles"})
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "front_article_and_category", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<ArticleCategory> categories;
+    private List<ArticleCategory> categories;
 
     @JsonIgnoreProperties({"articles"})
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "front_article_tag", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+    private List<Tag> tags;
 
-    public Article idToTags(Set<String> ids) {
-        Set<Tag> tags = ids.stream().map(id -> {
+    public Article idToTags(List<String> ids) {
+        List<Tag> tags = ids.stream().map(id -> {
             Tag tag = new Tag();
             tag.setId(id);
             return tag;
-        }).collect(Collectors.toSet());
+        }).collect(Collectors.toList());
         this.setTags(tags);
         return this;
     }
 
-    public Article idToCategories(Set<String> ids) {
-        Set<ArticleCategory> tags = ids.stream().map(id -> {
+    public Article idToCategories(List<String> ids) {
+        List<ArticleCategory> tags = ids.stream().map(id -> {
             ArticleCategory category = new ArticleCategory();
             category.setId(id);
             return category;
-        }).collect(Collectors.toSet());
+        }).collect(Collectors.toList());
         this.setCategories(tags);
         return this;
     }

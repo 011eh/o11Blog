@@ -52,7 +52,7 @@ public class MemberService {
         Map<String, String> map = new HashMap<>();
         map.put("receiver", email);
         map.put("token", token);
-        rabbit.convertAndSend(RabbitConstants.EXCHANGE, RabbitConstants.EMAIL_ROUTING_KEY, map);
+        rabbit.convertAndSend(RabbitConstants.EXCHANGE, RabbitConstants.ROUTING_KEY_EMAIL, map);
     }
 
     public String login(String email, String password) {

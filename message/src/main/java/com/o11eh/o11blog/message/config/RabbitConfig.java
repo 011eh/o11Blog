@@ -20,11 +20,22 @@ public class RabbitConfig {
 
     @Bean
     public Queue emailQueue() {
-        return QueueBuilder.durable(RabbitConstants.EMAIL_QUEUE).ttl(60000).build();
+        return QueueBuilder.durable(RabbitConstants.QUEUE_EMAIL).ttl(60000).build();
     }
 
     @Bean
-    public Binding binding(Exchange exchange, Queue queue) {
-        return BindingBuilder.bind(queue).to(exchange).with(RabbitConstants.EMAIL_ROUTING_KEY).noargs();
+    public Binding emailBinding(Exchange exchange, Queue emailQueue) {
+        return BindingBuilder.bind(emailQueue).to(exchange).with(RabbitConstants.ROUTING_KEY_EMAIL).noargs();
+    }
+
+
+    @Bean
+    public Queue articleQueue() {
+        return QueueBuilder.durable(RabbitConstants.QUEUE_ARTICLE).build();
+    }
+
+    @Bean
+    public Binding articleBinding(Exchange exchange, Queue articleQueue) {
+        return BindingBuilder.bind(articleQueue).to(exchange).with(RabbitConstants.ROUTING_KEY_ARTICLE).noargs();
     }
 }

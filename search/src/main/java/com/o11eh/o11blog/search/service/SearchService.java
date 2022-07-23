@@ -66,4 +66,11 @@ public class SearchService {
         Page<ESArticle> page = new PageImpl<>(articles, PageRequest.of((int) req.getCurrent(), (int) req.getSize()), hits.getTotalHits());
         return page;
     }
+
+    public void update(Article article) {
+        ESArticle esArticle = BeanUtil.copyProperties(article, ESArticle.class);
+        esArticle.setMemberId(article.getMember().getNickName());
+        esArticle.setMemberId(article.getMember().getId());
+        articleRepository.save(esArticle);
+    }
 }
